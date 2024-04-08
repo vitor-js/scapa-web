@@ -18,6 +18,7 @@ export function NavLink({
     children,
     contextPage = 'null',
     isExternalLink,
+    notLink,
     ...props
 }) {
     const colors = useColors()
@@ -54,15 +55,30 @@ export function NavLink({
             cursor="pointer"
             transition="ease all 0.1s"
         >
-            <ActiveLink href={isExternalLink ? externalLink : href} passHref>
-                <Box display="flex" align="center" {...props}>
-                    <Icon as={icon} fontSize="20px" />
+            {notLink && (
+                <div style={{ cursor: "pointer" }} >
+                    <Box display="flex" align="center">
+                        <Icon as={icon} fontSize="20px" />
 
-                    <Text ml="4" fontSize="medium">
-                        {children}
-                    </Text>
-                </Box>
-            </ActiveLink>
+                        <Text ml="4" fontSize="medium">
+                            {children}
+                        </Text>
+                    </Box>
+                </div>
+            )}
+
+            {!notLink && (
+                <ActiveLink href={isExternalLink ? externalLink : href} passHref>
+                    <Box display="flex" align="center">
+                        <Icon as={icon} fontSize="20px" />
+
+                        <Text ml="4" fontSize="medium">
+                            {children}
+                        </Text>
+                    </Box>
+                </ActiveLink>
+            )}
+
         </Box>
     )
 }

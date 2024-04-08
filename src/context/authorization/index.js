@@ -62,6 +62,7 @@ function AuthProvider({ children }) {
             )
 
             setAuthData({
+                id: dataUser.data.id,
                 email: dataUser.data.email,
                 nome: dataUser.data.nome,
                 type: dataUser.data.type,

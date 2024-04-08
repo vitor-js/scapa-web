@@ -5,7 +5,9 @@ import {
     FormErrorMessage,
     FormLabel,
     Input,
+    Text
 } from '@chakra-ui/react'
+import { useColors } from '../../../hooks'
 import React from 'react'
 import masks from './masks'
 
@@ -18,6 +20,9 @@ const Index = (
         masks[mask](event)
     }
 
+    const color = useColors()
+
+
     return (
         <FormControl isInvalid={!!error}>
             {label && (
@@ -28,7 +33,10 @@ const Index = (
                     color={"black.100"}
                     fontWeight="normal"
                 >
-                    {label}
+                    <Text color={color.text}>
+                        {label}
+                    </Text>
+
                 </FormLabel>
             )}
 
@@ -40,13 +48,14 @@ const Index = (
                 name={name}
                 borderRadius={5}
                 fontSize="sm"
+                color={color.text}
                 ref={ref}
                 size="md"
-                color={"black.100"}
+
                 {...props}
             />
 
-            {error && <FormErrorMessage>{error.message}</FormErrorMessage>}
+            {error && <FormErrorMessage color={color.textDanger}>{error}</FormErrorMessage>}
         </FormControl>
     )
 }
