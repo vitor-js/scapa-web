@@ -129,7 +129,7 @@ function Index() {
                             <Text fontSize={'2xl'} fontWeight={600}>
                                 Checklist
                             </Text>
-                            <Text cursor={requestData && requestData?.data?.Checklist ? "pointer" : "not-allowed"} mt={3} onClick={() => { exportPDF() }} fontSize={15} fontWeight={600} color={colors.text} cursor={'pointer'}>
+                            <Text cursor={requestData && requestData?.data?.Checklist ? "pointer" : "not-allowed"} mt={3} onClick={() => { exportPDF() }} fontSize={15} fontWeight={600} color={colors.text} >
                                 Clique para baixar modelo PDF da sua proposta
                             </Text>
                         </Flex>
