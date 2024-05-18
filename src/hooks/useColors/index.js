@@ -6,11 +6,14 @@ function useColors() {
         background: useColorModeValue('white.100', 'black.150'),
         cardBackground: useColorModeValue('#ecedee  ', '#26292b'),
         text: useColorModeValue('black.100', 'white.100'),
-        textDanger: '#FC8181',
-        hoverbackground: useColorModeValue('#f1f3f5', '#26292b'),
+        textButton: useColorModeValue('#ecedee', '#ecedee'),
+        bgDanger: '#FC8181',
+        textDanger: "#721c24",
+
+        hoverbackground: useColorModeValue('#f1f3f5', '#313538'),
         border: {
             color: useColorModeValue('#dfe3e6', '#313538'),
-            hoverColor: useColorModeValue('#d7dbdf', '#3a3f42'),
+            hoverColor: useColorModeValue('#d7dbdf', '#313538'),
             colorAlert: "#ffeeba",
             colorInfo: "#b8daff",
             radius: 5

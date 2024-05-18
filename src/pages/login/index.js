@@ -5,14 +5,16 @@ import { Input } from '../../components'
 
 import { useAuth } from '../../hooks'
 import { api } from '../../service'
-
+import { Spinner } from '@chakra-ui/react'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
-
+import { toast } from 'react-hot-toast';
+import { useColors } from '../../hooks'
 
 function Index() {
     const { login } = useAuth()
+    const colors = useColors()
     const [loading, setLoading] = useState(false)
     const schema = yup.object().shape({
         email: yup
@@ -35,13 +37,14 @@ function Index() {
         try {
             setLoading(true)
             const { data } = await api.post('/login', {
-                "email": "vitorgabriel1998@hotmail.com",
-                "password": "vitorgabriel1998@hotmail.com"
+                "email": values.email,
+                "password": values.password
             })
-            login({ token: data.data.token, refresh: data.data.refreshToken })
-            console.log(data)
+            login({ token: data.data.token, refresh: data.data.refreshToken }, true)
+
             setLoading(false)
         } catch {
+            toast.error("Algo deu errado, tente novamente!")
             setLoading(false)
         }
 
@@ -54,9 +57,7 @@ function Index() {
                 <Text fontSize={"3xl"} fontWeight={600} >
                     Seja bem vindo
                 </Text>
-                <Text fontSize={"1xl"} fontWeight={400} color={"black.50"} >
-                    simply dummy text of the printing<br />and typesetting industry.
-                </Text>
+
                 <Flex width={'100%'} marginY={4} >
                     <Input
                         {...register('email')}
@@ -67,7 +68,11 @@ function Index() {
                     <Input     {...register('password')} error={errors.password} label='Password' type='password' />
                 </Flex>
                 <Flex width={'100%'}>
-                    <Button type="submit" width={'100%'} >Entrar</Button>
+                    <Button type="submit" width={'100%'} >Entrar {loading && (
+                        <>
+                            <Spinner color={colors.text} />
+                        </>
+                    )}</Button>
                 </Flex>
 
             </Box>

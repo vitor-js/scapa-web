@@ -1,4 +1,5 @@
 import converteNaiveDate from './naiveToBrlDate'
+import toCurrencyScreen from './toCurrencyScreen'
+import currencyToBackend from './currencyToNumber'
 
-
-export { converteNaiveDate }
+export { converteNaiveDate, toCurrencyScreen, currencyToBackend }

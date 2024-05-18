@@ -91,7 +91,27 @@ function Index() {
 
                 )}
 
+                {data?.data.length === 0 && (
+                    <>
+                        <WrapperBody>
 
+                            <Flex mt={5} width={'100%'} flexDirection={'column'}>
+                                <Text fontSize={'2xl'} fontWeight={600}>
+                                    Processos
+                                </Text>
+
+                                <Flex
+                                    flexDirection={'column'}
+                                    bg={colors.cardBackground} padding={4} borderRadius={5} mt={4}>
+
+                                    <Text fontSize={20} fontWeight={400}>
+                                        Nenhuma processo foi criada, clique em Adicionar Processo no menu lateral para adicionar seu primeiro processo.
+                                    </Text>
+                                </Flex>
+                            </Flex>
+                        </WrapperBody>
+                    </>
+                )}
             </WrapperBody>
         </LayoutDashboardHome>
     );

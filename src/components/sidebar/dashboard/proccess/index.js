@@ -15,7 +15,7 @@ import {
     MdCheckCircle,
     MdEditDocument
 } from 'react-icons/md'
-
+import { MdFilePresent } from "react-icons/md";
 import {
     Modal,
     ModalOverlay,
@@ -28,11 +28,13 @@ import {
     Button,
     useDisclosure
 } from '@chakra-ui/react'
+import { useRouter } from 'next/router'
 
 const Index = ({ onOpen }) => {
     const colors = useColors()
 
-
+    const { query } = useRouter()
+    const { id } = query
     return (
         <>
             <Box
@@ -52,16 +54,29 @@ const Index = ({ onOpen }) => {
                         <Box mt={15}>
                             <NavLink
                                 alignItems="center"
-                                notLink={true}
+
 
                                 icon={MdEditDocument}
-                                href="/dashboard/processo/dashboard"
+                                href={`/dashboard/processo/${id}`}
                                 shouldMatchExactHref
                             >
                                 <span onClick={onOpen}>
-                                    Propostas
+                                    Informações Básicas
                                 </span>
 
+                            </NavLink>
+                        </Box>
+
+                        <Box mt={15}>
+                            <NavLink
+                                alignItems="center"
+                                href={`/dashboard/processo/propostas/${id}`}
+
+                                icon={MdFilePresent}
+                                shouldMatchExactHref
+                            >
+
+                                Propostas
                             </NavLink>
                         </Box>
 
@@ -69,7 +84,8 @@ const Index = ({ onOpen }) => {
                         <Box mt={15}>
                             <NavLink
                                 alignItems="center"
-                                href="/dashboard/proccess/checkList/"
+                                href={`/dashboard/processo/checkList/${id}`}
+
                                 icon={MdCheckCircle}
                                 shouldMatchExactHref
                             >

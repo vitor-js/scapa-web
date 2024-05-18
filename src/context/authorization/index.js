@@ -4,8 +4,8 @@ import { useRouter } from 'next/router'
 import { jwtDecode } from "jwt-decode";
 import { Flex, Spinner } from '@chakra-ui/react'
 import { api } from "../../service"
-import { getCookie, setCookie, removeCookies } from 'cookies-next';
-
+import { getCookie, setCookie, deleteCookie } from 'cookies-next';
+import { toast } from 'react-hot-toast';
 
 const JWT_HASH = "a54f843ea012b3d3e1168b1fd8b566f1c6577e07871819f3e241945731e43d3f"
 
@@ -25,13 +25,15 @@ function AuthProvider({ children }) {
 
     const logout = useCallback(() => {
         setAuthData({})
-        removeCookies('scapa.token');
-        removeCookies('scapa.refreshToken');
+        deleteCookie('scapa.token');
+        deleteCookie('scapa.refreshToken');
         router.push('/login')
     }, [router])
 
-    const login = async (tokens) => {
-        await getCredenciais(tokens, true)
+    const login = async (tokens, redirect) => {
+        await getCredenciais(tokens, redirect)
+        if (redirect) return toast.success("Login feito com sucesso")
+
     }
 
 
@@ -39,7 +41,7 @@ function AuthProvider({ children }) {
         const token = getCookie('scapa.token');
         const refresh = getCookie('scapa.refreshToken');
         if (!token || !refresh) return
-        login({ token: String(token), refresh: String(refresh) })
+        login({ token: String(token), refresh: String(refresh) }, false)
     }, [])
 
 
@@ -78,14 +80,15 @@ function AuthProvider({ children }) {
             }
             return
 
-        } catch {
-            router.push("/")
+        } catch (e) {
+            console.log(e)
+            // router.push("/")
         }
 
     }
 
     const handleRedirect = (type, is_active) => {
-        if (is_active) {
+        if (!is_active) {
             router.push("401-not-found")
         }
         const page = REDIRECT_USER_HOME[type]
@@ -102,7 +105,7 @@ function AuthProvider({ children }) {
     )
 
     const showLoading =
-        !Object.keys(authData).length && router.pathname.startsWith('/backoffice')
+        !Object.keys(authData).length && router.pathname.startsWith('/dashboard')
 
     return (
         <AuthContext.Provider value={authProviderValue}>

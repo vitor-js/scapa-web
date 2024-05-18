@@ -6,7 +6,7 @@ import {
   QueryClientProvider,
 } from '@tanstack/react-query'
 import { queryClient } from '../service/queryClient.js'
-
+import { Toaster } from "react-hot-toast";
 
 export default function App({ Component, pageProps }) {
 
@@ -14,6 +14,7 @@ export default function App({ Component, pageProps }) {
 
     <AppProvider> <QueryClientProvider client={queryClient}>
       <ChakraProvider theme={globalTheme}>
+        <Toaster position="center-top" />
         <Component {...pageProps} />
       </ChakraProvider>
     </QueryClientProvider>
