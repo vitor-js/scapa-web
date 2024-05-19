@@ -236,12 +236,12 @@ function Index({ handleAddNewRequest, draftRequest, setOpenSelect, handleUpdateR
     useEffect(() => {
 
         if (!draftRequest) return
-
+        console.log(draftRequest)
 
         setValue("pedido", draftRequest.requestValue)
         setValue("valor_individual_postulado", draftRequest.valuePostulate)
         setValue("ratio", `${draftRequest.riskSuccess}`)
-        setValue("valor_individualizado", draftRequest.valueIndividual)
+        setValue("valor_individualizado", draftRequest.valuePostulate)
         setValue("risco", RISK_TABLE_REVERSE[draftRequest.riskSuccess])
 
 

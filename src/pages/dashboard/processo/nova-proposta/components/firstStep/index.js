@@ -52,7 +52,7 @@ function Index({ data, preRequests }) {
             </Text>
 
             <Text color={colors.text} fontSize='lg' fontWeight={400} my={2} w={'100%'}  >
-                It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
+
             </Text>
 
             <Flex w={'100%'} >

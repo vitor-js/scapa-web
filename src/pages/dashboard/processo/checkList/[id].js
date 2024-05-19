@@ -1,5 +1,5 @@
 import { LayoutDashboardProccess } from '../../../../layouts'
-import { HeaderPages, WrapperBody, } from '../../../../components'
+import { HeaderPages, WrapperBody, Input } from '../../../../components'
 import { MdEditDocument } from 'react-icons/md'
 import { useRouter } from 'next/router'
 import { useProcces, useAuth, useColors } from '../../../../hooks'
@@ -12,6 +12,7 @@ import { api } from '@/service'
 import CheckListTemplate from '../../../../templates/checkListTemplate/index.js'
 import { queryClient } from '../../../../service/queryClient';
 import { toast } from 'react-hot-toast';
+import { currencyToBackend } from '@/helpers'
 
 
 function Index() {
@@ -26,6 +27,7 @@ function Index() {
     const [data, setData] = useState({})
     const [checkedItems, setCheckedItems] = useState([])
     const [target, setTarget] = useState("")
+    const [value, setValue] = useState("")
     const [error, setError] = useState(false)
 
 
@@ -48,7 +50,7 @@ function Index() {
         if (requestData?.data?.Checklist) {
             setTarget(requestData?.data?.Checklist?.target)
             setCheckedItems([requestData?.data?.Checklist?.type_client])
-
+            setValue(requestData?.data?.Checklist?.value)
             return setData({
                 postulated_total_value,
                 sum_total_value_with_risk, proposals,
@@ -76,13 +78,13 @@ function Index() {
 
     const handleSubmit = () => {
         try {
-            if (target === "" || checkedItems.length === 0) return setError(true)
+            if (target === "" || checkedItems.length === 0 || value === "") return setError(true)
             if (requestData?.data?.Checklist) {
-                api.put(`checklist/${requestData?.data?.Checklist?.id}`, { type_client: checkedItems[0], target: target })
+                api.put(`checklist/${requestData?.data?.Checklist?.id}`, { type_client: checkedItems[0], target: target, value: currencyToBackend(value) })
 
                 toast.success("Atualização feita com sucesso")
             } else {
-                api.post(`checklist`, { process_id: id, type_client: checkedItems[0], target: target })
+                api.post(`checklist`, { process_id: id, type_client: checkedItems[0], target: target, value: currencyToBackend(value) })
                 toast.success("Checklist cadastrado com sucesso")
             }
             queryClient.invalidateQueries('procces');
@@ -130,14 +132,14 @@ function Index() {
                                 Checklist
                             </Text>
                             <Text cursor={requestData && requestData?.data?.Checklist ? "pointer" : "not-allowed"} mt={3} onClick={() => { exportPDF() }} fontSize={15} fontWeight={600} color={colors.text} >
-                                Clique para baixar modelo PDF da sua proposta
-                            </Text>
+                                Clique para baixar Checklist                            </Text>
                         </Flex>
+
 
 
                         <Box mt={5} width={'100%'}>
                             <Text fontSize={'2xl'} fontWeight={600}>
-                                Valor Indicado
+                                Valor Real Apurado
                             </Text>
                             <Box _hover={{
                                 background: colors.hoverbackground,
@@ -149,65 +151,6 @@ function Index() {
                             </Box>
                         </Box>
 
-                        <Box mt={5} width={'100%'}>
-                            <Text fontSize={'2xl'} fontWeight={600}>
-                                Valor Real Aplicado
-                            </Text>
-                            <Box _hover={{
-                                background: colors.hoverbackground,
-                                borderColor: colors.border.hoverColor,
-                            }} bg={colors.cardBackground} padding={4} borderRadius={5} mt={4} cursor={'pointer'} >
-                                <Text fontSize={'1xl'} fontWeight={400}>
-                                    {toBRL(data?.sum_total_value_with_risk)}
-                                </Text>
-                            </Box>
-                        </Box>
-
-
-
-                        <Box mt={5} width={'100%'}>
-                            <Text fontSize={'2xl'} fontWeight={600}>
-                                Estratégia
-                            </Text>
-                            <Box bg={colors.cardBackground} padding={4} borderRadius={5} mt={4} cursor={'pointer'} >
-                                <Text mb={5} fontSize={'1xl'} fontWeight={600}>
-                                    Análise de risco
-                                </Text>
-
-                                <CheckboxGroup colorScheme='green' value={checkedItems} defaultValue={checkedItems}>
-                                    <Stack spacing={[1, 5]} direction={['column', 'column']}>
-                                        <Checkbox onChange={(e) => handleSetItem(e.target.value)} value='aversao_risco'>Aversão a Risco</Checkbox>
-                                        <Checkbox onChange={(e) => handleSetItem(e.target.value)} value='apetite_risco'>Apetite a Risco</Checkbox>
-                                        <Checkbox onChange={(e) => handleSetItem(e.target.value)} value='indiferente'>Indiferente a Risco</Checkbox>
-                                    </Stack>
-                                </CheckboxGroup>
-
-                                <Text mt={5} fontSize={'1xl'} fontWeight={600}>
-                                    Qual sua meta de acordo
-                                </Text>
-
-                                <Textarea value={target} onChange={(e) => {
-                                    setError(false)
-                                    setTarget(e.target.value)
-                                }} mt={3} placeholder='Descreva sua meta de acordo' />
-
-                                {error &&
-                                    <Box onClick={() => setError(false)} background={colors.bgDanger} mt={3} p={3} borderRadius={colors.border.radius} >
-                                        <Text color={colors.textDanger} fontWeight={600}>
-                                            Todos os campos acima precisam estar prenchidos
-                                        </Text>
-                                    </Box>
-                                }
-
-                                <Flex mt={3} alignItems={'center'} justifyContent={'flex-end'}>
-                                    <Button onClick={() => handleSubmit()} >Slavar</Button>
-                                </Flex>
-                            </Box>
-
-
-
-
-                        </Box>
 
 
                         <Box mt={5} width={'100%'}>
@@ -288,6 +231,62 @@ function Index() {
 
                                 </Grid>
                             ))}
+                        </Box>
+
+
+
+
+                        <Box mt={5} width={'100%'}>
+                            <Text fontSize={'2xl'} fontWeight={600}>
+                                Estratégia
+                            </Text>
+                            <Box bg={colors.cardBackground} padding={4} borderRadius={5} mt={4} cursor={'pointer'} >
+                                <Text mb={5} fontSize={'1xl'} fontWeight={600}>
+                                    Análise de risco
+                                </Text>
+
+                                <Input
+                                    value={value} onChange={(e) => {
+                                        setError(false)
+                                        setValue(e.target.value)
+                                    }}
+
+                                    mb={3} label='Valor indicado' mask='currency' />
+
+
+                                <CheckboxGroup mt={3} colorScheme='green' value={checkedItems} defaultValue={checkedItems}>
+                                    <Stack mt={3} spacing={[1, 5]} direction={['column', 'column']}>
+                                        <Checkbox onChange={(e) => handleSetItem(e.target.value)} value='aversao_risco'>Aversão a Risco</Checkbox>
+                                        <Checkbox onChange={(e) => handleSetItem(e.target.value)} value='apetite_risco'>Apetite a Risco</Checkbox>
+                                        <Checkbox onChange={(e) => handleSetItem(e.target.value)} value='indiferente'>Indiferente a Risco</Checkbox>
+                                    </Stack>
+                                </CheckboxGroup>
+
+                                <Text mt={5} fontSize={'1xl'} fontWeight={600}>
+                                    Qual sua meta de acordo
+                                </Text>
+
+                                <Textarea value={target} onChange={(e) => {
+                                    setError(false)
+                                    setTarget(e.target.value)
+                                }} mt={3} placeholder='Descreva sua meta de acordo' />
+
+                                {error &&
+                                    <Box onClick={() => setError(false)} background={colors.bgDanger} mt={3} p={3} borderRadius={colors.border.radius} >
+                                        <Text color={colors.textDanger} fontWeight={600}>
+                                            Todos os campos acima precisam estar prenchidos
+                                        </Text>
+                                    </Box>
+                                }
+
+                                <Flex mt={3} alignItems={'center'} justifyContent={'flex-end'}>
+                                    <Button onClick={() => handleSubmit()} >Slavar</Button>
+                                </Flex>
+                            </Box>
+
+
+
+
                         </Box>
 
 

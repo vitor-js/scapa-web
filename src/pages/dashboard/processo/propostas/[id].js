@@ -211,7 +211,7 @@ function Index() {
                     {console.log(haveNeutraProposal)}
                     {console.log(haveNeutraProposal)}
 
-                    {haveNeutraProposal && requestData?.data?.Proposals.length !== 0 && (
+                    {requestData?.data?.Proposals.length !== 0 && (
                         <>
                             <WrapperBody>
 
@@ -282,7 +282,7 @@ function Index() {
                                 router.push(`/dashboard/processo/nova-proposta/${id}?type=Neutra`)
                             }} mt={5} width={'100%'}>
                                 <Text fontSize={'2xl'} fontWeight={600}>
-                                    Modelo de proposta Neutra
+                                    Proposta Neutra
                                 </Text>
 
                                 <Box _hover={{
@@ -290,7 +290,7 @@ function Index() {
                                     borderColor: colors.border.hoverColor,
                                 }} bg={colors.cardBackground} padding={4} borderRadius={5} mt={4} cursor={'pointer'} >
                                     <Text fontSize={'1xl'} fontWeight={400}>
-                                        Clique para criar modelo de proposta
+                                        Clique para criar a proposta
                                     </Text>
                                 </Box>
                             </Box>
@@ -298,13 +298,13 @@ function Index() {
 
                             <Box opacity={0.4} mt={5} width={'100%'} cursor={"not-allowed"}>
                                 <Text fontSize={'2xl'} fontWeight={600}>
-                                    Modelo de proposta otimista
+                                    Proposta otimista
                                 </Text>
                                 <Box
                                     cursor={"not-allowed"}
                                     bg={colors.cardBackground} padding={4} borderRadius={5} mt={4} >
                                     <Text fontSize={'1xl'} fontWeight={400}>
-                                        Clique para criar modelo de proposta
+                                        Clique para criar a proposta
                                     </Text>
                                 </Box>
                             </Box>
@@ -312,12 +312,12 @@ function Index() {
 
                             <Box opacity={0.4} mt={5} width={'100%'} cursor={"not-allowed"}>
                                 <Text fontSize={'2xl'} fontWeight={600}>
-                                    Modelo de proposta Pessimista
+                                    Proposta Pessimista
                                 </Text>
 
                                 <Box bg={colors.cardBackground} padding={4} borderRadius={5} mt={4} cursor={"not-allowed"} >
                                     <Text fontSize={'1xl'} fontWeight={400}>
-                                        Clique para criar modelo de proposta
+                                        Clique para criar a proposta
                                     </Text>
                                 </Box>
                             </Box>

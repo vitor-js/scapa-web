@@ -11,7 +11,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { toast } from 'react-hot-toast';
 import { api } from '@/service'
 import { queryClient } from '../../../service/queryClient';
-
+import { toCurrencyScreen } from '../../../helpers'
 
 const schemForm = yup.object().shape({
     title: yup.string().required('Campo obrigatório'),
@@ -66,6 +66,8 @@ function Index() {
         setValueForm('autor', requestData.data.autor)
         setValueForm('reu', requestData.data.reu)
         setValueForm('description', requestData.data.description)
+        setValueForm("proccess_time", requestData.data.proccess_time)
+        setValueForm("reu_cost", toCurrencyScreen(requestData.data.reu_cost))
     }, [requestData])
 
 
@@ -89,7 +91,7 @@ function Index() {
                                     error={errors?.title?.message}
                                     {...register("title")}
                                     default
-                                    label='Titulo'
+                                    label='Titulo Identificador'
                                 />
                                 <Input
 
@@ -100,9 +102,14 @@ function Index() {
                                     name='autor' error={errors?.autor?.message}  {...register("autor")}
                                 />
                                 <Input label='Réu' name='reu' error={errors?.reu?.message} {...register("reu")} />
+
+                                <Input label='Tempo do processo'
+                                    name='proccess_time' error={errors?.autor?.proccess_time}  {...register("proccess_time")}
+                                />
+                                <Input label='Réu' name='reu' error={errors?.reu?.message} {...register("reu")} />
                             </Grid>
                             <Box mt={4}>
-                                <Input label='Descricao' name='description' error={errors?.description?.message}  {...register("description")} />
+                                <Input label='Custo do Réu' name='reu_cost' error={errors?.description?.reu_cost}  {...register("reu_cost")} />
                             </Box>
 
                             <Flex mt={4} alignContent={'flex-end'} justifyContent={'flex-end'} justifyItems={'flex-end'} >

@@ -56,7 +56,7 @@ function Index() {
                                                 Propostas
                                             </Text>
                                             <Text fontSize='md'>
-                                                3
+                                                {value.Proposals.length}
                                             </Text>
 
                                         </Box>
