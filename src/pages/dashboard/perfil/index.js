@@ -90,7 +90,7 @@ function Index() {
                         <Input
                             name='name'
                             color={colors.text}
-                            error={errors?.title?.name}
+                            error={errors?.name?.message}
                             {...register("name")}
 
 
@@ -101,7 +101,7 @@ function Index() {
                         <Input
                             name='email'
                             color={colors.text}
-                            error={errors?.title?.email}
+                            error={errors?.email?.message}
                             {...register("email")}
 
 
@@ -123,7 +123,7 @@ function Index() {
                         <Input
                             name='password'
                             color={colors.text}
-                            error={errosP?.title?.password}
+                            error={errosP?.password?.message}
                             {...registerP("password")}
                             default
                             type={'password'}
@@ -135,7 +135,7 @@ function Index() {
                             type={'password'}
                             name='newpassword'
                             color={colors.text}
-                            error={errosP?.title?.newPass}
+                            error={errosP?.newPass?.message}
                             {...registerP("newPass")}
                             default
                             label='Nova senha'
