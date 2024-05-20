@@ -91,7 +91,7 @@ function Index() {
         return (
             <Box mt={5} width={'100%'}>
                 <Text fontSize={'2xl'} fontWeight={600}>
-                    Modelo de proposta {type}
+                    Proposta {type}
                 </Text>
 
                 <Grid bg={colors.cardBackground} padding={4}

@@ -63,7 +63,12 @@ const Tempalte = ({ result }) => {
     return (
         <div style={{ paddingLeft: 20, paddingRight: 20, paddingBottom: 20, paddingTop: 20 }}>
             <div style={{ marginTop: 10 }}>
-
+                <Image
+                    src={require('../../assets/logo/logo.png')}
+                    alt=""
+                    width={130}
+                    objectFit="cover"
+                />
             </div>
 
             <div style={{ "textAlign": "left", "marginTop": "50px", "fontSize": "10px", "fontWeight": "600", color: '#000' }}>
