@@ -4,7 +4,9 @@ import toBRL from '@/helpers/toCurrencyScreen'
 import Image from 'next/image'
 
 const Tempalte = ({ data }) => {
-
+    useEffect(() => {
+        console.log(data)
+    }, [data])
     const checklsit = {
         "aversao_risco": "Aversão a Risco",
         "apetite_risco": "Apetite a Risco",
@@ -35,14 +37,28 @@ const Tempalte = ({ data }) => {
 
             <div style={{ marginTop: 20, fontSize: 10 }}>
                 <p style={{ color: "black" }}>
-                    Valor Real Aplicado
+                    Valor Real Apurado
                 </p>
 
                 <p style={{ color: "black", fontSize: 10 }}>
-                    {toBRL(data?.sum_total_value_with_risk)}
+                    {toBRL(data?.postulated_total_value)}
                 </p>
 
             </div>
+
+
+            <div style={{ marginTop: 20, fontSize: 10 }}>
+                <p style={{ color: "black" }}>
+                    Valor Indicado
+                </p>
+
+                <p style={{ color: "black", fontSize: 10 }}>
+                    {toBRL(data?.value)}
+                </p>
+
+            </div>
+
+
 
             <div style={{ marginTop: 20, fontSize: 10 }}>
                 <p style={{ color: "black" }}>
@@ -56,9 +72,9 @@ const Tempalte = ({ data }) => {
             </div>
 
 
-            <div style={{ marginTop: 20, fontSize: 10 }}>
+            <div style={{ marginTop: 20, marginBottom: 20, fontSize: 10 }}>
                 <p style={{ color: "black" }}>
-                    Objetivo
+                    Qual sua meta de acordo ?
                 </p>
 
                 <p style={{ color: "black", fontSize: 10 }}>
@@ -67,8 +83,44 @@ const Tempalte = ({ data }) => {
 
             </div>
 
+
+            <Table  >
+                <tr>
+                    <th style={{ fontSize: 8, color: '#000', alignItems: 'center', justifyContent: 'center', padding: 5, justifyItems: "center", alignContent: "center", paddingBottom: 8 }}>Tipo</th>
+                    <th style={{ fontSize: 8, color: '#000', alignItems: 'center', justifyContent: 'center', padding: 5, justifyItems: "center", alignContent: "center", paddingBottom: 8 }}>Valor Total da proposta</th>
+                    <th style={{ fontSize: 8, color: '#000', alignItems: 'center', justifyContent: 'center', padding: 5, justifyItems: "center", alignContent: "center", paddingBottom: 8 }}>Valor Total Postulado</th>
+                    <th style={{ fontSize: 8, color: '#000', alignItems: 'center', justifyContent: 'center', padding: 5, justifyItems: "center", alignContent: "center", paddingBottom: 8 }}>Valor individualizado com  risco</th>
+                </tr>
+
+                {data && data?.proposals && data?.proposals.map((value, index) => {
+                    return (
+                        <tr key={index} id='Table-response-request' >
+                            <td style={{ fontSize: 8, color: '#000', alignItems: 'center', justifyContent: 'center', padding: 5, justifyItems: "center", alignContent: "center", paddingBottom: 8 }}>{value.type}</td>
+                            <td style={{ fontSize: 8, color: '#000', alignItems: 'center', justifyContent: 'center', padding: 5, justifyItems: "center", alignContent: "center", paddingBottom: 8 }}>{toBRL(value.total_value)}</td>
+                            <td style={{ fontSize: 8, color: '#000', alignItems: 'center', justifyContent: 'center', padding: 5, justifyItems: "center", alignContent: "center", paddingBottom: 8 }}> {toBRL(value.postulated_total_value)}</td>
+                            <td style={{ fontSize: 8, color: '#000', alignItems: 'center', justifyContent: 'center', padding: 5, justifyItems: "center", alignContent: "center", paddingBottom: 8 }}>{toBRL(value.total_value_with_riks)}</td>
+
+                        </tr>
+                    )
+                })}
+            </Table>
+
         </div>)
 
 }
+const Table = styled.table`
+font-family: arial, sans-serif;
+      border-collapse: collapse;
+        width: 90%;
+      td, th {
+      border: 1px solid #dddddd ;
+   
+    }
+    
+    tr:nth-child(even) {
+      background-color: #dddddd;
+    }
+`
+
 
 export default Tempalte

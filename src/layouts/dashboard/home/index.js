@@ -125,7 +125,7 @@ function Index({ children }) {
             <GridItem area={'nav'}>
                 <DashboardHomeMenu onOpen={onOpen} />
             </GridItem>
-            <GridItem area={'main'}>
+            <GridItem overflow={'auto'} area={'main'}>
                 <Flex overflow='overlay' height='100%' align={'center'} flexDirection={"column"}>
                     {children}
                 </Flex>
