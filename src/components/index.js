@@ -8,5 +8,7 @@ import WrapperBody from './wrapperBody'
 import HeaderPages from './headerPages'
 import Wizard from './wizard'
 import ScapaRequest from './scapaComponents/requests'
+import SideBarBackofficeIndex from './sidebar/backoffice'
+import SideBarBackofficeEditarUser from './sidebar/backoffice/users/editar'
 
-export { Input, HeaderBar, DashboardHomeMenu, WrapperBody, HeaderPages, DashboardProccess, Wizard, ScapaRequest, Select }
+export { SideBarBackofficeEditarUser, SideBarBackofficeIndex, Input, HeaderBar, DashboardHomeMenu, WrapperBody, HeaderPages, DashboardProccess, Wizard, ScapaRequest, Select }

@@ -4,6 +4,7 @@ import useProccess from './useProcess'
 import useProcces from './useProces'
 import useWizardContext from './useWizardContext'
 import useProposal from './useProposal'
+import useAllProccess from './useAllProcess'
+import useUsers from './useUsers'
 
-
-export { useAuth, useColors, useProccess, useProcces, useWizardContext, useProposal }
+export { useUsers, useAuth, useColors, useProccess, useProcces, useWizardContext, useProposal, useAllProccess }
