@@ -87,12 +87,7 @@ function Index() {
 
 
 
-    useEffect(() => {
-        if (!authData) return
-        setValueForm('name', authData.nome)
-        setValueForm('email', authData.email)
 
-    }, [authData])
 
 
 
