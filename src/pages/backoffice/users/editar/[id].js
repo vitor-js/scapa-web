@@ -18,7 +18,6 @@ const schemForm = yup.object().shape({
 })
 
 const formPassWordValidation = yup.object().shape({
-    password: yup.string().required('Campo obrigatório'),
     newPass: yup.string().required('Campo obrigatório'),
 });
 
@@ -66,9 +65,9 @@ function Index() {
 
     const submitPass = async (values) => {
         try {
-            await api.put(`user/update-password/${authData.id}`, {
-                password: values.password,
-                newPassword: values.newPass
+            await api.put(`user/update-password-admin/${authData.id}`, {
+
+                password: values.newPass
             })
             toast.success("Senha atualizada com sucesso")
         } catch {
@@ -125,21 +124,11 @@ function Index() {
                 </Flex>
             </Flex>
 
-            {/* <Flex as='form' onSubmit={handleSubmitP(submitPass)} mt={5} width="100%" bg={colors.cardBackground} padding={4} borderRadius={5} flexDirection={'column'}>
+            <Flex as='form' onSubmit={handleSubmitP(submitPass)} mt={5} width="100%" bg={colors.cardBackground} padding={4} borderRadius={5} flexDirection={'column'}>
                 <Text fontSize='2xl' fontWeight={600}>
                     Senha
                 </Text>
-                <Flex mt={4}>
-                    <Input
-                        name='password'
-                        color={colors.text}
-                        error={errosP?.password?.message}
-                        {...registerP("password")}
-                        default
-                        type={'password'}
-                        label='Senha antiga'
-                    />
-                </Flex>
+
                 <Flex mt={4}>
                     <Input
                         type={'password'}
@@ -157,7 +146,7 @@ function Index() {
                     </Button>
                 </Flex>
 
-            </Flex> */}
+            </Flex>
 
 
         </WrapperBody>
