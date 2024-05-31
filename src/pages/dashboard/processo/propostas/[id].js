@@ -164,7 +164,7 @@ function Index() {
                                 cursor="pointer"
                                 transition="ease all 0.1s"
                                 onClick={() => {
-                                    router.push(`/dashboard/processo/proposta/${value.id}`)
+                                    router.push(`/dashboard/processo/proposta/${value.id}?proccess_id=${id}`)
                                 }}
                                 icon={<FaEye />}
 

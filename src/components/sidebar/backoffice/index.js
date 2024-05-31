@@ -51,7 +51,17 @@ const Index = () => {
                         Home
                     </NavLink>
 
+                    <Box mt={15}>
+                        <NavLink
+                            alignItems="center"
+                            href="/backoffice/users/adicionar"
+                            icon={MdPeople}
+                            shouldMatchExactHref
+                        >
 
+                            Adicionar usuário
+                        </NavLink>
+                    </Box>
 
 
                     <Box mt={15}>

@@ -52,13 +52,21 @@ function Index() {
 
 
     const submitBasic = async (values) => {
+        const data = {
+            data: {
+                buyer: {
+                    email: values.email,
+                    name: values.name
+                }
+            },
+            event: "PURCHASE_APPROVED"
+
+        }
         try {
-            await api.put(`user/${authData.id}`, {
-                email: values.email,
-                nome: values.name
-            })
-            toast.success("Cadastro atualizado com sucesso")
-        } catch {
+            await api.post(`hotmart/product`, data)
+            toast.success("Cadastro criado com sucesso")
+        } catch (e) {
+            console.log(e)
             toast.error("Algo deu errado, tente novamente!")
         }
 
@@ -89,12 +97,12 @@ function Index() {
 
 
     return <LayoutBckofficeUsers>
-        <HeaderPages title={`Perfil`} icon={Md3P} />
+        <HeaderPages title={`Adicionar novo usuário `} icon={Md3P} />
         <WrapperBody>
             <Flex onSubmit={handleSubmit(submitBasic)}
                 as="form" mt={5} width="100%" bg={colors.cardBackground} padding={4} borderRadius={5} flexDirection={'column'}>
                 <Text fontSize='2xl' fontWeight={600}>
-                    Informação pessoal
+                    Informação básica
                 </Text>
                 <Flex mt={4}>
                     <Input
@@ -120,7 +128,7 @@ function Index() {
                 </Flex>
                 <Flex mt={4} alignContent={'flex-end'} justifyContent={'flex-end'} justifyItems={'flex-end'} >
                     <Button type='submit'>
-                        Atualizar
+                        Criar
                     </Button>
                 </Flex>
             </Flex>

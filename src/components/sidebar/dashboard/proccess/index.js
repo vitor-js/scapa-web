@@ -57,7 +57,7 @@ const Index = ({ onOpen }) => {
 
 
                                 icon={MdEditDocument}
-                                href={`/dashboard/processo/${id}`}
+                                href={`/dashboard/processo/${query.proccess_id ? query.proccess_id : id}`}
                                 shouldMatchExactHref
                             >
                                 <span onClick={onOpen}>
@@ -70,7 +70,7 @@ const Index = ({ onOpen }) => {
                         <Box mt={15}>
                             <NavLink
                                 alignItems="center"
-                                href={`/dashboard/processo/propostas/${id}`}
+                                href={`/dashboard/processo/propostas/${query.proccess_id ? query.proccess_id : id}`}
 
                                 icon={MdFilePresent}
                                 shouldMatchExactHref
@@ -84,7 +84,7 @@ const Index = ({ onOpen }) => {
                         <Box mt={15}>
                             <NavLink
                                 alignItems="center"
-                                href={`/dashboard/processo/checkList/${id}`}
+                                href={`/dashboard/processo/checkList/${query.proccess_id ? query.proccess_id : id}`}
 
                                 icon={MdCheckCircle}
                                 shouldMatchExactHref
