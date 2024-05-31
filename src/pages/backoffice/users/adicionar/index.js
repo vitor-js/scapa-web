@@ -55,8 +55,8 @@ function Index() {
         const data = {
             data: {
                 buyer: {
-                    email: values.email,
-                    name: values.name
+                    email: values.email.trim(),
+                    name: values.name.trim()
                 }
             },
             event: "PURCHASE_APPROVED"
