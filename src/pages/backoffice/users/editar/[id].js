@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { LayoutBckofficeUsers } from '../../../../layouts'
 import { useColors, useAuth } from '../../../../hooks'
 import { WrapperBody, HeaderPages, Input, } from '../../../../components'
@@ -25,8 +25,8 @@ const formPassWordValidation = yup.object().shape({
 
 function Index() {
     const colors = useColors()
-    const { authData } = useAuth()
-
+    const { authData, reload } = useAuth()
+    const [status, setStatus] = useState()
 
 
     const {
@@ -76,13 +76,29 @@ function Index() {
 
     }
 
+    const handleChangeStatus = async (e) => {
+        e.preventDefault()
+
+        try {
+            await api.put(`user/${authData.id}`, {
+                is_active: !authData.is_active,
+
+            })
+
+            await reload()
+            toast.success("Cadastro atualizado com sucesso")
+        } catch {
+            toast.error("Algo deu errado, tente novamente!")
+        }
+    }
+
 
 
     useEffect(() => {
         if (!authData) return
         setValueForm('name', authData.nome)
         setValueForm('email', authData.email)
-
+        setStatus(authData.is_active ? "Ativado" : "Desativado")
     }, [authData])
 
 
@@ -90,6 +106,28 @@ function Index() {
     return <LayoutBckofficeUsers>
         <HeaderPages title={`Perfil`} icon={Md3P} />
         <WrapperBody>
+
+            <Flex as='form' onSubmit={(e) => handleChangeStatus(e)} mt={5} width="100%" bg={colors.cardBackground} padding={4} borderRadius={5} flexDirection={'column'}>
+                <Text fontSize='2xl' fontWeight={600}>
+                    Status
+                </Text>
+
+                <Flex
+                    flexDirection={'column'}
+                    bg={colors.cardBackground} borderRadius={5}>
+
+                    <Text fontSize={20} fontWeight={400}>
+                        Este usuário esta {status}
+                    </Text>
+                </Flex>
+                <Flex alignContent={'flex-end'} justifyContent={'flex-end'} justifyItems={'flex-end'} >
+                    <Button type='submit'>
+                        {status === "Ativado" ? "Desativar" : "Ativar"}
+                    </Button>
+                </Flex>
+
+            </Flex>
+
             <Flex onSubmit={handleSubmit(submitBasic)}
                 as="form" mt={5} width="100%" bg={colors.cardBackground} padding={4} borderRadius={5} flexDirection={'column'}>
                 <Text fontSize='2xl' fontWeight={600}>
@@ -123,6 +161,8 @@ function Index() {
                     </Button>
                 </Flex>
             </Flex>
+
+
 
             <Flex as='form' onSubmit={handleSubmitP(submitPass)} mt={5} width="100%" bg={colors.cardBackground} padding={4} borderRadius={5} flexDirection={'column'}>
                 <Text fontSize='2xl' fontWeight={600}>

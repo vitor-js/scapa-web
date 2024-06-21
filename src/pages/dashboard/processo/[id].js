@@ -25,7 +25,7 @@ const schemForm = yup.object().shape({
 function Index() {
 
     const { authData } = useAuth()
-    const { query } = useRouter()
+    const { query, push } = useRouter()
     const { id } = query
 
 
@@ -71,6 +71,20 @@ function Index() {
     }, [requestData])
 
 
+    const handleRemoveProcess = async (e) => {
+        e.preventDefault()
+        try {
+            await api.delete(`/proccess/${id}`,)
+
+            await push("/dashboard")
+            queryClient.invalidateQueries('proccess');
+            toast.success("Processo removido com sucesso")
+        } catch {
+            toast.error("Algo deu errado, tente novamente!")
+        }
+
+    }
+
 
 
 
@@ -101,15 +115,16 @@ function Index() {
                                 <Input label='Autor'
                                     name='autor' error={errors?.autor?.message}  {...register("autor")}
                                 />
-                                <Input label='Réu' name='reu' error={errors?.reu?.message} {...register("reu")} />
+
 
                                 <Input label='Tempo do processo'
                                     name='proccess_time' error={errors?.autor?.proccess_time}  {...register("proccess_time")}
                                 />
                                 <Input label='Réu' name='reu' error={errors?.reu?.message} {...register("reu")} />
+                                <Input label='Custo do Réu' name='reu_cost' error={errors?.description?.reu_cost}  {...register("reu_cost")} />
                             </Grid>
                             <Box mt={4}>
-                                <Input label='Custo do Réu' name='reu_cost' error={errors?.description?.reu_cost}  {...register("reu_cost")} />
+
                             </Box>
 
                             <Flex mt={4} alignContent={'flex-end'} justifyContent={'flex-end'} justifyItems={'flex-end'} >
@@ -119,10 +134,74 @@ function Index() {
                             </Flex>
 
                         </Flex>
+
+                        <Flex as='form' onSubmit={async (e) => {
+                            e.preventDefault()
+                            await push(`/dashboard/processo/propostas/${id}`)
+                        }
+                        } mt={5} width="100%" bg={colors.cardBackground} padding={4} borderRadius={5} flexDirection={'column'}>
+                            <Text fontSize='2xl' fontWeight={600}>
+                                Deseja criar uma proposta para este processo ?
+                            </Text>
+
+                            <Flex
+                                flexDirection={'column'}
+                                bg={colors.cardBackground} borderRadius={5}
+                                justifyContent={"center"}
+                            >
+
+                                <Text fontSize={16} fontWeight={400}>
+                                    Clique no botão  para criar ou administrar suas propostas
+                                </Text>
+
+                                <Flex alignContent={'flex-end'} justifyContent={'flex-end'} justifyItems={'flex-end'} >
+                                    <Button type='submit'>
+                                        Ir para propostas
+                                    </Button>
+                                </Flex>
+
+                            </Flex>
+
+                        </Flex>
+
+
+                        <Flex as='form' onSubmit={(e) => handleRemoveProcess(e)} mt={5} width="100%" bg={colors.cardBackground} padding={4} borderRadius={5} flexDirection={'column'}>
+                            <Text fontSize='2xl' fontWeight={600}>
+                                Excluir processo
+                            </Text>
+
+                            <Flex
+                                flexDirection={'column'}
+                                bg={colors.cardBackground} borderRadius={5}
+                                justifyContent={"center"}
+                            >
+
+                                <Text fontSize={16} fontWeight={400}>
+                                    Caso queira excluir este processo permanentemente clique no botao ao lado
+                                </Text>
+
+                                <Flex alignContent={'flex-end'} justifyContent={'flex-end'} justifyItems={'flex-end'} >
+                                    <Button
+                                        _hover={{
+                                            background: colors.bgDanger,
+
+                                        }}
+                                        backgroundColor={colors.textDanger} type='submit'>
+                                        Excluir Processo
+                                    </Button>
+                                </Flex>
+
+                            </Flex>
+
+                        </Flex>
+
+
+
                     </WrapperBody>
                 </>
-            )}
-        </LayoutDashboardProccess>
+            )
+            }
+        </LayoutDashboardProccess >
     )
 }
 

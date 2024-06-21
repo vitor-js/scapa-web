@@ -14,7 +14,7 @@ export const globalTheme = extendTheme({
         global: () => ({
             body: {
                 backgroundColor: useColorModeValue('#f1f3f5', '#0c0d0e'),
-                text: useColorModeValue('#0c0d0e', '#f1f3f5'),
+                text: useColorModeValue('#f1f3f5', '#f1f3f5'),
                 scrollBehavior: "smooth",
             },
         }),

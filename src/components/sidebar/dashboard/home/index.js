@@ -48,7 +48,7 @@ const Index = ({ onOpen }) => {
                         icon={MdHome}
                         shouldMatchExactHref
                     >
-                        Dashboard
+                        Processos
                     </NavLink>
 
                     <Box mt={15}>

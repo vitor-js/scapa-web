@@ -14,7 +14,7 @@ function Index({ requests = [], setRequests, data }) {
 
     const router = useRouter()
     const { query } = router
-    const { id } = query
+    const { id, type } = query
     const colors = useColors()
     const [openSelect, setOpenSelect] = useState(false)
     const [showResult, setShowResult] = useState(false)
@@ -22,6 +22,7 @@ function Index({ requests = [], setRequests, data }) {
     const [draftRequest, setDraftRequest] = useState()
 
     useEffect(() => {
+
         if (!data) return router.push(`/dashboard/processo/propostas/${id}`)
     }, [data])
 
@@ -137,21 +138,58 @@ function Index({ requests = [], setRequests, data }) {
 
     return (<>
         <Flex w={'100%'} >
-            {requests.length === 0 && openSelect === false && showResult === false && <Request.default setOpenSelect={setOpenSelect} />}
-            {openSelect && <Request.requestForm handleAddNewRequest={handleAddNewRequest} handleUpdateRequest={handleUpdateRequest} setOpenSelect={setOpenSelect} draftRequest={draftRequest} />}
+            {requests.length === 0 && openSelect === false && showResult === false &&
+                <>
+                    <Flex flexDirection={"column"} w='100%'>
+                        <Text color={colors.text} fontSize='4xl' fontWeight={600}  >
+                            {type !== "Neutra" ? "Ajuste o nível de risco para essa modalidade de proposta" : "Monte seu pedido"}
+
+                        </Text>
+                        <Request.default setOpenSelect={setOpenSelect} />
+                    </Flex>
+                </>
+
+            }
+            {openSelect && (
+
+                <Flex flexDirection={"column"} w='100%'>
+                    <Text color={colors.text} fontSize='4xl' fontWeight={600}  >
+                        {type !== "Neutra" ? "Ajuste o nível de risco para essa modalidade de proposta" : "Monte seu pedido"}
+                    </Text>
+                    <Request.requestForm handleAddNewRequest={handleAddNewRequest} handleUpdateRequest={handleUpdateRequest} setOpenSelect={setOpenSelect} draftRequest={draftRequest} />
+                </Flex>
+            )}
             {requests.length !== 0 && openSelect === false && showResult === false && (
-                <Request.requestList
-                    requests={requests}
-                    setDraftRequest={setDraftRequest}
-                    removeRequest={removeRequest}
-                    setOpenSelect={setOpenSelect}
 
-                    calcAndSave={calcAndSave}
+                <>
 
-                />
+                    <Flex flexDirection={"column"} w='100%'>
+                        <Text color={colors.text} fontSize='4xl' fontWeight={600}  >
+                            {type !== "Neutra" ? "Ajuste o nível de risco para essa modalidade de proposta" : "Monte seu pedido"}
+                        </Text>
+                        <Request.requestList
+                            requests={requests}
+                            setDraftRequest={setDraftRequest}
+                            removeRequest={removeRequest}
+                            setOpenSelect={setOpenSelect}
+
+                            calcAndSave={calcAndSave}
+
+                        />
+                    </Flex>
+
+
+
+
+                </>
+
             )}
             {showResult === true && openSelect === false && <>
                 <div style={{ opacity: 1 }} >
+                    <Text color={colors.text} fontSize='4xl' fontWeight={600}  >
+                        Proposta adicionada com sucesso!
+                    </Text>
+
                     <Request.requestResult result={result} />
                 </div>
             </>}

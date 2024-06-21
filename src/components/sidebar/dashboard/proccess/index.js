@@ -48,7 +48,7 @@ const Index = ({ onOpen }) => {
             >
                 <Flex flexDirection="column">
 
-                    <ReturnLink text="Dashboard" href={'/dashboard/'} />
+                    <ReturnLink text="Todos os processos" href={'/dashboard/'} />
                     <Flex flexDirection="column" p={5}>
 
                         <Box mt={15}>
@@ -76,7 +76,7 @@ const Index = ({ onOpen }) => {
                                 shouldMatchExactHref
                             >
 
-                                Propostas
+                                Criar Propostas
                             </NavLink>
                         </Box>
 

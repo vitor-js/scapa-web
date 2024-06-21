@@ -47,13 +47,8 @@ function Index({ data, preRequests }) {
 
     return (
         <Box width={'100%'}>
-            <Text color={colors.text} fontSize='4xl' fontWeight={600}  >
-                Adicione seus pedidos
-            </Text>
 
-            <Text color={colors.text} fontSize='lg' fontWeight={400} my={2} w={'100%'}  >
 
-            </Text>
 
             <Flex w={'100%'} >
                 <ScapaRequest requests={requests} setRequests={setRequests} data={data} />

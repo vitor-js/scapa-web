@@ -278,6 +278,13 @@ function Index() {
                     {requestData?.data?.Proposals.length === 0 && (<>
 
                         <WrapperBody>
+
+                            <Box bg={colors.cardBackground} w={'100%'} padding={4} borderRadius={5} mt={4} cursor={'pointer'} >
+                                <Text fontSize={'1xl'} fontWeight={400}>
+                                    Para iniciar, desenvolva sua primeira proposta utilizando o modelo neutro disponível.
+                                </Text>
+                            </Box>
+
                             <Box onClick={() => {
                                 router.push(`/dashboard/processo/nova-proposta/${id}?type=Neutra`)
                             }} mt={5} width={'100%'}>

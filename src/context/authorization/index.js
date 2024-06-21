@@ -38,11 +38,15 @@ function AuthProvider({ children }) {
 
 
     useEffect(() => {
+        reload()
+    }, [])
+
+    const reload = () => {
         const token = getCookie('scapa.token');
         const refresh = getCookie('scapa.refreshToken');
         if (!token || !refresh) return
         login({ token: String(token), refresh: String(refresh) }, false)
-    }, [])
+    }
 
 
     const getCredenciais = async (tokens, haveRedirect = false) => {
@@ -99,7 +103,8 @@ function AuthProvider({ children }) {
         () => ({
             authData,
             logout,
-            login
+            login,
+            reload
         }),
         [authData]
     )

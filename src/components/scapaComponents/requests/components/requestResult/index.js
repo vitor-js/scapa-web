@@ -131,22 +131,6 @@ function Index({ result }) {
                     gridTemplateColumns={['1fr', '1fr 1fr', '1fr 1fr 1fr']}
                 >
 
-                    <Flex my={6} width={'100%'} flexDirection={'column'}>
-                        <Box>
-                            <Text fontSize={15} fontWeight={400} ml={3} mr={3} >
-                                Valor Total da proposta
-                            </Text>
-                        </Box>
-
-                        <Box mt={1}>
-                            <Text fontSize={15} fontWeight={400} ml={3} mr={3} >
-                                {result && toCurrencyScreen(result.valueProposal)}
-                            </Text>
-                        </Box>
-
-
-                    </Flex>
-
 
                     <Flex width={'100%'} flexDirection={'column'}>
                         <Box>
@@ -163,6 +147,11 @@ function Index({ result }) {
 
 
                     </Flex>
+
+
+
+
+
                     <Flex my={6} width={'100%'} flexDirection={'column'}>
                         <Box>
                             <Text fontSize={15} fontWeight={400} ml={3} mr={3} >
@@ -173,6 +162,23 @@ function Index({ result }) {
                         <Box mt={1}>
                             <Text fontSize={15} fontWeight={400} ml={3} mr={3} >
                                 {result && toCurrencyScreen(result.valueTotalPostulateIndividual)}
+                            </Text>
+                        </Box>
+
+
+                    </Flex>
+
+
+                    <Flex my={6} width={'100%'} flexDirection={'column'}>
+                        <Box>
+                            <Text fontSize={15} fontWeight={400} ml={3} mr={3} >
+                                Valor Total da proposta
+                            </Text>
+                        </Box>
+
+                        <Box mt={1}>
+                            <Text fontSize={15} fontWeight={400} ml={3} mr={3} >
+                                {result && toCurrencyScreen(result.valueProposal)}
                             </Text>
                         </Box>
 
@@ -193,7 +199,7 @@ function Index({ result }) {
 
             <Flex width={'100%'} textAlign={'center'} alignItems={'center'} justifyContent={'center'} mt={10}>
                 <Text textAlign={'center'} onClick={() => router.back()} fontSize={15} fontWeight={400} color={colors.text} cursor={'pointer'}>
-                    Clique para voltar
+                    Clique para voltar ou criar nova proposta
                 </Text>
 
             </Flex>

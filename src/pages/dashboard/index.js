@@ -77,7 +77,7 @@ function Index() {
 
                                         <Link href={`/dashboard/processo/${value.id}`} passHref>
                                             <Text fontSize='md' fontWeight={600}>
-                                                Clique para ver mais
+                                                Clique para inserir dados e montar propostas
                                             </Text>
                                         </Link>
 
