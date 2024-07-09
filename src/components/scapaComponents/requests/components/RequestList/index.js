@@ -88,7 +88,7 @@ function Index({ requests = [], setOpenSelect, setDraftRequest, removeRequest, c
                         <Flex my={6} width={'100%'} flexDirection={'column'}>
                             <Box>
                                 <Text fontSize={15} fontWeight={400} ml={3} mr={3} >
-                                    Valor individualizado
+                                    Valor individualizado com gestão de risco
                                 </Text>
                             </Box>
 
