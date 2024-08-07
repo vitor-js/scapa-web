@@ -8,12 +8,14 @@ import { useRouter } from 'next/router'
 import { api } from '../../../service'
 import { queryClient } from '../../../service/queryClient';
 import { toast } from 'react-hot-toast';
+import { MdArrowBack } from "react-icons/md";
+
 
 function Index({ requests = [], setRequests, data }) {
 
 
     const router = useRouter()
-    const { query } = router
+    const { query, push } = router
     const { id, type } = query
     const colors = useColors()
     const [openSelect, setOpenSelect] = useState(false)
@@ -137,62 +139,74 @@ function Index({ requests = [], setRequests, data }) {
 
 
     return (<>
-        <Flex w={'100%'} >
-            {requests.length === 0 && openSelect === false && showResult === false &&
-                <>
+        <Flex flexDirection={'column'} w={"100%"} >
+            <Flex alignItems={'center'} onClick={() => { push(`/dashboard/processo/propostas/${id}`) }} mb={8} cursor={'pointer'} >
+                <MdArrowBack color={colors.text} size={20} />
+                <Text ml={3} mr={3} >Clique para voltar</Text>
+            </Flex>
+
+
+
+            <Flex w={'100%'} >
+
+
+
+                {requests.length === 0 && openSelect === false && showResult === false &&
+                    <>
+                        <Flex flexDirection={"column"} w='100%'>
+                            <Text color={colors.text} fontSize='4xl' fontWeight={600}  >
+                                {type !== "Neutra" ? "Ajuste o nível de risco para essa modalidade de proposta" : "Monte seu pedido"}
+
+                            </Text>
+                            <Request.default setOpenSelect={setOpenSelect} />
+                        </Flex>
+                    </>
+
+                }
+                {openSelect && (
+
                     <Flex flexDirection={"column"} w='100%'>
                         <Text color={colors.text} fontSize='4xl' fontWeight={600}  >
                             {type !== "Neutra" ? "Ajuste o nível de risco para essa modalidade de proposta" : "Monte seu pedido"}
-
                         </Text>
-                        <Request.default setOpenSelect={setOpenSelect} />
+                        <Request.requestForm data={data} handleAddNewRequest={handleAddNewRequest} handleUpdateRequest={handleUpdateRequest} setOpenSelect={setOpenSelect} draftRequest={draftRequest} />
                     </Flex>
-                </>
+                )}
+                {requests.length !== 0 && openSelect === false && showResult === false && (
 
-            }
-            {openSelect && (
+                    <>
 
-                <Flex flexDirection={"column"} w='100%'>
-                    <Text color={colors.text} fontSize='4xl' fontWeight={600}  >
-                        {type !== "Neutra" ? "Ajuste o nível de risco para essa modalidade de proposta" : "Monte seu pedido"}
-                    </Text>
-                    <Request.requestForm handleAddNewRequest={handleAddNewRequest} handleUpdateRequest={handleUpdateRequest} setOpenSelect={setOpenSelect} draftRequest={draftRequest} />
-                </Flex>
-            )}
-            {requests.length !== 0 && openSelect === false && showResult === false && (
+                        <Flex flexDirection={"column"} w='100%'>
+                            <Text color={colors.text} fontSize='4xl' fontWeight={600}  >
+                                {type !== "Neutra" ? "Ajuste o nível de risco para essa modalidade de proposta" : "Monte seu pedido"}
+                            </Text>
+                            <Request.requestList
+                                requests={requests}
+                                setDraftRequest={setDraftRequest}
+                                removeRequest={removeRequest}
+                                setOpenSelect={setOpenSelect}
 
-                <>
+                                calcAndSave={calcAndSave}
 
-                    <Flex flexDirection={"column"} w='100%'>
+                            />
+                        </Flex>
+
+
+
+
+                    </>
+
+                )}
+                {showResult === true && openSelect === false && <>
+                    <div style={{ opacity: 1 }} >
                         <Text color={colors.text} fontSize='4xl' fontWeight={600}  >
-                            {type !== "Neutra" ? "Ajuste o nível de risco para essa modalidade de proposta" : "Monte seu pedido"}
+                            Proposta adicionada com sucesso!
                         </Text>
-                        <Request.requestList
-                            requests={requests}
-                            setDraftRequest={setDraftRequest}
-                            removeRequest={removeRequest}
-                            setOpenSelect={setOpenSelect}
 
-                            calcAndSave={calcAndSave}
-
-                        />
-                    </Flex>
-
-
-
-
-                </>
-
-            )}
-            {showResult === true && openSelect === false && <>
-                <div style={{ opacity: 1 }} >
-                    <Text color={colors.text} fontSize='4xl' fontWeight={600}  >
-                        Proposta adicionada com sucesso!
-                    </Text>
-
-                    <Request.requestResult result={result} />
-                </div>
-            </>}
+                        <Request.requestResult result={result} />
+                    </div>
+                </>}
+            </Flex>
         </Flex>
     </>);
 }

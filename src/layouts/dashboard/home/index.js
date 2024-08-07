@@ -19,7 +19,7 @@ import {
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm } from 'react-hook-form'
-import { currencyToBackend } from '../../../helpers'
+import { currencyToBackend, diffMonths } from '../../../helpers'
 import { api } from '../../../service';
 import { useRouter } from 'next/router'
 import { queryClient } from '../../../service/queryClient';
@@ -35,7 +35,7 @@ function Index({ children }) {
         number_process: yup.string().required('Campo obrigatório'),
         autor: yup.string().required('Campo obrigatório'),
         reu: yup.string().required('Campo obrigatório'),
-        proccess_time: yup.string().required('Campo obrigatório'),
+        // proccess_time: yup.string().required('Campo obrigatório'),
     })
 
 
@@ -48,8 +48,9 @@ function Index({ children }) {
     } = useForm({ resolver: yupResolver(schema) })
 
     const handleSubmitForm = async (values) => {
+
         try {
-            await api.post("proccess", { ...values, reu_cost: currencyToBackend(values.reu_cost), user_id: authData.id })
+            await api.post("proccess", { ...values, reu_cost: currencyToBackend(values.reu_cost), user_id: authData.id, proccess_time: diffMonths(values.start_date, values.end_date) })
             reset()
             queryClient.invalidateQueries('proccess');
             onClose()
@@ -89,9 +90,19 @@ function Index({ children }) {
                                 <Input mask={"number"} name='number_process' error={errors?.number_process?.message} {...register("number_process")} label='Número do Processo' />
                             </Box>
 
-                            <Box my='5'>
+                            {/* <Box my='5'>
                                 <Input mask={"number"} label='Tempo de duração (em meses)' name='proccess_time' error={errors?.proccess_time?.message}  {...register("proccess_time")} />
+                            </Box> */}
+
+                            <Box my='5'>
+                                <Input type="date" label='Data de inicio' name='start_date' error={errors?.proccess_time?.start_date}  {...register("start_date")} />
                             </Box>
+
+                            <Box my='5'>
+                                <Input type="date" label='Data de fim' name='end_date' error={errors?.proccess_time?.end_date}  {...register("end_date")} />
+                            </Box>
+
+
                             <Box my='5'>
                                 <Input label='Autor' name='autor' error={errors?.autor?.message}  {...register("autor")} />
                             </Box>

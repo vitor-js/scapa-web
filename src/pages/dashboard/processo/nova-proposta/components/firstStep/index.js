@@ -30,14 +30,16 @@ function Index({ data, preRequests }) {
     useEffect(() => {
         if (!preRequests || preRequests.length === 0) return
         if (requests.length !== 0) return
-
+        console.log(preRequests, 'asdsd')
         const requestsParse = preRequests.map(v => {
             return {
                 requestValue: v.type,
                 valuePostulate: v.postulated_individual,
                 valueIndividual: v.postulated_individual_value,
                 risk: RISK_TABLE[v.risk_success],
-                riskSuccess: v.risk_success
+                riskSuccess: v.risk_success,
+                ...(v.diference_type ? { diference_type: v.diference_type } : {}),
+                ...(v.diference_value ? { diference_value: v.diference_value } : {}),
             }
         })
         toast.success("Peidos importados com sucesso!")

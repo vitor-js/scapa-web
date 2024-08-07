@@ -71,7 +71,6 @@ function Index({ requests = [], setOpenSelect, setDraftRequest, removeRequest, c
 
                         <Box mt={1}>
                             <Text fontSize={15} fontWeight={400} ml={3} mr={3} >
-                                {console.log("value.valuePostulate", value)}
                                 {toCurrencyScreen(value.valuePostulate)}
                             </Text>
                         </Box>
