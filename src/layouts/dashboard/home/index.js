@@ -35,6 +35,7 @@ function Index({ children }) {
         number_process: yup.string().required('Campo obrigatório'),
         autor: yup.string().required('Campo obrigatório'),
         reu: yup.string().required('Campo obrigatório'),
+        salary: yup.string().required('Campo obrigatório'),
         // proccess_time: yup.string().required('Campo obrigatório'),
     })
 
@@ -50,7 +51,7 @@ function Index({ children }) {
     const handleSubmitForm = async (values) => {
 
         try {
-            await api.post("proccess", { ...values, reu_cost: currencyToBackend(values.reu_cost), user_id: authData.id, proccess_time: diffMonths(values.start_date, values.end_date) })
+            await api.post("proccess", { ...values, salary: currencyToBackend(values.salary), reu_cost: currencyToBackend(values.reu_cost), user_id: authData.id, proccess_time: diffMonths(values.start_date, values.end_date) })
             reset()
             queryClient.invalidateQueries('proccess');
             onClose()
@@ -90,6 +91,10 @@ function Index({ children }) {
                                 <Input mask={"number"} name='number_process' error={errors?.number_process?.message} {...register("number_process")} label='Número do Processo' />
                             </Box>
 
+
+                            <Box my='5'>
+                                <Input mask={"currency"} name='salary' error={errors?.salary?.message} {...register("salary")} label='Valor do salário' />
+                            </Box>
                             {/* <Box my='5'>
                                 <Input mask={"number"} label='Tempo de duração (em meses)' name='proccess_time' error={errors?.proccess_time?.message}  {...register("proccess_time")} />
                             </Box> */}

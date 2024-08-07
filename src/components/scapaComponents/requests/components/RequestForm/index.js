@@ -203,6 +203,7 @@ function Index({ handleAddNewRequest, draftRequest, setOpenSelect, handleUpdateR
 
     const [risk, setRisk] = useState()
     const [ratio, setRatio] = useState()
+    const [salaryValue, setSalaryValue] = useState()
 
     const schema = yup.object().shape({
         pedido: yup
@@ -342,6 +343,17 @@ function Index({ handleAddNewRequest, draftRequest, setOpenSelect, handleUpdateR
 
     const valueRequest = watch('pedido')
 
+    useEffect(() => {
+        if (!data) return
+        const { salary } = data.data
+        setSalaryValue(salary ? salary : undefined)
+    }, [data])
+
+    useEffect(() => {
+        console.log(VALUES_WITH_CALCS.includes(valueRequest), salaryValue !== undefined, salaryValue)
+    }, [valueRequest])
+
+
 
     return (
         <Flex
@@ -364,7 +376,7 @@ function Index({ handleAddNewRequest, draftRequest, setOpenSelect, handleUpdateR
 
             {valueRequest && <>
 
-                {!VALUES_WITH_CALCS.includes(valueRequest) && <>
+                {!VALUES_WITH_CALCS.includes(valueRequest) || salaryValue === undefined ? <>
                     <Box w={'100%'} mt={5}>
                         <Input label='Valor individual postulado'
                             {...register('valor_individual_postulado')}
@@ -377,7 +389,11 @@ function Index({ handleAddNewRequest, draftRequest, setOpenSelect, handleUpdateR
                             mask='currency' />
                     </Box>
 
-                </>}
+                </> : null}
+
+
+
+
 
                 <Box w={'100%'} mt={5}>
                     <Select
@@ -393,7 +409,8 @@ function Index({ handleAddNewRequest, draftRequest, setOpenSelect, handleUpdateR
                 </Box>
 
 
-                {!VALUES_WITH_CALCS.includes(valueRequest) && <>
+                {!VALUES_WITH_CALCS.includes(valueRequest) || salaryValue === undefined ? <>
+
                     <Box w={'100%'} mt={5}>
                         <Input mask='currency'
                             {...register('ratio')}
@@ -403,11 +420,12 @@ function Index({ handleAddNewRequest, draftRequest, setOpenSelect, handleUpdateR
                     </Box>
 
 
-                </>}
+                </> : null}
 
 
 
-                {!VALUES_WITH_CALCS.includes(valueRequest) && <>
+                {!VALUES_WITH_CALCS.includes(valueRequest) || salaryValue === undefined ? <>
+
                     <Box w={'100%'} mt={5}>
 
                         <Input mask='currency'
@@ -417,21 +435,16 @@ function Index({ handleAddNewRequest, draftRequest, setOpenSelect, handleUpdateR
                     </Box>
 
 
-                </>}
+                </> : null}
 
 
 
-
-                {["Diferenças salariais por equiparação salarial",
-                    "Diferenças salariais por acúmulo de função",
-                    "Diferenças salariais convencionais",
-                    "Diferenças reflexas de vantagens salariais",
-                    "Diferenças salariais (genérico)",].includes(valueRequest) && data && data?.data?.salary &&
+                {VALUES_WITH_CALCS.includes(valueRequest) && salaryValue !== undefined ?
                     <>
                         <CalculeComponents.DiffSalary
                             register={register} errors={errors} data={data} draftRequest={draftRequest} setValue={setValue}
                         />
-                    </>
+                    </> : null
                 }
 
                 <Flex mt={5} alignItems={'center'} justifyContent={'end'}>
