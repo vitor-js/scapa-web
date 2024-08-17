@@ -119,7 +119,7 @@ function Index({ result }) {
 
                     <Box >
                         <Text fontSize={15} fontWeight={400} ml={3} mr={3} >
-                            {result && toCurrencyScreen(600)}
+                            {result && toCurrencyScreen(Math.round(result.custo_reu))}
                         </Text>
                     </Box>
                 </Flex>
