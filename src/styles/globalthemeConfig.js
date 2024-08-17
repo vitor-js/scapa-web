@@ -23,7 +23,8 @@ export const globalTheme = extendTheme({
         Button: {
             baseStyle: {
                 backgroundColor: "#2253A0 !important",
-                borderRadius: '5px !important'
+                borderRadius: '5px !important',
+                color: "#fff !important"
             }
         },
     },

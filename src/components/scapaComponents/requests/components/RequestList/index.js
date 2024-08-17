@@ -157,7 +157,7 @@ function Index({ requests = [], setOpenSelect, setDraftRequest, removeRequest, c
 
 
             <Flex mt={6} justifyContent={"end"} onClick={() => { calcAndSave() }}>
-                <Button>
+                <Button color="#fff">
                     Avançar
                 </Button>
             </Flex>

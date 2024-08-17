@@ -285,7 +285,7 @@ function Index() {
                                 }
 
                                 <Flex mt={3} alignItems={'center'} justifyContent={'flex-end'}>
-                                    <Button onClick={() => handleSubmit()} >Slavar</Button>
+                                    <Button color="#fff" onClick={() => handleSubmit()} >Slavar</Button>
                                 </Flex>
                             </Box>
 

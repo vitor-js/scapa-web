@@ -122,7 +122,7 @@ function Index() {
                     />
                 </Flex>
                 <Flex mt={4} alignContent={'flex-end'} justifyContent={'flex-end'} justifyItems={'flex-end'} >
-                    <Button type='submit'>
+                    <Button color="#fff" type='submit'>
                         Criar
                     </Button>
                 </Flex>

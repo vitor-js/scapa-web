@@ -142,7 +142,7 @@ function Index({ requests = [], setRequests, data }) {
                 <>
                     <Flex flexDirection={"column"} w='100%'>
                         <Text color={colors.text} fontSize='4xl' fontWeight={600}  >
-                            {type !== "Neutra" ? "Ajuste o nível de risco para essa modalidade de proposta" : "Monte seu pedido"}
+                            {type !== "Neutra" ? "Ajuste o nível de risco para essa modalidade de proposta" : "Gerencie seus pedidos"}
 
                         </Text>
                         <Request.default setOpenSelect={setOpenSelect} />
@@ -154,7 +154,7 @@ function Index({ requests = [], setRequests, data }) {
 
                 <Flex flexDirection={"column"} w='100%'>
                     <Text color={colors.text} fontSize='4xl' fontWeight={600}  >
-                        {type !== "Neutra" ? "Ajuste o nível de risco para essa modalidade de proposta" : "Monte seu pedido"}
+                        {type !== "Neutra" ? "Ajuste o nível de risco para essa modalidade de proposta" : "Gerencie seus pedidos"}
                     </Text>
                     <Request.requestForm handleAddNewRequest={handleAddNewRequest} handleUpdateRequest={handleUpdateRequest} setOpenSelect={setOpenSelect} draftRequest={draftRequest} />
                 </Flex>
@@ -165,7 +165,7 @@ function Index({ requests = [], setRequests, data }) {
 
                     <Flex flexDirection={"column"} w='100%'>
                         <Text color={colors.text} fontSize='4xl' fontWeight={600}  >
-                            {type !== "Neutra" ? "Ajuste o nível de risco para essa modalidade de proposta" : "Monte seu pedido"}
+                            {type !== "Neutra" ? "Ajuste o nível de risco para essa modalidade de proposta" : "Gerencie seus pedidos"}
                         </Text>
                         <Request.requestList
                             requests={requests}

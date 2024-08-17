@@ -109,7 +109,7 @@ function Index({ children }) {
                     </ModalBody>
 
                     <ModalFooter>
-                        <Button colorScheme='blue' mr={3} type='submit'>
+                        <Button color="#fff" colorScheme='blue' mr={3} type='submit'>
                             <Text color={colors.text}>
                                 Salvar
                             </Text>

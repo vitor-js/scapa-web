@@ -138,8 +138,8 @@ function Index({ data, setPrerequests }) {
 
 
             <Flex w={'100%'} mt={6} alignItems={"flex-end"} justifyContent={'flex-end'} >
-                <Button onClick={() => onSubmit()} >
-                    <Text color={colors.textButton} fontSize='lg' fontWeight={400} my={2}>
+                <Button color="#fff" onClick={() => onSubmit()} >
+                    <Text color={"#fff"} fontSize='lg' fontWeight={400} my={2}>
                         Continuar
                     </Text>
                 </Button>

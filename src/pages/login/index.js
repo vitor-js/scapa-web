@@ -68,7 +68,7 @@ function Index() {
                     <Input     {...register('password')} error={errors.password} label='Password' type='password' />
                 </Flex>
                 <Flex width={'100%'}>
-                    <Button type="submit" width={'100%'} >Entrar {loading && (
+                    <Button color="#fff" type="submit" width={'100%'} >Entrar {loading && (
                         <>
                             <Spinner color={colors.text} />
                         </>

@@ -4,7 +4,7 @@ import { MdAddCircle } from "react-icons/md";
 import { useColors } from '../../../../../hooks'
 import Select from '../../../../form/select'
 import Input from '../../../../form/input'
-import { toCurrencyScreen, currencyToBackend } from '../../../../../helpers'
+import { toCurrencyScreen, currencyToBackend, } from '../../../../../helpers'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
@@ -156,6 +156,10 @@ const OPTIONS_RIK = [
         value: 'Inexistente'
     },
     {
+        label: "Muito Baixo",
+        value: "Muito Baixo"
+    },
+    {
         label: "Baixo",
         value: 'Baixo'
     },
@@ -236,17 +240,17 @@ function Index({ handleAddNewRequest, draftRequest, setOpenSelect, handleUpdateR
     useEffect(() => {
 
         if (!draftRequest) return
-        console.log(draftRequest)
+        console.log(draftRequest, '---')
 
         setValue("pedido", draftRequest.requestValue)
         setValue("valor_individual_postulado", draftRequest.valuePostulate)
         setValue("ratio", `${draftRequest.riskSuccess}`)
-        setValue("valor_individualizado", draftRequest.valuePostulate)
+        setValue("valor_individualizado", draftRequest.valueIndividual)
         setValue("risco", RISK_TABLE_REVERSE[draftRequest.riskSuccess])
 
 
         setRisk(RISK_TABLE_REVERSE[draftRequest.riskSuccess])
-        setIndividualValue(draftRequest.valueIndividual)
+        setIndividualValue(toCurrencyScreen(draftRequest.valuePostulate))
         update()
     }, [draftRequest])
 
@@ -327,7 +331,7 @@ function Index({ handleAddNewRequest, draftRequest, setOpenSelect, handleUpdateR
                 <Text cursor={'pointer'} onClick={() => { setOpenSelect(false) }} mr={5}>
                     Voltar
                 </Text>
-                <Button type='submit'>
+                <Button color="#fff" type='submit'>
                     Salvar
                 </Button>
             </Flex>
