@@ -34,6 +34,7 @@ function Index({ requests = [], setOpenSelect, setDraftRequest, removeRequest, c
                                     borderColor={colors.border.hoverColor}
                                     borderWidth={1}
                                     onClick={() => {
+
                                         setDraftRequest({ ...value })
                                         setOpenSelect(true)
                                     }}

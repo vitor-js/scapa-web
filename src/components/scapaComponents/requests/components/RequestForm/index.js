@@ -8,6 +8,10 @@ import { toCurrencyScreen, currencyToBackend, } from '../../../../../helpers'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
+import CalculeComponents from './components'
+import calc from '../../../../../helpers/calcs'
+
+import { toast } from 'react-hot-toast';
 
 const ACTIONS = [
     {
@@ -32,9 +36,15 @@ const ACTIONS = [
         value: "Adicional Noturno"
     },
     {
+        label: "Adicional de Insalubridade",
+        value: "Adicional de Insalubridade"
+    },
+    {
         label: "Adicional de Periculosidade",
         value: "Adicional de Periculosidade"
     },
+
+
     {
         label: "Diferenças salariais por equiparação salarial",
         value: "Diferenças salariais por equiparação salarial"
@@ -181,15 +191,33 @@ const OPTIONS_RIK = [
     }
 ]
 
+const VALUES_WITH_CALCS = ["Diferenças salariais por equiparação salarial",
+    "Diferenças salariais por acúmulo de função",
+    "Diferenças salariais convencionais",
+    "Diferenças reflexas de vantagens salariais",
+    "Diferenças salariais (genérico)",
+    "Adicional de Insalubridade"
+]
+
+const VALUES_WITH_CALCS_DIFF_SALARY = ["Diferenças salariais por equiparação salarial",
+    "Diferenças salariais por acúmulo de função",
+    "Diferenças salariais convencionais",
+    "Diferenças reflexas de vantagens salariais",
+    "Diferenças salariais (genérico)",
+
+]
+
+const INSALUBRIDADE = ["Adicional de Insalubridade"]
 
 
-function Index({ handleAddNewRequest, draftRequest, setOpenSelect, handleUpdateRequest }) {
+function Index({ handleAddNewRequest, draftRequest, setOpenSelect, handleUpdateRequest, data }) {
     const colors = useColors()
     const [individualValue, setIndividualValue] = useState()
     const [individualValueWithRisk, setIndividualValueWithRisk] = useState()
-
+    const [insalubridadeSalary, setInsalubridadeSalary] = useState([])
     const [risk, setRisk] = useState()
     const [ratio, setRatio] = useState()
+    const [salaryValue, setSalaryValue] = useState()
 
     const schema = yup.object().shape({
         pedido: yup
@@ -197,6 +225,32 @@ function Index({ handleAddNewRequest, draftRequest, setOpenSelect, handleUpdateR
             .required('Este campo é origatório'),
         valor_individual_postulado: yup.string().required('Este campo é origatório'),
         risco: yup.string().required('Este campo é origatório'),
+        // diff_value_salary: yup.string().required('Este campo é origatório'),
+        // diff_salary_type: yup.string().required('Este campo é origatório'),
+        valor_individual_postulado: yup.lazy((value) => {
+            if (value !== undefined && value !== "") {
+                return yup.string().required('Este campo é origatório');
+            }
+            return yup.string().nullable().optional();
+        }),
+        diff_salary_type: yup.lazy((value) => {
+            if (value !== undefined && value !== "") {
+                return yup.string().required('Este campo é origatório');
+            }
+            return yup.string().nullable().optional();
+        }),
+        diff_value_salary: yup.lazy((value) => {
+            if (value !== undefined && value !== "") {
+                return yup.string().required('Este campo é origatório');
+            }
+            return yup.string().nullable().optional();
+        }),
+        insalubridade_grau: yup.lazy((value) => {
+            if (value !== undefined && value !== " ") {
+                return yup.string().required('Este campo é origatório');
+            }
+            return yup.string().nullable().optional();
+        }),
     })
 
     const {
@@ -204,16 +258,15 @@ function Index({ handleAddNewRequest, draftRequest, setOpenSelect, handleUpdateR
         getValues,
         register,
         setValue,
+        watch,
         formState: { errors },
     } = useForm({
         resolver: yupResolver(schema),
     })
 
     const submit = async (values) => {
+        console.log(values)
         const pedido = getValues("pedido")
-        const valor_individual_postulado = getValues("valor_individual_postulado")
-
-
         const newRequest = {
             requestValue: pedido,
             valuePostulate: valor_individual_postulado,
@@ -222,6 +275,60 @@ function Index({ handleAddNewRequest, draftRequest, setOpenSelect, handleUpdateR
             valueIndividual: individualValueWithRisk,
         };
 
+        try {
+            if (VALUES_WITH_CALCS.includes(valueRequest)) {
+                if (VALUES_WITH_CALCS_DIFF_SALARY.includes(valueRequest)) {
+                    const { valueIndividual, valuePostulate } = calc.diffSalaty(values.diff_salary_type, values.diff_value_salary, data.data, RISK_TABLE[risk])
+                    const requestUpdate = {
+                        ...newRequest,
+                        diference_type: values.diff_salary_type,
+                        diference_value: parseFloat(currencyToBackend(values.diff_value_salary))
+                    }
+
+                    finishRequest(requestUpdate, valuePostulate, valueIndividual)
+                    return
+                }
+
+                if (INSALUBRIDADE.includes(valueRequest)) {
+                    const sumMonths = insalubridadeSalary.reduce(function (accumulator, value) {
+                        return accumulator + value.time
+                    }, 0);
+
+                    const sumValues = insalubridadeSalary.reduce(function (accumulator, value) {
+                        return accumulator + (value.time * value.value)
+                    }, 0);
+
+                    const salaryMedia = sumValues / sumMonths
+
+                    const { valueIndividual, valuePostulate } = calc.insalubridade(data.data, values.insalubridade_grau, RISK_TABLE[risk], salaryMedia)
+                    const requestUpdate = {
+                        ...newRequest,
+                        insalubridade_grau: values.insalubridade_grau,
+                        insalubridade_salario: { data: insalubridadeSalary }
+                    }
+                    finishRequest(requestUpdate, valuePostulate, valueIndividual)
+                    return
+                }
+            }
+
+            const valor_individual_postulado = getValues("valor_individual_postulado")
+            finishRequest(newRequest, valor_individual_postulado, individualValueWithRisk)
+        } catch (e) {
+            console.log(e)
+            toast.error("Algo deu errado, tente novamente!")
+        }
+
+
+    }
+
+    const finishRequest = (value, valuePostulate, valueIndividual) => {
+
+        const newRequest = {
+            ...value,
+            valuePostulate: valuePostulate,
+            valueIndividual: valueIndividual,
+        }
+        console.log(newRequest)
         if (draftRequest) return handleUpdateRequest(newRequest)
         return handleAddNewRequest(newRequest)
     }
@@ -264,6 +371,29 @@ function Index({ handleAddNewRequest, draftRequest, setOpenSelect, handleUpdateR
         setIndividualValueWithRisk(toCurrencyScreen(ApplyRatio));
         setValue("valor_individualizado", toCurrencyScreen(ApplyRatio))
     }
+
+
+    const valueRequest = watch('pedido')
+
+    useEffect(() => {
+        if (!data) return
+        const { salary } = data.data
+        console.log(data.data)
+        setSalaryValue(salary ? salary : undefined)
+    }, [data])
+
+
+    useEffect(() => {
+        console.log(data)
+        if (!data) return
+        const { salary } = data.data
+        console.log(data.data)
+        setSalaryValue(salary ? salary : undefined)
+    }, [])
+
+
+
+
 
     return (
         <Flex
@@ -311,30 +441,64 @@ function Index({ handleAddNewRequest, draftRequest, setOpenSelect, handleUpdateR
             </Box>
 
 
-            <Box w={'100%'} mt={5}>
-                <Input mask='currency'
-                    {...register('ratio')}
 
-                    name='ratio'
-                    label='Risco de exito' value={ratio} disabled={true} />
-            </Box>
+            {!VALUES_WITH_CALCS.includes(valueRequest) || salaryValue === undefined ? <>
 
-            <Box w={'100%'} mt={5}>
-                <Input mask='currency'
-                    {...register('valor_individualizado')}
-                    name='valor_individualizado'
-                    label='Valor individualizado' disabled={true} />
-            </Box>
+                <Box w={'100%'} mt={5}>
+                    <Input mask='currency'
+                        {...register('ratio')}
 
+                        name='ratio'
+                        label='Risco de exito' value={ratio} disabled={true} />
+                </Box>
+
+
+            </> : null}
+
+
+            {!VALUES_WITH_CALCS.includes(valueRequest) || salaryValue === undefined ? <>
+
+                <Box w={'100%'} mt={5}>
+
+                    <Input mask='currency'
+                        {...register('valor_individualizado')}
+                        name='valor_individualizado'
+                        label='Valor individualizado' disabled={true} />
+                </Box>
+
+
+            </> : null}
+
+
+            {VALUES_WITH_CALCS_DIFF_SALARY.includes(valueRequest) && salaryValue !== undefined ?
+                <>
+                    <CalculeComponents.DiffSalary
+                        register={register} errors={errors} data={data} draftRequest={draftRequest} setValue={setValue}
+                    />
+                </> : null
+            }
+
+            {INSALUBRIDADE.includes(valueRequest) && salaryValue !== undefined ?
+                <>
+                    <CalculeComponents.Insalubridade
+                        insalubridadeSalary={insalubridadeSalary} setInsalubridadeSalary={setInsalubridadeSalary} register={register} errors={errors} data={data} draftRequest={draftRequest} setValue={setValue}
+                    />
+                </> : null
+            }
 
             <Flex mt={5} alignItems={'center'} justifyContent={'end'}>
                 <Text cursor={'pointer'} onClick={() => { setOpenSelect(false) }} mr={5}>
                     Voltar
                 </Text>
-                <Button color="#fff" type='submit'>
+                <Button type='submit'>
                     Salvar
                 </Button>
             </Flex>
+
+
+
+
+
 
         </Flex>
     );

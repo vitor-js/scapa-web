@@ -24,7 +24,8 @@ function Index() {
             valuePostulate: v.postulated_individual,
             risk: v.risk,
             risk_success: v.risk_success,
-            valueIndividual: v.postulated_individual_value
+            valueIndividual: v.postulated_individual_value,
+            ...v
 
         }))
 

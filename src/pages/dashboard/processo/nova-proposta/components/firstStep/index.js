@@ -37,10 +37,14 @@ function Index({ data, preRequests }) {
                 valuePostulate: v.postulated_individual,
                 valueIndividual: v.postulated_individual_value,
                 risk: RISK_TABLE[v.risk_success],
-                riskSuccess: v.risk_success
+                riskSuccess: v.risk_success,
+                ...(v.diference_type ? { diference_type: v.diference_type } : {}),
+                ...(v.diference_value ? { diference_value: v.diference_value } : {}),
+                ...(v.insalubridade_grau ? { insalubridade_grau: v.insalubridade_grau } : {}),
+                ...(v.insalubridade_salario ? { insalubridade_salario: v.insalubridade_salario?.data } : {}),
             }
         })
-        toast.success("Peidos importados com sucesso!")
+        toast.success("Pedidos importados com sucesso!")
 
         setRequests([...requestsParse])
     }, [preRequests])

@@ -156,7 +156,7 @@ function Index({ requests = [], setRequests, data }) {
                     <Text color={colors.text} fontSize='4xl' fontWeight={600}  >
                         {type !== "Neutra" ? "Ajuste o nível de risco para essa modalidade de proposta" : "Gerencie seus pedidos"}
                     </Text>
-                    <Request.requestForm handleAddNewRequest={handleAddNewRequest} handleUpdateRequest={handleUpdateRequest} setOpenSelect={setOpenSelect} draftRequest={draftRequest} />
+                    <Request.requestForm data={data} handleAddNewRequest={handleAddNewRequest} handleUpdateRequest={handleUpdateRequest} setOpenSelect={setOpenSelect} draftRequest={draftRequest} />
                 </Flex>
             )}
             {requests.length !== 0 && openSelect === false && showResult === false && (

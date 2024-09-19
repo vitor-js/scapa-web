@@ -1,18 +1,42 @@
 import React, { useEffect } from 'react';
 import { LayoutDashboardHome } from '../../layouts'
 import { WrapperBody, HeaderPages } from '../../components'
-import { Text, Box, Flex } from '@chakra-ui/react';
+import { Text, Box, Flex, IconButton, ButtonGroup, } from '@chakra-ui/react';
 import { MdEditDocument } from 'react-icons/md'
 import { useProccess, useAuth, useColors } from '../../hooks'
 import { converteNaiveDate } from '../../helpers'
 import Link from 'next/link'
+import { MdExitToApp, MdKeyboardArrowDown, } from 'react-icons/md'
+import { FaTrash } from "react-icons/fa";
+import { useRouter } from 'next/router'
 
 
 function Index() {
     const { authData } = useAuth()
+    const { query: queryUrl, push } = useRouter()
     const { query } = useProccess(authData.id)
+    const { id } = queryUrl
     const colors = useColors()
     const { data, isLoading, isFetching, isError, refetch } = query;
+
+    const deleteProccess = async () => {
+
+        try {
+            await api.delete(`/proccess/${id}`,)
+
+            await push("/dashboard")
+            queryClient.invalidateQueries('proccess');
+            toast.success("Processo removido com sucesso")
+        } catch {
+            toast.error("Algo deu errado, tente novamente!")
+        }
+
+    }
+
+    const goToProcess = (v) => {
+        push(v)
+    }
+
 
     return (
         <LayoutDashboardHome>
@@ -75,11 +99,40 @@ function Index() {
                                     </Flex>
                                     <Flex cursor={"pointer"}>
 
-                                        <Link href={`/dashboard/processo/${value.id}`} passHref>
+                                        <ButtonGroup gap="2">
+                                            <IconButton
+                                                size="md"
+                                                fontSize="lg"
+                                                variant="ghost"
+                                                backgroundColor={colors.background}
+                                                borderColor={colors.border.hoverColor}
+                                                borderWidth={1}
+                                                cursor="pointer"
+                                                transition="ease all 0.1s"
+                                                onClick={() => { goToProcess(`/dashboard/processo/${value.id}`) }}
+                                                icon={<MdEditDocument />}
+
+                                            />
+                                            <IconButton
+                                                size="md"
+                                                fontSize="lg"
+                                                variant="ghost"
+                                                backgroundColor={colors.background}
+                                                borderColor={colors.border.hoverColor}
+                                                borderWidth={1}
+                                                cursor="pointer"
+                                                transition="ease all 0.1s"
+                                                onClick={deleteProccess}
+                                                icon={<FaTrash />}
+
+                                            />
+                                        </ButtonGroup>
+
+                                        {/* <Link href={`/dashboard/processo/${value.id}`} passHref>
                                             <Text fontSize='md' fontWeight={600}>
                                                 Clique para inserir dados e montar propostas
                                             </Text>
-                                        </Link>
+                                        </Link> */}
 
 
 
