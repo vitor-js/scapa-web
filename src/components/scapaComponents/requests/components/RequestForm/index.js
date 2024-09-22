@@ -24,6 +24,11 @@ const ACTIONS = [
         value: "Intervalo Intrajornada"
     },
     {
+        label: "Verbas Rescisórias",
+        value: "Verbas Rescisórias"
+    },
+
+    {
         label: "Pausas não realizadas",
         value: "Pausas não realizadas"
     },
@@ -196,7 +201,8 @@ const VALUES_WITH_CALCS = ["Diferenças salariais por equiparação salarial",
     "Diferenças salariais convencionais",
     "Diferenças reflexas de vantagens salariais",
     "Diferenças salariais (genérico)",
-    "Adicional de Insalubridade"
+    "Adicional de Insalubridade",
+    "Verbas Rescisórias"
 ]
 
 const VALUES_WITH_CALCS_DIFF_SALARY = ["Diferenças salariais por equiparação salarial",
@@ -208,7 +214,7 @@ const VALUES_WITH_CALCS_DIFF_SALARY = ["Diferenças salariais por equiparação 
 ]
 
 const INSALUBRIDADE = ["Adicional de Insalubridade"]
-
+const VERBAS = ["Verbas Rescisórias"]
 
 function Index({ handleAddNewRequest, draftRequest, setOpenSelect, handleUpdateRequest, data }) {
     const colors = useColors()
@@ -265,7 +271,7 @@ function Index({ handleAddNewRequest, draftRequest, setOpenSelect, handleUpdateR
     })
 
     const submit = async (values) => {
-        console.log(values)
+
         const pedido = getValues("pedido")
         const newRequest = {
             requestValue: pedido,
@@ -309,10 +315,21 @@ function Index({ handleAddNewRequest, draftRequest, setOpenSelect, handleUpdateR
                     finishRequest(requestUpdate, valuePostulate, valueIndividual)
                     return
                 }
+
+                if (VERBAS.includes(valueRequest)) {
+                    const { valueIndividual, valuePostulate } = calc.calcVerbasRescisorias(data.data, values.termination_type, RISK_TABLE[risk], values.have_vacation)
+                    const requestUpdate = {
+                        ...newRequest,
+                        have_vacation: Boolean(values.have_vacation),
+                        termination_type: values.termination_type
+                    }
+                    finishRequest(requestUpdate, valuePostulate, valueIndividual)
+                    return
+                }
             }
 
             const valor_individual_postulado = getValues("valor_individual_postulado")
-            finishRequest(newRequest, valor_individual_postulado, individualValueWithRisk)
+            // finishRequest(newRequest, valor_individual_postulado, individualValueWithRisk)
         } catch (e) {
             console.log(e)
             toast.error("Algo deu errado, tente novamente!")
@@ -482,6 +499,14 @@ function Index({ handleAddNewRequest, draftRequest, setOpenSelect, handleUpdateR
                 <>
                     <CalculeComponents.Insalubridade
                         insalubridadeSalary={insalubridadeSalary} setInsalubridadeSalary={setInsalubridadeSalary} register={register} errors={errors} data={data} draftRequest={draftRequest} setValue={setValue}
+                    />
+                </> : null
+            }
+
+            {VERBAS.includes(valueRequest) && salaryValue !== undefined ?
+                <>
+                    <CalculeComponents.Verbas
+                        register={register} errors={errors} data={data} draftRequest={draftRequest} setValue={setValue}
                     />
                 </> : null
             }
