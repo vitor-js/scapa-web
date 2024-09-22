@@ -320,7 +320,7 @@ function Index({ handleAddNewRequest, draftRequest, setOpenSelect, handleUpdateR
                     const { valueIndividual, valuePostulate } = calc.calcVerbasRescisorias(data.data, values.termination_type, RISK_TABLE[risk], values.have_vacation)
                     const requestUpdate = {
                         ...newRequest,
-                        have_vacation: Boolean(values.have_vacation),
+                        have_vacation: values.have_vacation === "Sim" ? true : false,
                         termination_type: values.termination_type
                     }
                     finishRequest(requestUpdate, valuePostulate, valueIndividual)

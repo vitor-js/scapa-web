@@ -230,13 +230,13 @@ const calcDispensaMotivada = (days, time, salary, risk, have_vacation) => {
 }
 
 const vacationCalcVerbas = (salary, diffDate, haveVacation) => {
-    console.log(salary, diffDate, haveVacation, '---sss')
+    console.log(salary, diffDate, haveVacation)
     try {
-        if (haveVacation === "true") {
+        if (haveVacation === "Sim") {
             return Math.round(salary + salary / 3);
         }
 
-        if (haveVacation === "false") {
+        if (haveVacation === "Não") {
             if (diffDate <= 12) {
                 const baseCalc = Math.round((salary / 12) * diffDate);
                 const finalcalc = Math.round(baseCalc + baseCalc / 3);

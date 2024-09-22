@@ -29,19 +29,15 @@ const ACTIONS = [
 function Index({ errors, register, data, draftRequest, setValue }) {
 
 
-    // useEffect(() => {
-    //     console.log(draftRequest)
-    //     if (!draftRequest || !data) return
-    //     if (["Diferenças salariais por equiparação salarial",
-    //         "Diferenças salariais por acúmulo de função",
-    //         "Diferenças salariais convencionais",
-    //         "Diferenças reflexas de vantagens salariais",
-    //         "Diferenças salariais (genérico)",].includes(draftRequest.requestValue)) {
-    //         setValue("diff_value_salary", toCurrencyScreen(draftRequest.diference_value))
-    //         setValue("diff_salary_type", draftRequest.diference_type)
-    //     }
+    useEffect(() => {
+        console.log(draftRequest)
+        if (!draftRequest || !data) return
+        if (["Verbas Rescisórias",].includes(draftRequest.requestValue)) {
+            setValue("have_vacation", draftRequest.have_vacation ? "Sim" : "Não")
+            setValue("termination_type", draftRequest.termination_type)
+        }
 
-    // }, [draftRequest, data])
+    }, [draftRequest, data])
 
     return (
         <>
@@ -58,11 +54,11 @@ function Index({ errors, register, data, draftRequest, setValue }) {
                 <Select label='Existem férias vencidas ?' options={[
                     {
                         label: "Sim",
-                        value: true
+                        value: "Sim"
                     },
                     {
                         label: "Não",
-                        value: false
+                        value: "Não"
                     }
                 ]}
                     {...register('have_vacation')}
