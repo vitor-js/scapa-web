@@ -375,12 +375,72 @@ const calcHoraExtra = (data, variation, risk, extraHour, limit, valuesForm) => {
 
 }
 
+const calcIntervalo = (data, variation, risk, interval, values) => {
+    const { proccess_time, salary, end_date } = data
+    let totalWithoutInterval = 0
+    let totalHours = 0;
+    if (variation === "Sim") {
+
+        extraHour.map((valueItem) => {
+
+            var fromDateInterval = parseInt(
+                new Date(`July 20, 69 ${valueItem.hora_inicio_intervalo} GMT+00:00`) / 1000
+            );
+            var toDateInterval = parseInt(
+                new Date(`July 20, 69 ${valueItem.hora_fim_intervalo} GMT+00:00`) / 1000
+            );
+
+            var timeDiffRoutine =
+                (Math.abs(fromDateInterval) - Math.abs(toDateInterval)) / 3600
+
+
+            totalHours = totalHours + timeDiffRoutine;
+        });
+        totalWithoutInterval =
+            intervalWithVariation.length * totalHours * 4.286 * proccess_time;
+
+    }
+    else {
+        var fromDateInterval = parseInt(
+            new Date(`July 20, 69 ${values.hora_inicio_intervalo} GMT+00:00`) / 1000
+        );
+        var toDateInterval = parseInt(new Date(`July 20, 69 ${values.hora_fim_intervalo} GMT+00:00`) / 1000);
+
+        var timeDiffInterval =
+            (Math.abs(fromDateInterval) - Math.abs(toDateInterval)) / 3600
+
+
+        totalHours = totalHours + timeDiffInterval;
+
+
+        totalWithoutInterval =
+            parseInt(values.days_whiout_interval) * timeDiffInterval * 4.286 * proccess_time;
+
+    }
+    console.log(totalWithoutInterval, 'totalWithoutInterval')
+    const divisor = ParseLimit[values.week_limit]
+    console.log(divisor, 'totalWithoutInterval')
+    const intervalValueCalc = Math.round(salary / divisor);
+    const intervalValue = intervalValueCalc + intervalValueCalc * 0.5;
+
+    const valuePostulate = Math.round(intervalValue * totalWithoutInterval);
+    const valueIndividual = Math.round(valuePostulate * risk);
+
+
+    return {
+        valueIndividual,
+        valuePostulate: valuePostulate
+    }
+
+}
+
 
 const calc = {
     diffSalaty,
     insalubridade,
     calcVerbasRescisorias,
-    calcHoraExtra
+    calcHoraExtra,
+    calcIntervalo
 }
 
 export default calc

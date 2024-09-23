@@ -19,7 +19,6 @@ import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { FaTrash } from "react-icons/fa";
 
-
 const ACTIONS = [
     {
         label: "Limite semanal de 44h",
@@ -70,14 +69,14 @@ const ACTIONS_DAYS = [
 
 
 
-function Index({ errors, register, data, draftRequest, setValue, watch, extraHour, setExtraHour }) {
+function Index({ errors, register, data, draftRequest, setValue, watch, interval, setInterval }) {
 
     const colors = useColors()
     const { isOpen, onOpen, onClose } = useDisclosure()
 
 
 
-    const extra_hour_variation_value = watch('extra_hour_variation')
+    const interval_variation_value = watch('interval_variation')
 
     const schema = yup.object().shape({
 
@@ -93,20 +92,20 @@ function Index({ errors, register, data, draftRequest, setValue, watch, extraHou
     useEffect(() => {
         console.log(draftRequest)
         if (!draftRequest || !data) return
-        if (["Horas Extras",].includes(draftRequest.requestValue)) {
-            setValue("extra_hour_variation", draftRequest.extra_hour_variation ? "Sim" : "Não")
+        if (["Intervalo Intrajornada",].includes(draftRequest.requestValue)) {
+            setValue("interval_variation", draftRequest.interval_variation ? "Sim" : "Não")
             setValue("week_limit", draftRequest.week_limit)
 
             if (draftRequest.extra_hour_variation !== true) {
-                const dates = draftRequest.extra_hour_object?.data[0]
+                const dates = draftRequest.interval_object?.data[0]
 
-                setValue("days_working_week", dates.week_limit)
-                setValue("hora_inicio_jornada", dates.hora_inicio_jornada)
-                setValue("hora_fim_jornada", dates.hora_fim_jornada)
+                setValue("days_whiout_interval", dates.days_whiout_interval)
                 setValue("hora_inicio_intervalo", dates.hora_inicio_intervalo)
                 setValue("hora_fim_intervalo", dates.hora_fim_intervalo)
+
             } else {
-                setExtraHour([...draftRequest.extra_hour_object?.data])
+                setValue("hora_fim_intervalo", draftRequest.hora_fim_intervalo)
+                setInterval([...draftRequest.interval_object?.data])
             }
 
         }
@@ -117,7 +116,7 @@ function Index({ errors, register, data, draftRequest, setValue, watch, extraHou
     const handleSubmitForm = async (values) => {
 
         const { day_worked, hora_inicio_jornada, hora_fim_jornada, hora_inicio_intervalo, hora_fim_intervalo } = values
-        setExtraHour((oldValue) => {
+        setInterval((oldValue) => {
             const newOb = {
                 day_worked, hora_inicio_jornada, hora_fim_jornada, hora_inicio_intervalo, hora_fim_intervalo
             }
@@ -177,38 +176,19 @@ function Index({ errors, register, data, draftRequest, setValue, watch, extraHou
                         <Box w={'100%'} mt={5}>
                             <Input
                                 type={"time"}
-                                {...registerModal('hora_inicio_jornada')}
-                                error={errosModal?.hora_inicio_jornada?.message}
-                                name='hora_inicio_jornada'
-                                label='Horário de início da jornada' />
-                        </Box>
-
-                        <Box w={'100%'} mt={5}>
-                            <Input
-                                type={"time"}
-                                {...registerModal('hora_fim_jornada')}
-                                error={errosModal?.hora_fim_jornada?.message}
-                                name='hora_fim_jornada'
-                                label='Horário de término da jornada' />
-                        </Box>
-
-
-                        <Box w={'100%'} mt={5}>
-                            <Input
-                                type={"time"}
                                 {...registerModal('hora_inicio_intervalo')}
-                                error={errosModal?.hora_inicio_intervalo?.message}
+                                error={errors?.hora_inicio_intervalo?.message}
                                 name='hora_inicio_intervalo'
-                                label='Horário de início do intervalo' />
+                                label='Informe o valor de inicio do intervalo' />
                         </Box>
 
                         <Box w={'100%'} mt={5}>
                             <Input
                                 type={"time"}
                                 {...registerModal('hora_fim_intervalo')}
-                                error={errosModal?.hora_fim_intervalo?.message}
+                                error={errors?.hora_fim_intervalo?.message}
                                 name='hora_fim_intervalo'
-                                label='Horário de fim do intervalo' />
+                                label='Informe o valor de fim do intervalo' />
                         </Box>
                     </Box>
 
@@ -226,7 +206,7 @@ function Index({ errors, register, data, draftRequest, setValue, watch, extraHou
 
             </Modal>
             <Box w={'100%'} mt={5}>
-                <Select label='No horário de início e término da jornada havia variação ?' options={[
+                <Select label='Havia variação de intervalo?' options={[
                     {
                         label: "Sim",
                         value: "Sim"
@@ -236,9 +216,9 @@ function Index({ errors, register, data, draftRequest, setValue, watch, extraHou
                         value: "Não"
                     }
                 ]}
-                    {...register('extra_hour_variation')}
-                    error={errors?.extra_hour_variation?.message}
-                    name='extra_hour_variation'
+                    {...register('interval_variation')}
+                    error={errors?.interval_variation?.message}
+                    name='interval_variation'
                 />
             </Box>
 
@@ -250,33 +230,14 @@ function Index({ errors, register, data, draftRequest, setValue, watch, extraHou
                 />
             </Box>
 
-            {extra_hour_variation_value !== "Sim" && <>
+            {interval_variation_value !== "Sim" && <>
                 <Box w={'100%'} mt={5}>
-                    <Select label='Seleciona a quantidade de dias trabalhados na semana' options={ACTIONS_DAYS}
-                        {...register('days_working_week')}
-                        error={errors?.days_working_week?.message}
-                        name='days_working_week'
+                    <Select label='Quantos dias na semana o intervalo não foi usufuido ?' options={ACTIONS_DAYS}
+                        {...register('days_whiout_interval')}
+                        error={errors?.days_whiout_interval?.message}
+                        name='days_whiout_interval'
                     />
                 </Box>
-
-                <Box w={'100%'} mt={5}>
-                    <Input
-                        type={"time"}
-                        {...register('hora_inicio_jornada')}
-                        error={errors?.hora_inicio_jornada?.message}
-                        name='hora_inicio_jornada'
-                        label='Horário de início da jornada' />
-                </Box>
-
-                <Box w={'100%'} mt={5}>
-                    <Input
-                        type={"time"}
-                        {...register('hora_fim_jornada')}
-                        error={errors?.hora_fim_jornada?.message}
-                        name='hora_fim_jornada'
-                        label='Horário de término da jornada' />
-                </Box>
-
 
                 <Box w={'100%'} mt={5}>
                     <Input
@@ -284,7 +245,7 @@ function Index({ errors, register, data, draftRequest, setValue, watch, extraHou
                         {...register('hora_inicio_intervalo')}
                         error={errors?.hora_inicio_intervalo?.message}
                         name='hora_inicio_intervalo'
-                        label='Horário de início do intervalo' />
+                        label='Informe o valor de inicio do intervalo' />
                 </Box>
 
                 <Box w={'100%'} mt={5}>
@@ -293,12 +254,15 @@ function Index({ errors, register, data, draftRequest, setValue, watch, extraHou
                         {...register('hora_fim_intervalo')}
                         error={errors?.hora_fim_intervalo?.message}
                         name='hora_fim_intervalo'
-                        label='Horário de fim do intervalo' />
+                        label='Informe o valor de fim do intervalo' />
                 </Box>
+
+
+
 
             </>}
 
-            {extra_hour_variation_value === "Sim" && <>
+            {interval_variation_value === "Sim" && <>
 
 
                 <Flex
@@ -318,7 +282,7 @@ function Index({ errors, register, data, draftRequest, setValue, watch, extraHou
                     </Text>
                 </Flex>
 
-                {extraHour.map((e, index) => (<>
+                {interval.map((e, index) => (<>
 
 
                     <Flex
@@ -331,7 +295,7 @@ function Index({ errors, register, data, draftRequest, setValue, watch, extraHou
                         bg={colors.cardBackground} padding={4} borderRadius={5} mt={4} w={'100%'} flexDirection={'column'} alignItems={'center'}>
 
                         <Flex onClick={() => {
-                            setExtraHour((old) => {
+                            setInterval((old) => {
                                 let draft = old
                                 draft.splice(index, 1)
                                 return [...draft]
@@ -341,42 +305,19 @@ function Index({ errors, register, data, draftRequest, setValue, watch, extraHou
                             justifyContent={'end'} cursor={'pointer'} textAlign={"end"} w={'100%'} >
                             <FaTrash size={20} bg={colors.text} />
                         </Flex>
-                        <Text w={'100%'} fontSize={15} fontWeight={400} ml={3} mr={3} my={0} >
-                            {e.day_worked}
-                        </Text>
+
+                        <Flex mt={4} width={'100%'} flexDirection={'row'} justifyContent={'space-between'}  >
+
+
+                            <Text w={'100%'} fontSize={15} fontWeight={400} ml={3} mr={3} my={0} >
+                                {e.day_worked}
+                            </Text>
+
+
+                        </Flex>
                         {console.log(e)}
                         <Flex mt={4} width={'100%'} flexDirection={'row'}>
-                            <Flex mt={4} width={'100%'} flexDirection={'column'}>
-                                <Box>
-                                    <Text fontSize={15} fontWeight={400} ml={3} mr={3} >
-                                        Início da jornada
-                                    </Text>
-                                </Box>
 
-                                <Box >
-                                    <Text fontSize={15} fontWeight={400} ml={3} mr={3} >
-                                        {e.hora_inicio_jornada}
-                                    </Text>
-                                </Box>
-
-
-                            </Flex>
-
-                            <Flex mt={4} width={'100%'} flexDirection={'column'}>
-                                <Box>
-                                    <Text fontSize={15} fontWeight={400} ml={3} mr={3} >
-                                        Fim da jornada
-                                    </Text>
-                                </Box>
-
-                                <Box >
-                                    <Text fontSize={15} fontWeight={400} ml={3} mr={3} >
-                                        {e.hora_fim_jornada}
-                                    </Text>
-                                </Box>
-
-
-                            </Flex>
 
                             <Flex mt={4} width={'100%'} flexDirection={'column'}>
                                 <Box>

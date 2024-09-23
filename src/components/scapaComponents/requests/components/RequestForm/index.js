@@ -203,7 +203,8 @@ const VALUES_WITH_CALCS = ["Diferenças salariais por equiparação salarial",
     "Diferenças salariais (genérico)",
     "Adicional de Insalubridade",
     "Verbas Rescisórias",
-    "Horas Extras"
+    "Horas Extras",
+    "Intervalo Intrajornada"
 ]
 
 const VALUES_WITH_CALCS_DIFF_SALARY = ["Diferenças salariais por equiparação salarial",
@@ -217,6 +218,7 @@ const VALUES_WITH_CALCS_DIFF_SALARY = ["Diferenças salariais por equiparação 
 const INSALUBRIDADE = ["Adicional de Insalubridade"]
 const VERBAS = ["Verbas Rescisórias"]
 const HORA_EXTRA = ["Horas Extras"]
+const INTERVALO = ["Intervalo Intrajornada"]
 
 function Index({ handleAddNewRequest, draftRequest, setOpenSelect, handleUpdateRequest, data }) {
     const colors = useColors()
@@ -227,6 +229,7 @@ function Index({ handleAddNewRequest, draftRequest, setOpenSelect, handleUpdateR
     const [risk, setRisk] = useState()
     const [ratio, setRatio] = useState()
     const [salaryValue, setSalaryValue] = useState()
+    const [interval, setInterval] = useState([])
 
     const schema = yup.object().shape({
         pedido: yup
@@ -349,6 +352,32 @@ function Index({ handleAddNewRequest, draftRequest, setOpenSelect, handleUpdateR
 
                     }
 
+                    finishRequest(requestUpdate, valuePostulate, valueIndividual)
+                    return
+                }
+
+                if (INTERVALO.includes(valueRequest)) {
+                    const interval_object = values.extra_hour_variation !== "Sim" ? {
+                        data: [{
+                            days_whiout_interval: values.days_whiout_interval,
+                            hora_inicio_intervalo: values.hora_inicio_intervalo,
+                            hora_fim_intervalo: values.hora_fim_intervalo,
+                            week_limit: values.week_limit,
+                            days_whiout_interval: values.days_whiout_interval
+
+                        }]
+                    } : { data: interval }
+
+                    const { valueIndividual, valuePostulate } = calc.calcIntervalo(data.data, values.interval_variation, RISK_TABLE[risk], interval, values)
+                    const requestUpdate = {
+                        ...newRequest,
+                        interval_variation: values.interval_variation === "Sim" ? true : false,
+                        interval_object: interval_object,
+                        week_limit: values.week_limit,
+                        days_whiout_interval: values.days_whiout_interval
+
+
+                    }
                     finishRequest(requestUpdate, valuePostulate, valueIndividual)
                     return
                 }
@@ -545,6 +574,16 @@ function Index({ handleAddNewRequest, draftRequest, setOpenSelect, handleUpdateR
                     />
                 </> : null
             }
+            {INTERVALO.includes(valueRequest) && salaryValue !== undefined ?
+                <>
+                    <CalculeComponents.Intervalo
+                        watch={watch} interval={interval} setInterval={setInterval} register={register} errors={errors} data={data} draftRequest={draftRequest} setValue={setValue}
+                    />
+                </> : null
+            }
+
+
+
 
             <Flex mt={5} alignItems={'center'} justifyContent={'end'}>
                 <Text cursor={'pointer'} onClick={() => { setOpenSelect(false) }} mr={5}>
