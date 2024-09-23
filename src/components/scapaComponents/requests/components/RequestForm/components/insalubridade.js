@@ -47,7 +47,7 @@ function Index({ errors, register, data, draftRequest, setValue, insalubridadeSa
         if (!draftRequest || !data) return
         if (["Adicional de Insalubridade",].includes(draftRequest.requestValue)) {
             setValue("insalubridade_grau", toCurrencyScreen(draftRequest.insalubridade_grau))
-            setInsalubridadeSalary([...draftRequest.insalubridade_salario])
+            setInsalubridadeSalary([...draftRequest.insalubridade_salario?.data])
 
         }
     }, [draftRequest, data])
@@ -85,7 +85,7 @@ function Index({ errors, register, data, draftRequest, setValue, insalubridadeSa
         <>
             <Modal position='absolute' size='xl' isCentered isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
-                <ModalContent as='form' onSubmit={handleSubmitModal(handleSubmitForm)} borderRadius={5} bg={colors.background} >
+                <ModalContent as='form' borderRadius={5} bg={colors.background} >
                     <ModalHeader>Cadastrar periodo de salário  </ModalHeader>
                     <ModalCloseButton />
                     <Box pl={5} pr={5}>
@@ -104,7 +104,7 @@ function Index({ errors, register, data, draftRequest, setValue, insalubridadeSa
                             error={errosModal?.value?.message} {...registerModal("value")} />
                     </Box>
                     <ModalFooter>
-                        <Button color="#fff" colorScheme='blue' type='submit'>
+                        <Button onClick={handleSubmitModal(handleSubmitForm)} color="#fff" colorScheme='blue' type='submit'>
                             <Text color={"#fff"}>
                                 Salvar
                             </Text>

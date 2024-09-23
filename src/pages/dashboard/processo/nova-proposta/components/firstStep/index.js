@@ -42,6 +42,7 @@ function Index({ data, preRequests }) {
                 ...(v.diference_value ? { diference_value: v.diference_value } : {}),
                 ...(v.insalubridade_grau ? { insalubridade_grau: v.insalubridade_grau } : {}),
                 ...(v.insalubridade_salario ? { insalubridade_salario: v.insalubridade_salario?.data } : {}),
+                ...v
             }
         })
         toast.success("Pedidos importados com sucesso!")

@@ -202,7 +202,8 @@ const VALUES_WITH_CALCS = ["Diferenças salariais por equiparação salarial",
     "Diferenças reflexas de vantagens salariais",
     "Diferenças salariais (genérico)",
     "Adicional de Insalubridade",
-    "Verbas Rescisórias"
+    "Verbas Rescisórias",
+    "Horas Extras"
 ]
 
 const VALUES_WITH_CALCS_DIFF_SALARY = ["Diferenças salariais por equiparação salarial",
@@ -215,12 +216,14 @@ const VALUES_WITH_CALCS_DIFF_SALARY = ["Diferenças salariais por equiparação 
 
 const INSALUBRIDADE = ["Adicional de Insalubridade"]
 const VERBAS = ["Verbas Rescisórias"]
+const HORA_EXTRA = ["Horas Extras"]
 
 function Index({ handleAddNewRequest, draftRequest, setOpenSelect, handleUpdateRequest, data }) {
     const colors = useColors()
     const [individualValue, setIndividualValue] = useState()
     const [individualValueWithRisk, setIndividualValueWithRisk] = useState()
     const [insalubridadeSalary, setInsalubridadeSalary] = useState([])
+    const [extraHour, setExtraHour] = useState([])
     const [risk, setRisk] = useState()
     const [ratio, setRatio] = useState()
     const [salaryValue, setSalaryValue] = useState()
@@ -326,10 +329,33 @@ function Index({ handleAddNewRequest, draftRequest, setOpenSelect, handleUpdateR
                     finishRequest(requestUpdate, valuePostulate, valueIndividual)
                     return
                 }
+                if (HORA_EXTRA.includes(valueRequest)) {
+                    const objectHoraExtra = values.extra_hour_variation !== "Sim" ? {
+                        data: [{
+                            hora_inicio_jornada: values.hora_inicio_jornada,
+                            hora_fim_jornada: values.hora_fim_jornada,
+                            hora_inicio_intervalo: values.hora_inicio_intervalo,
+                            hora_fim_intervalo: values.hora_fim_intervalo,
+                            days_working_week: values.days_working_week
+
+                        }]
+                    } : { data: extraHour }
+                    const { valueIndividual, valuePostulate } = calc.calcHoraExtra(data.data, values.extra_hour_variation, RISK_TABLE[risk], extraHour, values.week_limit, values)
+                    const requestUpdate = {
+                        ...newRequest,
+                        extra_hour_variation: values.extra_hour_variation === "Sim" ? true : false,
+                        extra_hour_object: objectHoraExtra,
+                        week_limit: values.week_limit,
+
+                    }
+
+                    finishRequest(requestUpdate, valuePostulate, valueIndividual)
+                    return
+                }
             }
 
             const valor_individual_postulado = getValues("valor_individual_postulado")
-            // finishRequest(newRequest, valor_individual_postulado, individualValueWithRisk)
+            finishRequest(newRequest, valor_individual_postulado, individualValueWithRisk)
         } catch (e) {
             console.log(e)
             toast.error("Algo deu errado, tente novamente!")
@@ -507,6 +533,15 @@ function Index({ handleAddNewRequest, draftRequest, setOpenSelect, handleUpdateR
                 <>
                     <CalculeComponents.Verbas
                         register={register} errors={errors} data={data} draftRequest={draftRequest} setValue={setValue}
+                    />
+                </> : null
+            }
+
+
+            {HORA_EXTRA.includes(valueRequest) && salaryValue !== undefined ?
+                <>
+                    <CalculeComponents.HoraExtra
+                        watch={watch} extraHour={extraHour} setExtraHour={setExtraHour} register={register} errors={errors} data={data} draftRequest={draftRequest} setValue={setValue}
                     />
                 </> : null
             }

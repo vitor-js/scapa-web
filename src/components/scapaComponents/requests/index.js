@@ -36,7 +36,7 @@ function Index({ requests = [], setRequests, data }) {
             setOpenSelect(false)
             setDraftRequest(undefined)
             toast.success("Pedido adicionado com sucesso")
-        } catch {
+        } catch (e) {
             toast.error("Algo deu errado, tente novamente!")
         }
 
@@ -120,7 +120,7 @@ function Index({ requests = [], setRequests, data }) {
                     valuePostulate: parseFloat(currencyToBackend(v.valuePostulate)),
                 })), type: query.type
             }
-
+            console.log(body)
             setResult(result)
             await api.post("proposal", body)
             queryClient.invalidateQueries('procces');

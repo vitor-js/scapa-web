@@ -10,6 +10,18 @@ function getQuantityDays(numberMonth) {
     return daysQuantity[numberMonth]
 }
 
+const ParseLimit = {
+    "Limite semanal de 44h": 44,
+    "Limite semanal de 40h": 40,
+    "Limite semanal de 36h": 36,
+};
+
+const ParseDivisor = {
+    "Limite semanal de 44h": 220,
+    "Limite semanal de 40h": 200,
+    "Limite semanal de 36h": 180,
+};
+
 const daysQuantity = {
     1: 31,
     2: 28,
@@ -264,11 +276,111 @@ const vacationCalcVerbas = (salary, diffDate, haveVacation) => {
 
 };
 
+const calcHoraExtra = (data, variation, risk, extraHour, limit, valuesForm) => {
+    console.log(valuesForm, '--------')
+    let hextraHour = 0
+    if (variation === "Sim") {
+        let totalHours = 0;
+        extraHour.map((valueItem) => {
+
+            var fromDateRoutine = parseInt(
+                new Date(`July 20, 69 ${valueItem.hora_inicio_jornada} GMT+00:00`) / 1000
+            );
+            var toDateRoutine = parseInt(
+                new Date(`July 20, 69 ${valueItem.hora_fim_jornada} GMT+00:00`) / 1000
+            );
+
+            var timeDiffRoutine =
+                (Math.abs(fromDateRoutine) - Math.abs(toDateRoutine)) / 3600
+
+
+            console.log(timeDiffRoutine)
+
+            var fromDateInterval = parseInt(
+                new Date(`July 20, 69 ${valueItem.hora_inicio_intervalo} GMT+00:00`) / 1000
+            );
+            var toDateInterval = parseInt(
+                new Date(`July 20, 69 ${valueItem.hora_fim_intervalo} GMT+00:00`) / 1000
+            );
+            var timeDiffInterval =
+                (Math.abs(fromDateInterval) - Math.abs(toDateInterval)) / 3600
+
+            const diff = timeDiffRoutine - timeDiffInterval;
+            totalHours = totalHours + diff;
+        });
+
+        hextraHour = Math.round(totalHours - ParseLimit[limit]);
+
+    } else {
+        var fromDateRoutine = parseInt(
+            new Date(`July 20, 69 ${valuesForm.hora_inicio_jornada} GMT+00:00`) / 1000
+        );
+        var toDateRoutine = parseInt(new Date(`July 20, 69 ${valuesForm.hora_fim_jornada} GMT+00:00`) / 1000);
+
+        var timeDiffRoutine =
+            (Math.abs(fromDateRoutine) - Math.abs(toDateRoutine)) / 3600
+
+        var fromDateInterval = parseInt(
+            new Date(`July 20, 69 ${valuesForm.hora_inicio_intervalo} GMT+00:00`) / 1000
+        );
+        var toDateInterval = parseInt(
+            new Date(`July 20, 69 ${valuesForm.hora_fim_intervalo} GMT+00:00`) / 1000
+        );
+        var timeDiffInterval =
+            (Math.abs(fromDateInterval) - Math.abs(toDateInterval)) / 3600
+
+        const haursWorkedPeerDay = timeDiffRoutine - timeDiffInterval;
+
+        const haursInWeek = haursWorkedPeerDay * valuesForm.days_working_week;
+
+        hextraHour = haursInWeek - ParseLimit[limit];
+
+    }
+
+    if (hextraHour <= 0) return {
+        valueIndividual: 0,
+        valuePostulate: 0
+    }
+
+    const { proccess_time, salary, end_date } = data
+    const salaryHour = Math.round(salary / ParseDivisor[limit]);
+    const extraHourValue = Math.round(salaryHour + salaryHour * 0.5);
+
+    const apuracaoDeHorasExtrasMes = Math.round(
+        extraHourValue * hextraHour * 4.286
+    );
+
+    const apuracaoDeHorasExtrasTotal = Math.round(
+        apuracaoDeHorasExtrasMes * proccess_time
+    );
+
+    const fgts = Math.round(apuracaoDeHorasExtrasTotal * 0.08);
+
+    const extraSalary = Math.round((apuracaoDeHorasExtrasMes / 12) * proccess_time);
+
+    const vocation = Math.round((apuracaoDeHorasExtrasMes / 12) * proccess_time);
+    const vocationCalc = Math.round(vocation + vocation / 3);
+
+    const RSR = Math.round((apuracaoDeHorasExtrasMes / 6) * proccess_time);
+
+    const valuePostulate = Math.round(
+        apuracaoDeHorasExtrasTotal + extraSalary + vocationCalc + RSR + fgts
+    );
+    const valueIndividual = Math.round(valuePostulate * risk);
+
+    return {
+        valueIndividual,
+        valuePostulate: valuePostulate
+    }
+
+}
+
 
 const calc = {
     diffSalaty,
     insalubridade,
-    calcVerbasRescisorias
+    calcVerbasRescisorias,
+    calcHoraExtra
 }
 
 export default calc

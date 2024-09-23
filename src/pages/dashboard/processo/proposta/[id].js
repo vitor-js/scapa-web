@@ -18,7 +18,7 @@ function Index() {
     useEffect(() => {
         if (!requestData) return
         const { Requests, Process, postulated_total_value, total_value, total_value_with_riks, type } = requestData.data
-
+        console.log(Requests, '-Requests--')
         const formatRequest = Requests.map(v => ({
             requestValue: v.type,
             valuePostulate: v.postulated_individual,
