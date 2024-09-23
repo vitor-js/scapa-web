@@ -19,7 +19,7 @@ import {
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm } from 'react-hook-form'
-import { currencyToBackend } from '../../../helpers'
+import { currencyToBackend, monthDiff } from '../../../helpers'
 import { api } from '../../../service';
 import { useRouter } from 'next/router'
 import { queryClient } from '../../../service/queryClient';
@@ -33,9 +33,12 @@ function Index({ children }) {
     const schema = yup.object().shape({
         title: yup.string().required('Campo obrigatório'),
         number_process: yup.string().required('Campo obrigatório'),
+        proccess_time: yup.string().required('Campo obrigatório'),
         autor: yup.string().required('Campo obrigatório'),
         reu: yup.string().required('Campo obrigatório'),
-        proccess_time: yup.string().required('Campo obrigatório'),
+        salary: yup.string().required('Campo obrigatório'),
+        start_date: yup.date().required('Campo obrigatório'),
+        end_date: yup.date().required('Campo obrigatório'),
     })
 
 
@@ -49,7 +52,17 @@ function Index({ children }) {
 
     const handleSubmitForm = async (values) => {
         try {
-            await api.post("proccess", { ...values, reu_cost: currencyToBackend(values.reu_cost), user_id: authData.id })
+            console.log(values)
+            const proccess_time_work = monthDiff(values.start_date, values.end_date)
+            console.log(proccess_time_work)
+            await api.post("proccess", {
+                ...values, reu_cost: currencyToBackend(values.reu_cost), user_id: authData.id,
+                start_date: values.start_date.toString(),
+                end_date: values.end_date.toString(),
+                time_worked_months: parseInt(proccess_time_work),
+                description: ""
+
+            })
             reset()
             queryClient.invalidateQueries('proccess');
             onClose()
@@ -82,19 +95,36 @@ function Index({ children }) {
                                     color={colors.text}
                                     error={errors?.title?.message}
                                     {...register("title")}
-                                    label='Título' />
+                                    label='Identificador do processo' />
                             </Box>
 
                             <Box my='5'>
                                 <Input mask={"number"} name='number_process' error={errors?.number_process?.message} {...register("number_process")} label='Número do Processo' />
                             </Box>
 
-                            <Box my='5'>
-                                <Input mask={"number"} label='Tempo de duração (em meses)' name='proccess_time' error={errors?.proccess_time?.message}  {...register("proccess_time")} />
-                            </Box>
+
                             <Box my='5'>
                                 <Input label='Autor' name='autor' error={errors?.autor?.message}  {...register("autor")} />
                             </Box>
+
+                            <Box my='5'>
+                                <Input mask={"number"} label='Tempo de duração (em meses)' name='proccess_time' error={errors?.proccess_time?.message}  {...register("proccess_time")} />
+                            </Box>
+
+                            <Box my='5'>
+                                <Input mask="currency" label='Valor so salário ou a média dos salários' name='salary' error={errors?.salary?.message} {...register("salary")} />
+                            </Box>
+
+
+                            <Box my='5'>
+                                <Input type='date' name='start_date' label='Data de início do contrato de trabalho' error={errors?.start_date?.message}  {...register("start_date")} />
+                            </Box>
+
+                            <Box my='5'>
+                                <Input type='date' name='end_date' label='Data de início do contrato de trabalho' error={errors?.end_date?.message}  {...register("end_date")} />
+                            </Box>
+
+
                             <Box my='5'>
                                 <Input label='Réu' name='reu' error={errors?.reu?.message} {...register("reu")} />
                             </Box>
@@ -102,9 +132,7 @@ function Index({ children }) {
                                 <Input mask="currency" label='Custo do Réu' name='reu_cost' error={errors?.reu_cost?.message} {...register("reu_cost")} />
                             </Box>
 
-                            <Box my='5'>
-                                <Input label='Descricao' name='description' error={errors?.description?.message}  {...register("description")} />
-                            </Box>
+
                         </Box>
                     </ModalBody>
 
