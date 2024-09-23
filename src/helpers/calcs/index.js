@@ -43,8 +43,8 @@ const fgts = (monthValue, diffDate) => {
 }
 
 const fgts_calc_pure = (data, risk) => {
-    const { proccess_time, salary, end_date } = data
-    const result = fgts(salary, proccess_time)
+    const { time_worked_months, salary, end_date } = data
+    const result = fgts(salary, time_worked_months)
     const result_with_risk = Math.round(result * risk);
 
     return {
@@ -81,9 +81,9 @@ const diffSalaty = (diferenceType, diff_value_salary, data, risk) => {
     let sumMonthValue = 0;
     let monthValue = 0;
 
-    const { proccess_time, salary } = data
+    const { time_worked_months, salary } = data
 
-    const time = parseInt(proccess_time)
+    const time = parseInt(time_worked_months)
     console.log(time, salary, diferenceType)
     if (diferenceType === "absoluta") {
         monthValue = parseFloat(currencyToNumber(diff_value_salary));
@@ -124,9 +124,9 @@ const diffSalaty = (diferenceType, diff_value_salary, data, risk) => {
 
 const insalubridade = (data, grau, risk, salary) => {
 
-    const { proccess_time } = data
+    const { time_worked_months } = data
 
-    const time = parseInt(proccess_time)
+    const time = parseInt(time_worked_months)
     const monthValue = salary * GRAU_RATIO_INSALUBRIDADE[grau];
 
     const fgts_calc = fgts(monthValue, time)
@@ -148,8 +148,8 @@ const insalubridade = (data, grau, risk, salary) => {
 
 
 const calcVerbasRescisorias = (data, reason, risk, have_vacation) => {
-    const { proccess_time, salary, end_date } = data
-    const time = parseInt(proccess_time)
+    const { time_worked_months, salary, end_date } = data
+    const time = parseInt(time_worked_months)
     const end_date_convert = new Date(end_date);
     const days = getQuantityDays(end_date_convert.getMonth() + 1);
     if (reason === "Dispensa imotivada ou rescisão indireta") {
@@ -353,7 +353,7 @@ const calcHoraExtra = (data, variation, risk, extraHour, limit, valuesForm) => {
         valuePostulate: 0
     }
 
-    const { proccess_time, salary, end_date } = data
+    const { time_worked_months, salary, end_date } = data
     const salaryHour = Math.round(salary / ParseDivisor[limit]);
     const extraHourValue = Math.round(salaryHour + salaryHour * 0.5);
 
@@ -362,17 +362,17 @@ const calcHoraExtra = (data, variation, risk, extraHour, limit, valuesForm) => {
     );
 
     const apuracaoDeHorasExtrasTotal = Math.round(
-        apuracaoDeHorasExtrasMes * proccess_time
+        apuracaoDeHorasExtrasMes * time_worked_months
     );
 
     const fgts = Math.round(apuracaoDeHorasExtrasTotal * 0.08);
 
-    const extraSalary = Math.round((apuracaoDeHorasExtrasMes / 12) * proccess_time);
+    const extraSalary = Math.round((apuracaoDeHorasExtrasMes / 12) * time_worked_months);
 
-    const vocation = Math.round((apuracaoDeHorasExtrasMes / 12) * proccess_time);
+    const vocation = Math.round((apuracaoDeHorasExtrasMes / 12) * time_worked_months);
     const vocationCalc = Math.round(vocation + vocation / 3);
 
-    const RSR = Math.round((apuracaoDeHorasExtrasMes / 6) * proccess_time);
+    const RSR = Math.round((apuracaoDeHorasExtrasMes / 6) * time_worked_months);
 
     const valuePostulate = Math.round(
         apuracaoDeHorasExtrasTotal + extraSalary + vocationCalc + RSR + fgts
@@ -387,7 +387,7 @@ const calcHoraExtra = (data, variation, risk, extraHour, limit, valuesForm) => {
 }
 
 const calcIntervalo = (data, variation, risk, interval, values) => {
-    const { proccess_time, salary, end_date } = data
+    const { time_worked_months, salary, end_date } = data
     let totalWithoutInterval = 0
     let totalHours = 0;
     if (variation === "Sim") {
@@ -408,7 +408,7 @@ const calcIntervalo = (data, variation, risk, interval, values) => {
             totalHours = totalHours + timeDiffRoutine;
         });
         totalWithoutInterval =
-            intervalWithVariation.length * totalHours * 4.286 * proccess_time;
+            intervalWithVariation.length * totalHours * 4.286 * time_worked_months;
 
     }
     else {
@@ -425,7 +425,7 @@ const calcIntervalo = (data, variation, risk, interval, values) => {
 
 
         totalWithoutInterval =
-            parseInt(values.days_whiout_interval) * timeDiffInterval * 4.286 * proccess_time;
+            parseInt(values.days_whiout_interval) * timeDiffInterval * 4.286 * time_worked_months;
 
     }
     console.log(totalWithoutInterval, 'totalWithoutInterval')
@@ -446,15 +446,15 @@ const calcIntervalo = (data, variation, risk, interval, values) => {
 }
 
 const adicionalPericulosidade = (data, risk) => {
-    const { proccess_time, salary, end_date } = data
+    const { time_worked_months, salary, end_date } = data
 
     const month_value = Math.round(salary * 0.3);
 
-    const all_month_value = Math.round(month_value * proccess_time);
-    const fgts = Math.round(month_value * 0.08 * proccess_time);
-    const thirteenth_salary = Math.round((month_value / 12) * proccess_time);
+    const all_month_value = Math.round(month_value * time_worked_months);
+    const fgts = Math.round(month_value * 0.08 * time_worked_months);
+    const thirteenth_salary = Math.round((month_value / 12) * time_worked_months);
 
-    const vacation_sum = Math.round((month_value / 12) * proccess_time);
+    const vacation_sum = Math.round((month_value / 12) * time_worked_months);
     const vocation = Math.round(vacation_sum + vacation_sum / 3);
 
     const result = Math.round(
@@ -471,7 +471,7 @@ const adicionalPericulosidade = (data, risk) => {
 
 
 const decimoTerceiroIntegral = (data, risk) => {
-    const { proccess_time, salary, end_date } = data
+    const { time_worked_months, salary, end_date } = data
     const result_with_risk = salary * risk;
 
     return {
@@ -481,7 +481,7 @@ const decimoTerceiroIntegral = (data, risk) => {
 }
 
 const decimoTerceiroProporcional = (data, risk) => {
-    const { proccess_time, salary, end_date } = data
+    const { time_worked_months, salary, end_date } = data
     const end_date_convert = new Date(end_date);
     const thirtySalary = (salary / 12) * end_date_convert.getMonth() + 1;
     const result_with_risk = thirtySalary * risk;
@@ -494,7 +494,7 @@ const decimoTerceiroProporcional = (data, risk) => {
 }
 
 const feriasIntegrais = (data, risk) => {
-    const { proccess_time, salary, end_date } = data
+    const { time_worked_months, salary, end_date } = data
 
     const vacation = salary + salary / 3;
     const result_with_risk = Math.round(vacation * risk);

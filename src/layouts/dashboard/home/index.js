@@ -60,7 +60,8 @@ function Index({ children }) {
                 start_date: values.start_date.toString(),
                 end_date: values.end_date.toString(),
                 time_worked_months: parseInt(proccess_time_work),
-                description: ""
+                description: "",
+                salary: currencyToBackend(values.salary)
 
             })
             reset()
