@@ -42,6 +42,17 @@ const fgts = (monthValue, diffDate) => {
     return Math.round(monthValue * 0.08 * diffDate);
 }
 
+const fgts_calc_pure = (data, risk) => {
+    const { proccess_time, salary, end_date } = data
+    const result = fgts(salary, proccess_time)
+    const result_with_risk = Math.round(result * risk);
+
+    return {
+        valueIndividual: result_with_risk,
+        valuePostulate: result
+    }
+}
+
 const extraSalary = (monthValue, diffDate) => {
     return Math.round((monthValue / 12) * diffDate);
 }
@@ -185,7 +196,7 @@ const calcPedidoDeDemissao = (days, time, salary, risk, have_vacation) => {
     const extraSalary_calc = extraSalary(salary, time)
     const vocation_calc = vacationCalcVerbas(salary, time, have_vacation)
 
-    console.log(SalaryForDaysWorkedInTheLastMonth, multa, extraSalary_calc, vocation_calc, fgts_calc, AvisoPrevioIndenizado)
+    console.log(SalaryForDaysWorkedInTheLastMonth, multa, extraSalary_calc, vocation_calc)
     const valuePostulate_calc = SalaryForDaysWorkedInTheLastMonth + multa + extraSalary_calc + vocation_calc
 
     const postuateValue = Math.round(
@@ -434,13 +445,86 @@ const calcIntervalo = (data, variation, risk, interval, values) => {
 
 }
 
+const adicionalPericulosidade = (data, risk) => {
+    const { proccess_time, salary, end_date } = data
+
+    const month_value = Math.round(salary * 0.3);
+
+    const all_month_value = Math.round(month_value * proccess_time);
+    const fgts = Math.round(month_value * 0.08 * proccess_time);
+    const thirteenth_salary = Math.round((month_value / 12) * proccess_time);
+
+    const vacation_sum = Math.round((month_value / 12) * proccess_time);
+    const vocation = Math.round(vacation_sum + vacation_sum / 3);
+
+    const result = Math.round(
+        all_month_value + fgts + thirteenth_salary + vocation
+    );
+    const result_with_risk = Math.round(result * risk);
+
+    return {
+        valueIndividual: result_with_risk,
+        valuePostulate: result
+    }
+
+}
+
+
+const decimoTerceiroIntegral = (data, risk) => {
+    const { proccess_time, salary, end_date } = data
+    const result_with_risk = salary * risk;
+
+    return {
+        valueIndividual: result_with_risk,
+        valuePostulate: salary
+    }
+}
+
+const decimoTerceiroProporcional = (data, risk) => {
+    const { proccess_time, salary, end_date } = data
+    const end_date_convert = new Date(end_date);
+    const thirtySalary = (salary / 12) * end_date_convert.getMonth() + 1;
+    const result_with_risk = thirtySalary * risk;
+
+    return {
+        valueIndividual: result_with_risk,
+        valuePostulate: result
+    }
+
+}
+
+const feriasIntegrais = (data, risk) => {
+    const { proccess_time, salary, end_date } = data
+
+    const vacation = salary + salary / 3;
+    const result_with_risk = Math.round(vacation * risk);
+
+    return {
+        valueIndividual: result_with_risk,
+        valuePostulate: result
+    }
+
+}
+
+const feriasProporcionais = () => {
+
+}
+
 
 const calc = {
     diffSalaty,
     insalubridade,
     calcVerbasRescisorias,
     calcHoraExtra,
-    calcIntervalo
+    calcIntervalo,
+    adicionalPericulosidade,
+    decimoTerceiroIntegral,
+    decimoTerceiroProporcional,
+    feriasIntegrais,
+    feriasProporcionais,
+    fgts,
+    fgts_calc_pure
 }
 
 export default calc
+

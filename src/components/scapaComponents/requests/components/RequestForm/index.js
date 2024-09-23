@@ -204,7 +204,8 @@ const VALUES_WITH_CALCS = ["Diferenças salariais por equiparação salarial",
     "Adicional de Insalubridade",
     "Verbas Rescisórias",
     "Horas Extras",
-    "Intervalo Intrajornada"
+    "Intervalo Intrajornada",
+
 ]
 
 const VALUES_WITH_CALCS_DIFF_SALARY = ["Diferenças salariais por equiparação salarial",
@@ -219,6 +220,16 @@ const INSALUBRIDADE = ["Adicional de Insalubridade"]
 const VERBAS = ["Verbas Rescisórias"]
 const HORA_EXTRA = ["Horas Extras"]
 const INTERVALO = ["Intervalo Intrajornada"]
+
+const FERIAS = ["Férias integrais"]
+const FERIAS_INTEGRAIS = ["Férias proporcionais"]
+const FGTS = ["Depósitos do FGTS"]
+
+const DECIMO_TERCEIRO = ["Décimo terceiro integral"]
+const DECIMO_TERCEIRO_PROPORCIONAL = ["Décimo terceiro proporcional"]
+
+const ADIOCIONAL_PERICULOSIDADE = ["Adicional de Periculosidade"]
+
 
 function Index({ handleAddNewRequest, draftRequest, setOpenSelect, handleUpdateRequest, data }) {
     const colors = useColors()
@@ -288,7 +299,7 @@ function Index({ handleAddNewRequest, draftRequest, setOpenSelect, handleUpdateR
         };
 
         try {
-            if (VALUES_WITH_CALCS.includes(valueRequest)) {
+            if (VALUES_WITH_CALCS.includes(valueRequest) || ["Férias integrais", "Férias proporcionais", "Depósitos do FGTS", "Décimo terceiro integral", "Décimo terceiro proporcional", "Adicional de Periculosidade"].includes(valueRequest)) {
                 if (VALUES_WITH_CALCS_DIFF_SALARY.includes(valueRequest)) {
                     const { valueIndividual, valuePostulate } = calc.diffSalaty(values.diff_salary_type, values.diff_value_salary, data.data, RISK_TABLE[risk])
                     const requestUpdate = {
@@ -376,6 +387,67 @@ function Index({ handleAddNewRequest, draftRequest, setOpenSelect, handleUpdateR
                         week_limit: values.week_limit,
                         days_whiout_interval: values.days_whiout_interval
 
+
+                    }
+                    finishRequest(requestUpdate, valuePostulate, valueIndividual)
+                    return
+                }
+
+                if (FERIAS.includes(valueRequest)) {
+                    const { valueIndividual, valuePostulate } = calc.feriasProporcionais(data.data, values.termination_type, RISK_TABLE[risk], values.have_vacation)
+                    const requestUpdate = {
+                        ...newRequest,
+
+                    }
+                    finishRequest(requestUpdate, valuePostulate, valueIndividual)
+                    return
+                }
+
+
+                if (FERIAS_INTEGRAIS.includes(valueRequest)) {
+                    const { valueIndividual, valuePostulate } = calc.feriasIntegrais(data.data, values.termination_type, RISK_TABLE[risk], values.have_vacation)
+                    const requestUpdate = {
+                        ...newRequest,
+
+                    }
+                    finishRequest(requestUpdate, valuePostulate, valueIndividual)
+                    return
+                }
+
+                if (FGTS.includes(valueRequest)) {
+                    const { valueIndividual, valuePostulate } = calc.fgts_calc_pure(data.data, RISK_TABLE[risk])
+                    const requestUpdate = {
+                        ...newRequest,
+
+                    }
+                    finishRequest(requestUpdate, valuePostulate, valueIndividual)
+                    return
+                }
+
+                if (DECIMO_TERCEIRO.includes(valueRequest)) {
+                    const { valueIndividual, valuePostulate } = calc.decimoTerceiroIntegral(data.data, RISK_TABLE[risk])
+                    const requestUpdate = {
+                        ...newRequest,
+
+                    }
+                    finishRequest(requestUpdate, valuePostulate, valueIndividual)
+                    return
+                }
+
+                if (DECIMO_TERCEIRO_PROPORCIONAL.includes(valueRequest)) {
+                    const { valueIndividual, valuePostulate } = calc.decimoTerceiroProporcional(data.data, RISK_TABLE[risk])
+                    const requestUpdate = {
+                        ...newRequest,
+
+                    }
+                    finishRequest(requestUpdate, valuePostulate, valueIndividual)
+                    return
+                }
+
+                if (ADIOCIONAL_PERICULOSIDADE.includes(valueRequest)) {
+                    const { valueIndividual, valuePostulate } = calc.adicionalPericulosidade(data.data, RISK_TABLE[risk])
+                    const requestUpdate = {
+                        ...newRequest,
 
                     }
                     finishRequest(requestUpdate, valuePostulate, valueIndividual)
