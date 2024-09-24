@@ -205,6 +205,13 @@ const VALUES_WITH_CALCS = ["Diferenças salariais por equiparação salarial",
     "Verbas Rescisórias",
     "Horas Extras",
     "Intervalo Intrajornada",
+    "Férias integrais",
+    "Férias proporcionais",
+    "Depósitos do FGTS",
+    "Décimo terceiro integral",
+    "Décimo terceiro proporcional",
+    "Adicional de Periculosidade"
+
 
 ]
 
@@ -221,8 +228,8 @@ const VERBAS = ["Verbas Rescisórias"]
 const HORA_EXTRA = ["Horas Extras"]
 const INTERVALO = ["Intervalo Intrajornada"]
 
-const FERIAS = ["Férias integrais"]
-const FERIAS_INTEGRAIS = ["Férias proporcionais"]
+const FERIAS = ["Férias proporcionais"]
+const FERIAS_INTEGRAIS = ["Férias integrais"]
 const FGTS = ["Depósitos do FGTS"]
 
 const DECIMO_TERCEIRO = ["Décimo terceiro integral"]
@@ -292,14 +299,14 @@ function Index({ handleAddNewRequest, draftRequest, setOpenSelect, handleUpdateR
         const pedido = getValues("pedido")
         const newRequest = {
             requestValue: pedido,
-            valuePostulate: valor_individual_postulado,
+            // valuePostulate: valor_individual_postulado,
             risk: risk,
             riskSuccess: ratio,
-            valueIndividual: individualValueWithRisk,
+            // valueIndividual: individualValueWithRisk,
         };
 
         try {
-            if (VALUES_WITH_CALCS.includes(valueRequest) || ["Férias integrais", "Férias proporcionais", "Depósitos do FGTS", "Décimo terceiro integral", "Décimo terceiro proporcional", "Adicional de Periculosidade"].includes(valueRequest)) {
+            if (VALUES_WITH_CALCS.includes(valueRequest)) {
                 if (VALUES_WITH_CALCS_DIFF_SALARY.includes(valueRequest)) {
                     const { valueIndividual, valuePostulate } = calc.diffSalaty(values.diff_salary_type, values.diff_value_salary, data.data, RISK_TABLE[risk])
                     const requestUpdate = {
@@ -340,6 +347,7 @@ function Index({ handleAddNewRequest, draftRequest, setOpenSelect, handleUpdateR
                         have_vacation: values.have_vacation === "Sim" ? true : false,
                         termination_type: values.termination_type
                     }
+                    console.log(valueIndividual, valuePostulate)
                     finishRequest(requestUpdate, valuePostulate, valueIndividual)
                     return
                 }
@@ -394,7 +402,7 @@ function Index({ handleAddNewRequest, draftRequest, setOpenSelect, handleUpdateR
                 }
 
                 if (FERIAS.includes(valueRequest)) {
-                    const { valueIndividual, valuePostulate } = calc.feriasProporcionais(data.data, values.termination_type, RISK_TABLE[risk], values.have_vacation)
+                    const { valueIndividual, valuePostulate } = calc.feriasProporcionais(data.data, RISK_TABLE[risk])
                     const requestUpdate = {
                         ...newRequest,
 
@@ -405,7 +413,8 @@ function Index({ handleAddNewRequest, draftRequest, setOpenSelect, handleUpdateR
 
 
                 if (FERIAS_INTEGRAIS.includes(valueRequest)) {
-                    const { valueIndividual, valuePostulate } = calc.feriasIntegrais(data.data, values.termination_type, RISK_TABLE[risk], values.have_vacation)
+                    console.log(values)
+                    const { valueIndividual, valuePostulate } = calc.feriasIntegrais(data.data, RISK_TABLE[risk])
                     const requestUpdate = {
                         ...newRequest,
 
@@ -558,18 +567,20 @@ function Index({ handleAddNewRequest, draftRequest, setOpenSelect, handleUpdateR
                 />
             </Box>
 
+            {!VALUES_WITH_CALCS.includes(valueRequest) || salaryValue === undefined && <>
+                <Box w={'100%'} mt={5}>
+                    <Input label='Valor individual postulado'
+                        {...register('valor_individual_postulado')}
+                        error={errors?.valor_individual_postulado?.message}
+                        name='valor_individual_postulado'
+                        value={individualValue}
+                        onChange={(e) => {
+                            setIndividualValue(e.target.value)
+                        }}
+                        mask='currency' />
+                </Box>
+            </>}
 
-            <Box w={'100%'} mt={5}>
-                <Input label='Valor individual postulado'
-                    {...register('valor_individual_postulado')}
-                    error={errors?.valor_individual_postulado?.message}
-                    name='valor_individual_postulado'
-                    value={individualValue}
-                    onChange={(e) => {
-                        setIndividualValue(e.target.value)
-                    }}
-                    mask='currency' />
-            </Box>
 
             <Box w={'100%'} mt={5}>
                 <Select

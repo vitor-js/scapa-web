@@ -9,7 +9,8 @@ import Link from 'next/link'
 import { MdExitToApp, MdKeyboardArrowDown, } from 'react-icons/md'
 import { FaTrash } from "react-icons/fa";
 import { useRouter } from 'next/router'
-
+import { toast } from 'react-hot-toast';
+import { api } from '@/service'
 
 function Index() {
     const { authData } = useAuth()
@@ -19,15 +20,16 @@ function Index() {
     const colors = useColors()
     const { data, isLoading, isFetching, isError, refetch } = query;
 
-    const deleteProccess = async () => {
-
+    const deleteProccess = async (vid) => {
+        console.log(queryUrl)
         try {
-            await api.delete(`/proccess/${id}`,)
+            await api.delete(`/proccess/${vid}`,)
 
             await push("/dashboard")
             queryClient.invalidateQueries('proccess');
             toast.success("Processo removido com sucesso")
-        } catch {
+        } catch (e) {
+            console.log(e)
             toast.error("Algo deu errado, tente novamente!")
         }
 
@@ -122,7 +124,7 @@ function Index() {
                                                 borderWidth={1}
                                                 cursor="pointer"
                                                 transition="ease all 0.1s"
-                                                onClick={deleteProccess}
+                                                onClick={() => { deleteProccess(value.id) }}
                                                 icon={<FaTrash />}
 
                                             />

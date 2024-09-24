@@ -153,7 +153,7 @@ const calcVerbasRescisorias = (data, reason, risk, have_vacation) => {
     const end_date_convert = new Date(end_date);
     const days = getQuantityDays(end_date_convert.getMonth() + 1);
     if (reason === "Dispensa imotivada ou rescisão indireta") {
-        return calcDispensaImotivadaOuRescisãoIndireta(days, time, salary, risk, have_vacation);
+        return calcDispensaImotivadaOuRescisãoIndireta(days, time, salary, risk, have_vacation, end_date_convert);
     }
     if (reason === "Pedido de demissão") { return calcPedidoDeDemissao(days, time, salary, risk, have_vacation); }
     if (reason === "Comum acordo") { return calcComumAcordo(days, time, salary, risk, have_vacation); }
@@ -162,24 +162,30 @@ const calcVerbasRescisorias = (data, reason, risk, have_vacation) => {
 }
 
 
-const calcDispensaImotivadaOuRescisãoIndireta = (days, time, salary, risk, have_vacation) => {
+const calcDispensaImotivadaOuRescisãoIndireta = (days, time, salary, risk, have_vacation, end_date_convert) => {
     const SalaryForDaysWorkedInTheLastMonth = (salary / 30) * days;
 
     const years = Math.round(time / 12);
+
     const AvisoPrevioIndenizado = Math.round(
         (salary / 30) * (years * 3) + salary
     );
 
-    const fgts_calc = fgts(salary, time)
-    const extraSalary_calc = extraSalary(salary, time)
 
-    const vocation_calc = vacationCalcVerbas(salary, time, have_vacation)
+    const fgtsBase = Math.round(0.08 * salary * time);
+    const fgts = fgtsBase * 0.4;
     const multa = salary;
+    const extraSalary_calc = extraSalary(salary, time)
+    const vocation_calc = vacationCalcVerbas(salary, time, have_vacation)
 
-    console.log(SalaryForDaysWorkedInTheLastMonth, multa, extraSalary_calc, vocation_calc, fgts_calc, AvisoPrevioIndenizado, '--')
+    const valuePostulate_calc = SalaryForDaysWorkedInTheLastMonth + multa + extraSalary_calc + vocation_calc + fgts + AvisoPrevioIndenizado
+    console.log(SalaryForDaysWorkedInTheLastMonth, "SalaryForDaysWorkedInTheLastMonth")
+    console.log(multa, "multa")
+    console.log(extraSalary, "extraSalary")
+    console.log(vocation_calc, "vocation_calc")
+    console.log(fgts, "fgts")
 
-    const valuePostulate_calc = SalaryForDaysWorkedInTheLastMonth + multa + extraSalary_calc + vocation_calc + fgts_calc + AvisoPrevioIndenizado
-
+    console.log(AvisoPrevioIndenizado, "AvisoPrevioIndenizado")
 
     const valueIndividual = Math.round(valuePostulate_calc * risk);
     return {
@@ -192,13 +198,16 @@ const calcDispensaImotivadaOuRescisãoIndireta = (days, time, salary, risk, have
 const calcPedidoDeDemissao = (days, time, salary, risk, have_vacation) => {
 
     const SalaryForDaysWorkedInTheLastMonth = (salary / 30) * days;
+    console.log(SalaryForDaysWorkedInTheLastMonth, "SalaryForDaysWorkedInTheLastMonth")
     const multa = salary;
+    console.log(multa, "multa")
     const extraSalary_calc = extraSalary(salary, time)
+    console.log(extraSalary_calc, "extraSalary_calc")
     const vocation_calc = vacationCalcVerbas(salary, time, have_vacation)
+    console.log(vocation_calc, "vocation_calc")
 
-    console.log(SalaryForDaysWorkedInTheLastMonth, multa, extraSalary_calc, vocation_calc)
     const valuePostulate_calc = SalaryForDaysWorkedInTheLastMonth + multa + extraSalary_calc + vocation_calc
-
+    console.log(valuePostulate_calc, "valuePostulate_calc")
     const postuateValue = Math.round(
         valuePostulate_calc
     );
@@ -215,13 +224,18 @@ const calcComumAcordo = (days, time, salary, risk, have_vacation) => {
     const SalaryForDaysWorkedInTheLastMonth = (salary / 30) * days;
     const multa = salary;
     const extraSalary_calc = extraSalary(salary, time)
+    const years = Math.round(time / 12);
+    const AvisoPrevioIndenizadoBase = Math.round(
+        (salary / 30) * (years * 3) + salary
+    );
+    const AvisoPrevioIndenizado = AvisoPrevioIndenizadoBase * 0.5;
     const fgts_calc = fgts(salary, time)
-
+    const fgts_value = fgts_calc * 0.2;
     const vocation_calc = vacationCalcVerbas(salary, time, have_vacation)
 
-    console.log(SalaryForDaysWorkedInTheLastMonth, multa, extraSalary_calc, vocation_calc, fgts_calc)
 
-    const valuePostulate_calc = SalaryForDaysWorkedInTheLastMonth + multa + extraSalary_calc + fgts_calc + vocation_calc
+
+    const valuePostulate_calc = SalaryForDaysWorkedInTheLastMonth + multa + extraSalary_calc + fgts_value + vocation_calc + AvisoPrevioIndenizado
 
     const postuateValue = Math.round(
         valuePostulate_calc
@@ -408,7 +422,7 @@ const calcIntervalo = (data, variation, risk, interval, values) => {
             totalHours = totalHours + timeDiffRoutine;
         });
         totalWithoutInterval =
-            intervalWithVariation.length * totalHours * 4.286 * time_worked_months;
+            Math.round(intervalWithVariation.length * totalHours * 4.286 * time_worked_months);
 
     }
     else {
@@ -419,24 +433,26 @@ const calcIntervalo = (data, variation, risk, interval, values) => {
 
         var timeDiffInterval =
             (Math.abs(fromDateInterval) - Math.abs(toDateInterval)) / 3600
-
-
-        totalHours = totalHours + timeDiffInterval;
-
-
+        console.log(values.days_whiout_interval, timeDiffInterval, '-------------------')
+        totalHours = parseInt(values.days_whiout_interval) * timeDiffInterval;
+        console.log(totalHours, 'totalHours')
+        console.log(totalHours, time_worked_months, "time_worked_months", Math.round((totalHours * 4.286) * time_worked_months))
         totalWithoutInterval =
-            parseInt(values.days_whiout_interval) * timeDiffInterval * 4.286 * time_worked_months;
+            Math.round((totalHours * 4.286) * time_worked_months);
 
     }
-    console.log(totalWithoutInterval, 'totalWithoutInterval')
-    const divisor = ParseLimit[values.week_limit]
-    console.log(divisor, 'totalWithoutInterval')
+
+    const divisor = ParseDivisor[values.week_limit]
+
     const intervalValueCalc = Math.round(salary / divisor);
     const intervalValue = intervalValueCalc + intervalValueCalc * 0.5;
 
-    const valuePostulate = Math.round(intervalValue * totalWithoutInterval);
+
+    const valuePostulate = Math.round(intervalValue * Math.round(totalWithoutInterval));
     const valueIndividual = Math.round(valuePostulate * risk);
 
+    console.log(valuePostulate, "valuePostulate")
+    console.log(valueIndividual, "valueIndividual")
 
     return {
         valueIndividual,
@@ -446,22 +462,29 @@ const calcIntervalo = (data, variation, risk, interval, values) => {
 }
 
 const adicionalPericulosidade = (data, risk) => {
+    console.log()
     const { time_worked_months, salary, end_date } = data
-
     const month_value = Math.round(salary * 0.3);
-
+    console.log(month_value, "month_value")
     const all_month_value = Math.round(month_value * time_worked_months);
-    const fgts = Math.round(month_value * 0.08 * time_worked_months);
-    const thirteenth_salary = Math.round((month_value / 12) * time_worked_months);
+    console.log(all_month_value, "all_month_value")
 
+    const fgts = Math.round(month_value * 0.08 * time_worked_months);
+    console.log(fgts, "fgts")
+    const thirteenth_salary = Math.round((month_value / 12) * time_worked_months);
+    console.log(thirteenth_salary, "thirteenth_salary")
     const vacation_sum = Math.round((month_value / 12) * time_worked_months);
+    console.log(vacation_sum, "vacation_sum")
     const vocation = Math.round(vacation_sum + vacation_sum / 3);
+    console.log(vocation, "vocation")
 
     const result = Math.round(
         all_month_value + fgts + thirteenth_salary + vocation
     );
+    console.log(result, "result")
     const result_with_risk = Math.round(result * risk);
-
+    console.log(result_with_risk, "result_with_risk")
+    console.log(risk, "risk")
     return {
         valueIndividual: result_with_risk,
         valuePostulate: result
@@ -483,12 +506,13 @@ const decimoTerceiroIntegral = (data, risk) => {
 const decimoTerceiroProporcional = (data, risk) => {
     const { time_worked_months, salary, end_date } = data
     const end_date_convert = new Date(end_date);
-    const thirtySalary = (salary / 12) * end_date_convert.getMonth() + 1;
-    const result_with_risk = thirtySalary * risk;
+    const thirteenth_salary = Math.round((salary / 12) * time_worked_months);
+
+    const result_with_risk = thirteenth_salary * risk;
 
     return {
         valueIndividual: result_with_risk,
-        valuePostulate: result
+        valuePostulate: thirtySalary
     }
 
 }
@@ -501,13 +525,41 @@ const feriasIntegrais = (data, risk) => {
 
     return {
         valueIndividual: result_with_risk,
-        valuePostulate: result
+        valuePostulate: vacation
     }
 
 }
 
-const feriasProporcionais = () => {
+const feriasProporcionais = (data, riks) => {
+    const { time_worked_months, salary, end_date } = data
+    let vacation = 0;
+    if (time_worked_months <= 12) {
+        const baseCalc = Math.round((salary / 12) * time_worked_months);
+        const finalcalc = Math.round(baseCalc + baseCalc / 3);
+        vacation = finalcalc;
+    }
+    if (time_worked_months > 12) {
+        const years = time_worked_months / 12;
 
+        if (Number.isInteger(years)) {
+            const baseCalc = Math.round((salary / 12) * time_worked_months);
+            const finalcalc = Math.round(baseCalc + baseCalc / 3);
+            vacation = finalcalc;
+        } else {
+            const getDecimals = years - Math.floor(years);
+            const mounths = 12 * getDecimals;
+            const baseCalc = Math.round((salary / 12) * mounths);
+            const finalcalc = Math.round(baseCalc + baseCalc / 3);
+            vacation = finalcalc;
+        }
+    }
+
+    const resultVocation = Math.round(vacation + vacation / 3);
+    const result_with_risk = resultVocation * risk;
+    return {
+        valueIndividual: result_with_risk,
+        valuePostulate: resultVocation
+    }
 }
 
 
