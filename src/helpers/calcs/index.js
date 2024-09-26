@@ -78,6 +78,9 @@ const valueIndividual = (valuePostulate, risk) => {
 
 
 const diffSalaty = (diferenceType, diff_value_salary, data, risk) => {
+
+    console.log(diferenceType, diff_value_salary, data, risk)
+
     let sumMonthValue = 0;
     let monthValue = 0;
 
@@ -101,23 +104,25 @@ const diffSalaty = (diferenceType, diff_value_salary, data, risk) => {
         sumMonthValue = monthValue * time;
 
     }
-
+    console.log(monthValue, "monthValue")
     const fgts_calc = fgts(monthValue, time)
-
+    console.log(fgts_calc, 'fgts_calc')
     const extraSalary_calc = extraSalary(monthValue, time)
-
+    console.log(extraSalary_calc, "extraSalary_calc")
     const vocationBase_calc = vocationBase(monthValue, time)
 
 
     const vocation_calc = vocation(vocationBase_calc)
-
+    console.log(vocation_calc)
     const valuePostulate_calc = valuePostulate(sumMonthValue, vocation_calc, extraSalary_calc, fgts_calc)
-
+    console.log(sumMonthValue, vocation_calc, extraSalary_calc, fgts_calc, 'sumMonthValue, vocation_calc, extraSalary_calc, fgts_calcsumMonthValue, vocation_calc, extraSalary_calc, fgts_calc')
+    console.log(valuePostulate_calc, "valuePostulate_calc")
+    console.log(valuePostulate_calc)
 
     const valueIndividual = Math.round(valuePostulate_calc * risk);
 
     return {
-        valueIndividual,
+        valueIndividual: valueIndividual,
         valuePostulate: valuePostulate_calc
     }
 }

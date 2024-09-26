@@ -135,6 +135,7 @@ function Index() {
 
             await api.post(`/proposal/request/${id}`, newObject)
             queryClient.invalidateQueries('proposal');
+            queryClient.invalidateQueries('procces')
             setOpenSelect(false)
             toast.success("Pedido adicionado com sucesso")
         } catch {
@@ -151,7 +152,6 @@ function Index() {
             risk_success: RISK_TABLE[params.risk] * 100,
             postulated_individual: parseFloat(currencyToBackend(params.valueIndividual)),
             postulated_individual_value: parseFloat(currencyToBackend(params.valuePostulate)),
-            proposal_id: id,
             ...params
         }
 
@@ -162,8 +162,8 @@ function Index() {
             const { proposal_id, id } = draftRequest
             await api.put(`/proposal/request/${id}/${proposal_id}`, newObject)
             queryClient.invalidateQueries('proposal');
-            setOpenSelect(false)
-            setDraftRequest(undefined)
+            // setOpenSelect(false)
+            // setDraftRequest(undefined)
             toast.success("Pedido adicionado com sucesso")
         } catch (e) {
             console.log(e)

@@ -28,6 +28,7 @@ import { toast } from 'react-hot-toast';
 function Index({ children }) {
     const { authData } = useAuth()
     const { isOpen, onOpen, onClose } = useDisclosure()
+
     const colors = useColors()
     const router = useRouter()
     const schema = yup.object().shape({
@@ -36,9 +37,9 @@ function Index({ children }) {
         proccess_time: yup.string().required('Campo obrigatório'),
         autor: yup.string().required('Campo obrigatório'),
         reu: yup.string().required('Campo obrigatório'),
-        salary: yup.string().required('Campo obrigatório'),
-        start_date: yup.date().required('Campo obrigatório'),
-        end_date: yup.date().required('Campo obrigatório'),
+        // salary: yup.string().required('Campo obrigatório'),
+        // start_date: yup.date().required('Campo obrigatório'),
+        // end_date: yup.date().required('Campo obrigatório'),
     })
 
 
@@ -52,23 +53,32 @@ function Index({ children }) {
 
     const handleSubmitForm = async (values) => {
         try {
-            console.log(values)
-            const proccess_time_work = monthDiff(values.start_date, values.end_date)
-            console.log(proccess_time_work)
-            await api.post("proccess", {
+            // console.log(values)
+            // // const proccess_time_work = monthDiff(values.start_date, values.end_date)
+            // console.log(proccess_time_work)
+            const { data } = await api.post("proccess", {
                 ...values, reu_cost: currencyToBackend(values.reu_cost), user_id: authData.id,
-                start_date: values.start_date.toString(),
-                end_date: values.end_date.toString(),
-                time_worked_months: parseInt(proccess_time_work),
+                // start_date: values.start_date.toString(),
+                // end_date: values.end_date.toString(),
+                time_worked_months: 0,
                 description: "",
-                salary: currencyToBackend(values.salary)
+                salary: 0
 
             })
+
             reset()
             queryClient.invalidateQueries('proccess');
             onClose()
+
+            router.push(`/dashboard/processo/${data.data?.id}`)
+
+
+
+
+
             toast.success("Cadastro realizado com sucesso")
-        } catch {
+        } catch (e) {
+            console.log(e)
             toast.error("Algo deu errado, tente novamente!")
         }
     }
@@ -112,7 +122,7 @@ function Index({ children }) {
                                 <Input mask={"number"} label='Tempo de duração (em meses)' name='proccess_time' error={errors?.proccess_time?.message}  {...register("proccess_time")} />
                             </Box>
 
-                            <Box my='5'>
+                            {/* <Box my='5'>
                                 <Input mask="currency" label='Valor so salário ou a média dos salários' name='salary' error={errors?.salary?.message} {...register("salary")} />
                             </Box>
 
@@ -123,7 +133,7 @@ function Index({ children }) {
 
                             <Box my='5'>
                                 <Input type='date' name='end_date' label='Data de início do contrato de trabalho' error={errors?.end_date?.message}  {...register("end_date")} />
-                            </Box>
+                            </Box> */}
 
 
                             <Box my='5'>

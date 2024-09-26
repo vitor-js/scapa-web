@@ -204,7 +204,7 @@ function Index({ result, hasReturn = true }) {
             </Flex>}
 
 
-            <div style={{ opacity: 0, position: 'absolute' }}  >
+            <div style={{ opacity: 0, position: 'absolute', zIndex: -10 }}  >
                 <div ref={reportTemplateRef}>
                     <ReportTemplate result={result} />
                 </div>

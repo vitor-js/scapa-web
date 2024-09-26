@@ -20,10 +20,9 @@ const schemForm = yup.object().shape({
     autor: yup.string().required('Campo obrigatório'),
     reu: yup.string().required('Campo obrigatório'),
     description: yup.string().required('Campo obrigatório'),
-    start_date: yup.date().required('Campo obrigatório'),
-    end_date: yup.date().required('Campo obrigatório'),
-    start_date: yup.date().required('Campo obrigatório'),
-    salary: yup.string().required('Campo obrigatório'),
+    // end_date: yup.date().required('Campo obrigatório'),
+    // start_date: yup.date().required('Campo obrigatório'),
+    // salary: yup.string().required('Campo obrigatório'),
 })
 
 
@@ -81,7 +80,7 @@ function Index() {
         setValueForm('description', requestData.data.description)
         setValueForm("proccess_time", requestData.data.proccess_time)
 
-        setValueForm("salary", toCurrencyScreen(requestData.data.salary))
+        // setValueForm("salary", toCurrencyScreen(requestData.data.salary))
         setValueForm("reu_cost", toCurrencyScreen(requestData.data.reu_cost))
     }, [requestData])
 
@@ -142,7 +141,7 @@ function Index() {
 
 
                                 <Input type='date' name='end_date' label='Data de início do contrato de trabalho' error={errors?.end_date?.message}  {...register("end_date")} /> */}
-                                <Input mask="currency" name='salary' label='Informe o valor do salário' error={errors?.salary?.message}  {...register("salary")} />
+                                {/* <Input mask="currency" name='salary' label='Informe o valor do salário' error={errors?.salary?.message}  {...register("salary")} /> */}
 
                             </Grid>
                             <Box mt={4}>
