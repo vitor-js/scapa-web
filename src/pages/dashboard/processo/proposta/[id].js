@@ -7,7 +7,7 @@ import { MdEditDocument } from 'react-icons/md'
 import Result from '../../../../components/scapaComponents/requests/components/requestResult'
 import { api } from '@/service';
 import { queryClient } from '../../../../service/queryClient';
-import Components from './components'
+import List from './components/list'
 import { toast } from 'react-hot-toast';
 
 import RequestForm from '../../../../components/scapaComponents/requests/components/RequestForm/index'
@@ -200,7 +200,7 @@ function Index() {
 
                         {requestsValue.length !== 0 && openSelect === false && <>
                             <Result result={result} hasReturn={false} />
-                            <Components.List createRequest={createRequest} custonEditFunction={editRequest} requests={requestsValue} setOpenSelect={setOpenSelect} setDraftRequest={setDraftRequest} removeRequest={removeRequest} calcAndSave={calcAndSave} />
+                            <List createRequest={createRequest} custonEditFunction={editRequest} requests={requestsValue} setOpenSelect={setOpenSelect} setDraftRequest={setDraftRequest} removeRequest={removeRequest} calcAndSave={calcAndSave} />
                         </>}
 
                     </WrapperBody>
