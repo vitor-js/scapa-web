@@ -257,6 +257,12 @@ function Index({ handleAddNewRequest, draftRequest, setOpenSelect, handleUpdateR
         risco: yup.string().required('Este campo é origatório'),
         // diff_value_salary: yup.string().required('Este campo é origatório'),
         // diff_salary_type: yup.string().required('Este campo é origatório'),
+        custon_request: yup.lazy((value) => {
+            if (value !== undefined && value !== "") {
+                return yup.string().required('Este campo é origatório');
+            }
+            return yup.string().nullable().optional();
+        }),
         valor_individual_postulado: yup.lazy((value) => {
             if (value !== undefined && value !== "") {
                 return yup.string().required('Este campo é origatório');
@@ -297,8 +303,9 @@ function Index({ handleAddNewRequest, draftRequest, setOpenSelect, handleUpdateR
     const submit = async (values) => {
 
         const pedido = getValues("pedido")
+        const custonPeido = getValues("custon_request")
         const newRequest = {
-            requestValue: pedido,
+            requestValue: pedido === "Outros" ? custonPeido : pedido,
             // valuePostulate: valor_individual_postulado,
             risk: risk,
             riskSuccess: ratio,
@@ -306,6 +313,14 @@ function Index({ handleAddNewRequest, draftRequest, setOpenSelect, handleUpdateR
         };
 
         try {
+
+            if (!salaryValue) {
+                const valor_individual_postulado = getValues("valor_individual_postulado")
+                finishRequest(newRequest, valor_individual_postulado, individualValueWithRisk)
+                return
+            }
+
+
             if (VALUES_WITH_CALCS.includes(valueRequest)) {
                 if (VALUES_WITH_CALCS_DIFF_SALARY.includes(valueRequest)) {
                     const { valueIndividual, valuePostulate } = calc.diffSalaty(values.diff_salary_type, values.diff_value_salary, data.data, RISK_TABLE[risk])
@@ -536,19 +551,13 @@ function Index({ handleAddNewRequest, draftRequest, setOpenSelect, handleUpdateR
     }, [data])
 
 
-    useEffect(() => {
-        console.log(data)
-        if (!data) return
-        const { salary } = data.data
-        console.log(data.data)
-        setSalaryValue(salary ? salary : undefined)
-    }, [])
 
 
 
 
 
     return (
+
         <Flex
             cursor={'pointer'}
             as='form'
@@ -567,7 +576,19 @@ function Index({ handleAddNewRequest, draftRequest, setOpenSelect, handleUpdateR
                 />
             </Box>
 
-            {!VALUES_WITH_CALCS.includes(valueRequest) || salaryValue === undefined && <>
+            {valueRequest === "Outros" &&
+                <Box w={'100%'} mt={5}>
+                    <Input label='Escreva o nome do pedido'
+                        {...register('custon_request')}
+                        error={errors?.custon_request?.message}
+                        name='custon_request'
+
+                    />
+                </Box>
+            }
+
+
+            {!VALUES_WITH_CALCS.includes(valueRequest) || salaryValue === undefined ? <>
                 <Box w={'100%'} mt={5}>
                     <Input label='Valor individual postulado'
                         {...register('valor_individual_postulado')}
@@ -579,7 +600,7 @@ function Index({ handleAddNewRequest, draftRequest, setOpenSelect, handleUpdateR
                         }}
                         mask='currency' />
                 </Box>
-            </>}
+            </> : null}
 
 
             <Box w={'100%'} mt={5}>
@@ -673,7 +694,9 @@ function Index({ handleAddNewRequest, draftRequest, setOpenSelect, handleUpdateR
                     Voltar
                 </Text>
                 <Button type='submit'>
-                    Salvar
+                    <Text color={"#fff"}>
+                        Salvar
+                    </Text>
                 </Button>
             </Flex>
 

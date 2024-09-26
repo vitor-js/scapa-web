@@ -6,9 +6,17 @@ import { toCurrencyScreen } from '../../../../../helpers'
 import { IoTrashBinOutline } from "react-icons/io5";
 
 import { FaEdit } from "react-icons/fa";
+const RISK_TABLE_REVERSE = {
+    0: "Inexistente",
+    10: "Muito Baixo",
+    25: "Baixo",
+    50: "Médio",
+    75: "Alto",
+    90: "Muito Alto",
+    100: "Total",
+};
 
-
-function Index({ requests = [], setOpenSelect, setDraftRequest, removeRequest, calcAndSave }) {
+function Index({ requests = [], setOpenSelect, setDraftRequest, removeRequest, calcAndSave, custonEdit = false, custonEditFunction, createRequest }) {
     const colors = useColors()
 
 
@@ -34,8 +42,13 @@ function Index({ requests = [], setOpenSelect, setDraftRequest, removeRequest, c
                                     borderColor={colors.border.hoverColor}
                                     borderWidth={1}
                                     onClick={() => {
-                                        setDraftRequest({ ...value })
-                                        setOpenSelect(true)
+                                        if (custonEdit) {
+                                            return custonEditFunction(value)
+                                        } else {
+                                            setDraftRequest({ ...value })
+                                            setOpenSelect(true)
+                                        }
+
                                     }}
                                     cursor="pointer"
                                     transition="ease all 0.1s"
@@ -111,7 +124,8 @@ function Index({ requests = [], setOpenSelect, setDraftRequest, removeRequest, c
 
                             <Box mt={1}>
                                 <Text fontSize={15} fontWeight={400} ml={3} mr={3} >
-                                    {value.risk}
+
+                                    {RISK_TABLE_REVERSE[value.riskSuccess]}
                                 </Text>
                             </Box>
 
@@ -144,9 +158,18 @@ function Index({ requests = [], setOpenSelect, setDraftRequest, removeRequest, c
                     borderColor: colors.border.hoverColor,
                 }}
                 mt={5}
+
                 onClick={() => {
-                    setOpenSelect(true)
+                    if (custonEdit) {
+                        setOpenSelect(true)
+                        return createRequest()
+                    } else {
+                        setOpenSelect(true)
+                    }
+
                 }}
+
+
                 cursor={'pointer'}
                 bg={colors.cardBackground} padding={4} borderRadius={5} w={'100%'} flexDirection={'row'}>
                 <MdAddCircle color={colors.text} size={40} />
@@ -155,12 +178,14 @@ function Index({ requests = [], setOpenSelect, setDraftRequest, removeRequest, c
                 </Text>
             </Flex>
 
-
-            <Flex mt={6} justifyContent={"end"} onClick={() => { calcAndSave() }}>
+            {!custonEdit && <Flex mt={6} justifyContent={"end"} onClick={() => { calcAndSave() }}>
                 <Button color="#fff">
                     Avançar
                 </Button>
-            </Flex>
+            </Flex>}
+
+            <Flex marginBottom={450} />
+
         </Flex>
 
     );

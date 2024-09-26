@@ -6,6 +6,7 @@ function Index(id, user_id) {
 
         if (!id || !user_id) return null
         const { data: data } = await api.get(`proccess/${user_id}/${id}`)
+        console.log(data, 'aaaaaaaaaaaassssssssss')
         return data
     }
     const query = useQuery(

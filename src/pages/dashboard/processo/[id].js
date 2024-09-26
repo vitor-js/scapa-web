@@ -13,12 +13,17 @@ import { api } from '@/service'
 import { queryClient } from '../../../service/queryClient';
 import { toCurrencyScreen } from '../../../helpers'
 
+
 const schemForm = yup.object().shape({
     title: yup.string().required('Campo obrigatório'),
     number_process: yup.string().required('Campo obrigatório'),
     autor: yup.string().required('Campo obrigatório'),
     reu: yup.string().required('Campo obrigatório'),
     description: yup.string().required('Campo obrigatório'),
+    start_date: yup.date().required('Campo obrigatório'),
+    end_date: yup.date().required('Campo obrigatório'),
+    start_date: yup.date().required('Campo obrigatório'),
+    salary: yup.string().required('Campo obrigatório'),
 })
 
 
@@ -61,12 +66,22 @@ function Index() {
 
     useEffect(() => {
         if (!requestData) return
+        // const end_date = requestData.data.end_date ? new Date(requestData.data.end_date) : null;
+        // const start_date = requestData.data.start_date ? new Date(requestData.data.start_date) : null;
+
+        // setValueForm("end_date", "22-10-2024")
+        // setValueForm("start_date", start_date)
+
+
+        console.log(requestData, 'aaaaaaaaaaddddd')
         setValueForm('title', requestData.data.title)
         setValueForm('number_process', requestData.data.number_process)
         setValueForm('autor', requestData.data.autor)
         setValueForm('reu', requestData.data.reu)
         setValueForm('description', requestData.data.description)
         setValueForm("proccess_time", requestData.data.proccess_time)
+
+        setValueForm("salary", toCurrencyScreen(requestData.data.salary))
         setValueForm("reu_cost", toCurrencyScreen(requestData.data.reu_cost))
     }, [requestData])
 
@@ -121,7 +136,14 @@ function Index() {
                                     name='proccess_time' error={errors?.autor?.proccess_time}  {...register("proccess_time")}
                                 />
                                 <Input label='Réu' name='reu' error={errors?.reu?.message} {...register("reu")} />
-                                <Input label='Custo do Réu' name='reu_cost' error={errors?.description?.reu_cost}  {...register("reu_cost")} />
+                                <Input label='Custo do Réu' mask="currency" name='reu_cost' error={errors?.description?.reu_cost}  {...register("reu_cost")} />
+
+                                {/* <Input type='date' name='start_date' label='Data de início do contrato de trabalho' error={errors?.start_date?.message}  {...register("start_date")} />
+
+
+                                <Input type='date' name='end_date' label='Data de início do contrato de trabalho' error={errors?.end_date?.message}  {...register("end_date")} /> */}
+                                <Input mask="currency" name='salary' label='Informe o valor do salário' error={errors?.salary?.message}  {...register("salary")} />
+
                             </Grid>
                             <Box mt={4}>
 

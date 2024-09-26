@@ -8,7 +8,7 @@ import ReportTemplate from '../../../../../templates/index.js'
 import { useRouter } from 'next/router'
 import { toast } from 'react-hot-toast';
 
-function Index({ result }) {
+function Index({ result, hasReturn = true }) {
     const colors = useColors()
     const reportTemplateRef = useRef(null);
     const router = useRouter()
@@ -196,15 +196,15 @@ function Index({ result }) {
 
 
             </Flex>
-
-            <Flex width={'100%'} textAlign={'center'} alignItems={'center'} justifyContent={'center'} mt={10}>
+            {hasReturn && <Flex width={'100%'} textAlign={'center'} alignItems={'center'} justifyContent={'center'} mt={10}>
                 <Text textAlign={'center'} onClick={() => router.back()} fontSize={15} fontWeight={400} color={colors.text} cursor={'pointer'}>
                     Clique para voltar ou criar nova proposta
                 </Text>
 
-            </Flex>
+            </Flex>}
 
-            <div style={{ opacity: 0 }} >
+
+            <div style={{ opacity: 0, position: 'absolute' }}  >
                 <div ref={reportTemplateRef}>
                     <ReportTemplate result={result} />
                 </div>

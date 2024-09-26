@@ -98,6 +98,17 @@ function Index({ requests = [], setRequests, data }) {
             const valueProposal =
                 valueTotalPostulateIndividual + parseFloat(currencyToBackend(data?.data?.reu_cost));
 
+            const RISK_TABLE = {
+                Inexistente: 0.0,
+                "Muito Baixo": 0.1,
+                Baixo: 0.25,
+                Médio: 0.5,
+                Alto: 0.75,
+                "Muito Alto": 0.9,
+                Total: 1.0,
+            };
+
+
             const result = {
                 type: query.type,
                 valotTotalPostulado,
@@ -118,6 +129,7 @@ function Index({ requests = [], setRequests, data }) {
                     ...v,
                     valueIndividual: parseFloat(currencyToBackend(v.valueIndividual)),
                     valuePostulate: parseFloat(currencyToBackend(v.valuePostulate)),
+                    riskSuccess: RISK_TABLE[v.risk] * 100
                 })), type: query.type
             }
             console.log(body)
@@ -128,8 +140,9 @@ function Index({ requests = [], setRequests, data }) {
             setShowResult(true)
 
 
-        } catch {
-            toast.error("Algo deu erradom, tente novamente!")
+        } catch (e) {
+            console.log(e)
+            toast.error("Algo deu errado, tente novamente!")
         }
 
     }
