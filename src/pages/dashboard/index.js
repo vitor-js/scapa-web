@@ -12,6 +12,7 @@ import { useRouter } from 'next/router'
 import { toast } from 'react-hot-toast';
 import { api } from '@/service'
 
+import { queryClient } from '../../service/queryClient';
 function Index() {
     const { authData } = useAuth()
     const { query: queryUrl, push } = useRouter()
