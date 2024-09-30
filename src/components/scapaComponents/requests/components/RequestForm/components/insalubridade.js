@@ -86,7 +86,7 @@ function Index({ errors, register, data, draftRequest, setValue, insalubridadeSa
             <Modal position='absolute' size='xl' isCentered isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
                 <ModalContent as='form' borderRadius={5} bg={colors.background} >
-                    <ModalHeader>Cadastrar periodo de salário  </ModalHeader>
+                    <ModalHeader>  </ModalHeader>
                     <ModalCloseButton />
                     <Box pl={5} pr={5}>
                         <Input
@@ -100,7 +100,7 @@ function Index({ errors, register, data, draftRequest, setValue, insalubridadeSa
 
                     <Box mt={4} />
                     <Box pl={5} pr={5}>
-                        <Input mask="currency" label='Valor do salário' name='value'
+                        <Input mask="currency" label='Valor do salário mínimo' name='value'
                             error={errosModal?.value?.message} {...registerModal("value")} />
                     </Box>
                     <ModalFooter>
@@ -139,7 +139,7 @@ function Index({ errors, register, data, draftRequest, setValue, insalubridadeSa
                     <MdAddCircle color={colors.text} size={20} />
                     <Text fontSize={14} fontWeight={400} ml={3} mr={3} >
 
-                        Clique para criar seu primeiro valor de salário
+                        Clique para criar seu primeiro valor de salário mínimo e o período
                     </Text>
                 </Flex>
             }

@@ -308,7 +308,7 @@ function Index({ handleAddNewRequest, draftRequest, setOpenSelect, handleUpdateR
             requestValue: pedido === "Outros" ? custonPeido : pedido,
             // valuePostulate: valor_individual_postulado,
             risk: risk,
-            riskSuccess: ratio,
+            riskSuccess: RISK_TABLE[risk] * 100,
             // valueIndividual: individualValueWithRisk,
         };
 
@@ -324,6 +324,9 @@ function Index({ handleAddNewRequest, draftRequest, setOpenSelect, handleUpdateR
             if (VALUES_WITH_CALCS.includes(valueRequest)) {
                 if (VALUES_WITH_CALCS_DIFF_SALARY.includes(valueRequest)) {
                     const { valueIndividual, valuePostulate } = calc.diffSalaty(values.diff_salary_type, values.diff_value_salary, data.data, RISK_TABLE[risk])
+
+
+
                     const requestUpdate = {
                         ...newRequest,
                         diference_type: values.diff_salary_type,
@@ -362,7 +365,7 @@ function Index({ handleAddNewRequest, draftRequest, setOpenSelect, handleUpdateR
                         have_vacation: values.have_vacation === "Sim" ? true : false,
                         termination_type: values.termination_type
                     }
-                    console.log(valueIndividual, valuePostulate)
+
                     finishRequest(requestUpdate, valuePostulate, valueIndividual)
                     return
                 }

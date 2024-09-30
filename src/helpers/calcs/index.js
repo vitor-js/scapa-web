@@ -79,7 +79,7 @@ const valueIndividual = (valuePostulate, risk) => {
 
 const diffSalaty = (diferenceType, diff_value_salary, data, risk) => {
 
-    console.log(diferenceType, diff_value_salary, data, risk)
+    console.log(diferenceType, diff_value_salary, data, risk, "console das diferencas")
 
     let sumMonthValue = 0;
     let monthValue = 0;
@@ -87,7 +87,7 @@ const diffSalaty = (diferenceType, diff_value_salary, data, risk) => {
     const { time_worked_months, salary } = data
 
     const time = parseInt(time_worked_months)
-    console.log(time, salary, diferenceType)
+
     if (diferenceType === "absoluta") {
         monthValue = parseFloat(currencyToNumber(diff_value_salary));
         console.log(monthValue, 'monthValue')
@@ -95,29 +95,32 @@ const diffSalaty = (diferenceType, diff_value_salary, data, risk) => {
 
     }
 
-    if (diferenceType === "percentual") {
 
+
+    if (diferenceType === "percentual") {
         monthValue =
-            (parseFloat(currencyToNumber(salary)) *
+            (salary *
                 parseFloat(currencyToNumber(diff_value_salary))) /
             100;
         sumMonthValue = monthValue * time;
-
     }
-    console.log(monthValue, "monthValue")
+
+
+
+
     const fgts_calc = fgts(monthValue, time)
-    console.log(fgts_calc, 'fgts_calc')
+
+
+
     const extraSalary_calc = extraSalary(monthValue, time)
-    console.log(extraSalary_calc, "extraSalary_calc")
+
     const vocationBase_calc = vocationBase(monthValue, time)
-
-
     const vocation_calc = vocation(vocationBase_calc)
-    console.log(vocation_calc)
-    const valuePostulate_calc = valuePostulate(sumMonthValue, vocation_calc, extraSalary_calc, fgts_calc)
-    console.log(sumMonthValue, vocation_calc, extraSalary_calc, fgts_calc, 'sumMonthValue, vocation_calc, extraSalary_calc, fgts_calcsumMonthValue, vocation_calc, extraSalary_calc, fgts_calc')
-    console.log(valuePostulate_calc, "valuePostulate_calc")
-    console.log(valuePostulate_calc)
+
+
+    const valuePostulate_calc = sumMonthValue + vocation_calc + extraSalary_calc + fgts_calc
+
+
 
     const valueIndividual = Math.round(valuePostulate_calc * risk);
 
@@ -156,7 +159,10 @@ const calcVerbasRescisorias = (data, reason, risk, have_vacation) => {
     const { time_worked_months, salary, end_date } = data
     const time = parseInt(time_worked_months)
     const end_date_convert = new Date(end_date);
+    console.log(end_date, 'end_date')
     const days = getQuantityDays(end_date_convert.getMonth() + 1);
+    console.log(end_date_convert.getMonth() + 1, "end_date_convert.getMonth() + 1")
+
     if (reason === "Dispensa imotivada ou rescisão indireta") {
         return calcDispensaImotivadaOuRescisãoIndireta(days, time, salary, risk, have_vacation, end_date_convert);
     }
@@ -255,7 +261,10 @@ const calcComumAcordo = (days, time, salary, risk, have_vacation) => {
 }
 
 const calcDispensaMotivada = (days, time, salary, risk, have_vacation) => {
+
+
     const SalaryForDaysWorkedInTheLastMonth = (salary / 30) * days;
+
     const multa = salary;
 
     const valuePostulate_calc = SalaryForDaysWorkedInTheLastMonth + multa
@@ -272,13 +281,15 @@ const calcDispensaMotivada = (days, time, salary, risk, have_vacation) => {
 }
 
 const vacationCalcVerbas = (salary, diffDate, haveVacation) => {
-    console.log(salary, diffDate, haveVacation)
+    console.log(salary, diffDate, haveVacation, "haveVacationhaveVacationhaveVacationhaveVacationhaveVacationhaveVacation")
     try {
         if (haveVacation === "Sim") {
+
             return Math.round(salary + salary / 3);
         }
 
         if (haveVacation === "Não") {
+            console.log("caiu no nao")
             if (diffDate <= 12) {
                 const baseCalc = Math.round((salary / 12) * diffDate);
                 const finalcalc = Math.round(baseCalc + baseCalc / 3);
@@ -517,7 +528,7 @@ const decimoTerceiroProporcional = (data, risk) => {
 
     return {
         valueIndividual: result_with_risk,
-        valuePostulate: thirtySalary
+        valuePostulate: thirteenth_salary
     }
 
 }
