@@ -106,8 +106,19 @@ function Index({ requests = [], setRequests, data }) {
                 Alto: 0.75,
                 "Muito Alto": 0.9,
                 Total: 1.0,
+                
             };
 
+            
+            const RISK_TABLE_REVERSE = {
+                0: "Inexistente",
+                10: "Muito Baixo",
+                25: "Baixo",
+                50: "Médio",
+                75: "Alto",
+                90: "Muito Alto",
+                100: "Total",
+            };
 
             const result = {
                 type: query.type,
@@ -124,15 +135,33 @@ function Index({ requests = [], setRequests, data }) {
                 custo_reu: data.data.reu_cost
             }
 
+            const format_request = requests.map(v => {
+                const risk = v.risk 
+                    if(typeof risk === 'number') {
+                        return {
+                            ...v,
+                            valueIndividual: parseFloat(currencyToBackend(v.valueIndividual)),
+                            valuePostulate: parseFloat(currencyToBackend(v.valuePostulate)),
+                            riskSuccess: RISK_TABLE_REVERSE[risk] ,
+                            risk_success: RISK_TABLE_REVERSE[risk],}
+                    }
+                    else {
+                        return {
+                            ...v,
+                            valueIndividual: parseFloat(currencyToBackend(v.valueIndividual)),
+                            valuePostulate: parseFloat(currencyToBackend(v.valuePostulate)),
+                            riskSuccess: RISK_TABLE[risk] ,
+                            risk_success: RISK_TABLE[risk],}
+                    }
+                 
+                   
+               })
+
             const body = {
-                postulated_total_value: valotTotalPostulado, total_value_with_riks: valueTotalPostulateIndividual, total_value: valueProposal, interest: 0, process_id: id, requests: requests.map(v => ({
-                    ...v,
-                    valueIndividual: parseFloat(currencyToBackend(v.valueIndividual)),
-                    valuePostulate: parseFloat(currencyToBackend(v.valuePostulate)),
-                    riskSuccess: RISK_TABLE[v.risk] * 100
-                })), type: query.type
+                postulated_total_value: valotTotalPostulado, total_value_with_riks: valueTotalPostulateIndividual, total_value: valueProposal, interest: 0, process_id: id, 
+                requests: format_request, type: query.type
             }
-            console.log(body)
+             console.log(body, 'bodybody')
             setResult(result)
             await api.post("proposal", body)
             queryClient.invalidateQueries('procces');

@@ -309,8 +309,11 @@ function Index({ handleAddNewRequest, draftRequest, setOpenSelect, handleUpdateR
             // valuePostulate: valor_individual_postulado,
             risk: risk,
             riskSuccess: RISK_TABLE[risk] * 100,
+            risk_success: RISK_TABLE[risk] * 100,
             // valueIndividual: individualValueWithRisk,
         };
+
+        console.log(newRequest, 'newRequestnewRequest')
 
         try {
 
@@ -323,17 +326,18 @@ function Index({ handleAddNewRequest, draftRequest, setOpenSelect, handleUpdateR
 
             if (VALUES_WITH_CALCS.includes(valueRequest)) {
                 if (VALUES_WITH_CALCS_DIFF_SALARY.includes(valueRequest)) {
-                    const { valueIndividual, valuePostulate } = calc.diffSalaty(values.diff_salary_type, values.diff_value_salary, data.data, RISK_TABLE[risk])
+                    const { valueIndividual, valuePostulate, reflex } = calc.diffSalaty(values.diff_salary_type, values.diff_value_salary, data.data, RISK_TABLE[risk])
 
 
 
                     const requestUpdate = {
                         ...newRequest,
                         diference_type: values.diff_salary_type,
-                        diference_value: parseFloat(currencyToBackend(values.diff_value_salary))
+                        diference_value: parseFloat(currencyToBackend(values.diff_value_salary)),
+                        reflex
                     }
 
-                    finishRequest(requestUpdate, valuePostulate, valueIndividual)
+                   finishRequest(requestUpdate, valuePostulate, valueIndividual)
                     return
                 }
 
@@ -348,22 +352,24 @@ function Index({ handleAddNewRequest, draftRequest, setOpenSelect, handleUpdateR
 
                     const salaryMedia = sumValues / sumMonths
 
-                    const { valueIndividual, valuePostulate } = calc.insalubridade(data.data, values.insalubridade_grau, RISK_TABLE[risk], salaryMedia)
+                    const { valueIndividual, valuePostulate, reflex } = calc.insalubridade(data.data, values.insalubridade_grau, RISK_TABLE[risk], salaryMedia)
                     const requestUpdate = {
                         ...newRequest,
                         insalubridade_grau: values.insalubridade_grau,
-                        insalubridade_salario: { data: insalubridadeSalary }
+                        insalubridade_salario: { data: insalubridadeSalary },
+                        reflex
                     }
                     finishRequest(requestUpdate, valuePostulate, valueIndividual)
                     return
                 }
 
                 if (VERBAS.includes(valueRequest)) {
-                    const { valueIndividual, valuePostulate } = calc.calcVerbasRescisorias(data.data, values.termination_type, RISK_TABLE[risk], values.have_vacation)
+                    const { valueIndividual, valuePostulate, reflex } = calc.calcVerbasRescisorias(data.data, values.termination_type, RISK_TABLE[risk], values.have_vacation)
                     const requestUpdate = {
                         ...newRequest,
                         have_vacation: values.have_vacation === "Sim" ? true : false,
-                        termination_type: values.termination_type
+                        termination_type: values.termination_type,
+                        reflex
                     }
 
                     finishRequest(requestUpdate, valuePostulate, valueIndividual)
@@ -380,16 +386,17 @@ function Index({ handleAddNewRequest, draftRequest, setOpenSelect, handleUpdateR
 
                         }]
                     } : { data: extraHour }
-                    const { valueIndividual, valuePostulate } = calc.calcHoraExtra(data.data, values.extra_hour_variation, RISK_TABLE[risk], extraHour, values.week_limit, values)
+                    const { valueIndividual, valuePostulate, reflex } = calc.calcHoraExtra(data.data, values.extra_hour_variation, RISK_TABLE[risk], extraHour, values.week_limit, values)
                     const requestUpdate = {
                         ...newRequest,
                         extra_hour_variation: values.extra_hour_variation === "Sim" ? true : false,
                         extra_hour_object: objectHoraExtra,
                         week_limit: values.week_limit,
+                        reflex
 
                     }
 
-                    finishRequest(requestUpdate, valuePostulate, valueIndividual)
+                     finishRequest(requestUpdate, valuePostulate, valueIndividual)
                     return
                 }
 
@@ -472,12 +479,13 @@ function Index({ handleAddNewRequest, draftRequest, setOpenSelect, handleUpdateR
                 }
 
                 if (ADIOCIONAL_PERICULOSIDADE.includes(valueRequest)) {
-                    const { valueIndividual, valuePostulate } = calc.adicionalPericulosidade(data.data, RISK_TABLE[risk])
+                    const { valueIndividual, valuePostulate , reflex} = calc.adicionalPericulosidade(data.data, RISK_TABLE[risk])
                     const requestUpdate = {
                         ...newRequest,
+                        reflex
 
                     }
-                    finishRequest(requestUpdate, valuePostulate, valueIndividual)
+                     finishRequest(requestUpdate, valuePostulate, valueIndividual)
                     return
                 }
             }

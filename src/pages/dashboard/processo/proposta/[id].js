@@ -129,8 +129,6 @@ function Index() {
             ...params
         }
 
-
-        console.log(newObject, "aaaaaaaaaaaaaaaaas")
         try {
 
             await api.post(`/proposal/request/${id}`, newObject)

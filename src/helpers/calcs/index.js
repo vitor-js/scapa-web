@@ -90,43 +90,50 @@ const diffSalaty = (diferenceType, diff_value_salary, data, risk) => {
 
     if (diferenceType === "absoluta") {
         monthValue = parseFloat(currencyToNumber(diff_value_salary));
-        console.log(monthValue, 'monthValue')
         sumMonthValue = monthValue * time;
 
-    }
-
-
-
-    if (diferenceType === "percentual") {
+    } else {
         monthValue =
-            (salary *
-                parseFloat(currencyToNumber(diff_value_salary))) /
-            100;
-        sumMonthValue = monthValue * time;
+        (salary *
+            parseFloat(currencyToNumber(diff_value_salary))) /
+        100;
+    sumMonthValue = monthValue * time;
     }
 
 
-
-
-    const fgts_calc = fgts(monthValue, time)
+    const fgts = Math.round(monthValue * 0.08 * time);
 
 
 
-    const extraSalary_calc = extraSalary(monthValue, time)
+    const extraSalary = Math.round((monthValue / 12) * time);
 
-    const vocationBase_calc = vocationBase(monthValue, time)
-    const vocation_calc = vocation(vocationBase_calc)
+    const vocationBase = (monthValue / 12) * time;
+    const vocation = Math.round(vocationBase + vocationBase / 3);
 
 
-    const valuePostulate_calc = sumMonthValue + vocation_calc + extraSalary_calc + fgts_calc
+    const valuePostulate_calc = sumMonthValue + vocation + extraSalary + fgts
 
 
 
     const valueIndividual = Math.round(valuePostulate_calc * risk);
-
+    const reflex = [
+        {
+          label: "Depósitos do FGTS",
+          value: fgts,
+        },
+        {
+          label: "Décimo terceiro salário",
+          value: extraSalary,
+        },
+        {
+          label: "Férias",
+          value: vocation,
+        },
+      ];
     return {
         valueIndividual: valueIndividual,
-        valuePostulate: valuePostulate_calc
+        valuePostulate: valuePostulate_calc,
+        reflex
     }
 }
 
@@ -137,19 +144,38 @@ const insalubridade = (data, grau, risk, salary) => {
     const time = parseInt(time_worked_months)
     const monthValue = salary * GRAU_RATIO_INSALUBRIDADE[grau];
 
-    const fgts_calc = fgts(monthValue, time)
-    const extraSalary_calc = extraSalary(monthValue, time)
-    const vocationBase_calc = vocationBase(monthValue, time)
-    const vocation_calc = vocation(vocationBase_calc)
+    const fgts = Math.round(monthValue * 0.08 * time);
+    const extraSalary = Math.round((monthValue / 12) * time);
 
-    const valuePostulate_calc = monthValue * time + extraSalary_calc + vocation_calc + fgts_calc
+ 
+    const vocation = Math.round((monthValue / 12) * time);
+
+    const vocationCalc = vocation + vocation / 3;
+
+    const valuePostulate_calc = monthValue * time + extraSalary + vocationCalc + fgts
 
 
     const valueIndividual = Math.round(valuePostulate_calc * risk);
 
+    const reflex = [
+        {
+          label: "Depósitos do FGTS",
+          value: fgts,
+        },
+        {
+          label: "Décimo terceiro salário",
+          value: extraSalary,
+        },
+        {
+          label: "Férias",
+          value: vocationCalc,
+        },
+      ];
+
     return {
         valueIndividual,
-        valuePostulate: valuePostulate_calc
+        valuePostulate: valuePostulate_calc,
+        reflex
     }
 }
 
@@ -160,16 +186,17 @@ const calcVerbasRescisorias = (data, reason, risk, have_vacation) => {
     const time = parseInt(time_worked_months)
     const end_date_convert = new Date(end_date);
     console.log(end_date, 'end_date')
-    const days = getQuantityDays(end_date_convert.getMonth() + 1);
     console.log(end_date_convert.getMonth() + 1, "end_date_convert.getMonth() + 1")
+    const days = getQuantityDays(end_date_convert.getMonth() + 1);
+
 
     if (reason === "Dispensa imotivada ou rescisão indireta") {
         return calcDispensaImotivadaOuRescisãoIndireta(days, time, salary, risk, have_vacation, end_date_convert);
     }
-    if (reason === "Pedido de demissão") { return calcPedidoDeDemissao(days, time, salary, risk, have_vacation); }
-    if (reason === "Comum acordo") { return calcComumAcordo(days, time, salary, risk, have_vacation); }
+    if (reason === "Pedido de demissão") { return calcPedidoDeDemissao(days, time, salary, risk, have_vacation, end_date_convert); }
+    if (reason === "Comum acordo") { return calcComumAcordo(days, time, salary, risk, have_vacation, end_date_convert); }
     if (reason === "Dispensa motivada (justa causa)")
-        return calcDispensaMotivada(days, time, salary, risk, have_vacation);
+        return calcDispensaMotivada(days, time, salary, risk, have_vacation, end_date_convert);
 }
 
 
@@ -185,77 +212,157 @@ const calcDispensaImotivadaOuRescisãoIndireta = (days, time, salary, risk, have
 
     const fgtsBase = Math.round(0.08 * salary * time);
     const fgts = fgtsBase * 0.4;
+    
     const multa = salary;
-    const extraSalary_calc = extraSalary(salary, time)
+  
+    const extraSalary_calc = Math.round(
+        (salary / 12) * end_date_convert.getMonth() + 1
+      );
     const vocation_calc = vacationCalcVerbas(salary, time, have_vacation)
 
     const valuePostulate_calc = SalaryForDaysWorkedInTheLastMonth + multa + extraSalary_calc + vocation_calc + fgts + AvisoPrevioIndenizado
-    console.log(SalaryForDaysWorkedInTheLastMonth, "SalaryForDaysWorkedInTheLastMonth")
-    console.log(multa, "multa")
-    console.log(extraSalary, "extraSalary")
-    console.log(vocation_calc, "vocation_calc")
-    console.log(fgts, "fgts")
+    const reflex = [{
+        label: "Salário dos dias trabalhados no último mês",
+        value: SalaryForDaysWorkedInTheLastMonth
+    },
 
-    console.log(AvisoPrevioIndenizado, "AvisoPrevioIndenizado")
+    {
+        label: "Aviso prévio indenizado",
+        value: AvisoPrevioIndenizado
+    },
+    {
+        label: "40% dos depósitos do FGTS",
+        value: fgts
+    },
+    {
+        label: "Multa do art. 477",
+        value: multa
+    },
+    {
+        label: "13º salário proporcional",
+        value: extraSalary_calc
+    },
+    {
+        label: "Férias proporcionais",
+        value: vocation_calc
+    }
+]
+
 
     const valueIndividual = Math.round(valuePostulate_calc * risk);
     return {
         valueIndividual,
-        valuePostulate: valuePostulate_calc
+        valuePostulate: valuePostulate_calc,
+    reflex
     }
 
 }
 
-const calcPedidoDeDemissao = (days, time, salary, risk, have_vacation) => {
+const calcPedidoDeDemissao = (days, time, salary, risk, have_vacation, end_date_convert) => {
 
     const SalaryForDaysWorkedInTheLastMonth = (salary / 30) * days;
-    console.log(SalaryForDaysWorkedInTheLastMonth, "SalaryForDaysWorkedInTheLastMonth")
     const multa = salary;
-    console.log(multa, "multa")
-    const extraSalary_calc = extraSalary(salary, time)
-    console.log(extraSalary_calc, "extraSalary_calc")
+    const extraSalary_calc = Math.round(
+        (salary / 12) * end_date_convert.getMonth() + 1
+      );
+
     const vocation_calc = vacationCalcVerbas(salary, time, have_vacation)
-    console.log(vocation_calc, "vocation_calc")
+
 
     const valuePostulate_calc = SalaryForDaysWorkedInTheLastMonth + multa + extraSalary_calc + vocation_calc
-    console.log(valuePostulate_calc, "valuePostulate_calc")
+ 
     const postuateValue = Math.round(
         valuePostulate_calc
     );
     const valueIndividual = postuateValue * risk;
 
+    const reflex = [{
+        label: "Salário dos dias trabalhados no último mês",
+        value: SalaryForDaysWorkedInTheLastMonth
+    },
+
+    {
+
+        label: "Multa do art. 477",
+        value: multa
+    },
+    {
+        label: "13º salário proporcional",
+        value: extraSalary_calc
+    },
+    {
+        label: "Férias proporcionais",
+        value: vocation_calc
+    }
+]
+
+
     return {
         valueIndividual,
-        valuePostulate: postuateValue
+        valuePostulate: postuateValue,
+        reflex
     }
 
 }
 
-const calcComumAcordo = (days, time, salary, risk, have_vacation) => {
+const calcComumAcordo = (days, time, salary, risk, have_vacation, end_date_convert) => {
     const SalaryForDaysWorkedInTheLastMonth = (salary / 30) * days;
-    const multa = salary;
-    const extraSalary_calc = extraSalary(salary, time)
     const years = Math.round(time / 12);
     const AvisoPrevioIndenizadoBase = Math.round(
         (salary / 30) * (years * 3) + salary
     );
     const AvisoPrevioIndenizado = AvisoPrevioIndenizadoBase * 0.5;
-    const fgts_calc = fgts(salary, time)
-    const fgts_value = fgts_calc * 0.2;
+    const fgtsBase = Math.round(0.08 * salary * time);
+    const fgts = fgtsBase * 0.2;
+    const multa = salary;
+    const extraSalary = Math.round(
+        (salary / 12) * end_date_convert.getMonth() + 1
+      );
+
     const vocation_calc = vacationCalcVerbas(salary, time, have_vacation)
 
 
 
-    const valuePostulate_calc = SalaryForDaysWorkedInTheLastMonth + multa + extraSalary_calc + fgts_value + vocation_calc + AvisoPrevioIndenizado
+    const valuePostulate_calc = SalaryForDaysWorkedInTheLastMonth + multa + extraSalary + fgts + vocation_calc + AvisoPrevioIndenizado
 
     const postuateValue = Math.round(
         valuePostulate_calc
     );
     const valueIndividual = postuateValue * risk;
 
+    const reflex = [
+        {
+          label: "Salário dos dias trabalhados no último mês",
+          value: SalaryForDaysWorkedInTheLastMonth,
+        },
+        {
+          label: "50% do aviso prévio indenizado",
+          value: AvisoPrevioIndenizado,
+        },
+        {
+          label: "20% dos depósitos do FGTS",
+          value: fgts,
+        },
+        {
+          label: "Multa do art. 477",
+          value: multa,
+        },
+    
+        {
+          label: "13º salário proporcional",
+          value: extraSalary,
+        },
+        {
+          label: "Férias proporcionais",
+          value: vocation_calc,
+        },
+      ];
+
+
     return {
         valueIndividual,
-        valuePostulate: postuateValue
+        valuePostulate: postuateValue,
+        reflex
     }
 
 }
@@ -274,14 +381,26 @@ const calcDispensaMotivada = (days, time, salary, risk, have_vacation) => {
     );
     const valueIndividual = postuateValue * risk;
 
+    const reflex = [
+        {
+          label: "Salário dos dias trabalhados no último mês",
+          value: SalaryForDaysWorkedInTheLastMonth,
+        },
+      
+        {
+          label: "Multa do art. 477",
+          value: multa,
+        },
+      ];
     return {
         valueIndividual,
-        valuePostulate: postuateValue
+        valuePostulate: postuateValue,
+        reflex
     }
 }
 
 const vacationCalcVerbas = (salary, diffDate, haveVacation) => {
-    console.log(salary, diffDate, haveVacation, "haveVacationhaveVacationhaveVacationhaveVacationhaveVacationhaveVacation")
+  
     try {
         if (haveVacation === "Sim") {
 
@@ -318,7 +437,7 @@ const vacationCalcVerbas = (salary, diffDate, haveVacation) => {
 };
 
 const calcHoraExtra = (data, variation, risk, extraHour, limit, valuesForm) => {
-    console.log(valuesForm, '--------')
+  
     let hextraHour = 0
     if (variation === "Sim") {
         let totalHours = 0;
@@ -384,6 +503,7 @@ const calcHoraExtra = (data, variation, risk, extraHour, limit, valuesForm) => {
     }
 
     const { time_worked_months, salary, end_date } = data
+
     const salaryHour = Math.round(salary / ParseDivisor[limit]);
     const extraHourValue = Math.round(salaryHour + salaryHour * 0.5);
 
@@ -408,10 +528,28 @@ const calcHoraExtra = (data, variation, risk, extraHour, limit, valuesForm) => {
         apuracaoDeHorasExtrasTotal + extraSalary + vocationCalc + RSR + fgts
     );
     const valueIndividual = Math.round(valuePostulate * risk);
-
+ const reflex = [
+    {
+      label: "Depósitos do FGTS",
+      value: fgts,
+    },
+    {
+      label: "Décimo terceiro salário",
+      value: extraSalary,
+    },
+    {
+      label: "Férias",
+      value: vocationCalc,
+    },
+    {
+      label: "RSR",
+      value: RSR,
+    },
+  ];
     return {
         valueIndividual,
-        valuePostulate: valuePostulate
+        valuePostulate: valuePostulate,
+        reflex
     }
 
 }
@@ -478,32 +616,45 @@ const calcIntervalo = (data, variation, risk, interval, values) => {
 }
 
 const adicionalPericulosidade = (data, risk) => {
-    console.log()
-    const { time_worked_months, salary, end_date } = data
-    const month_value = Math.round(salary * 0.3);
-    console.log(month_value, "month_value")
-    const all_month_value = Math.round(month_value * time_worked_months);
-    console.log(all_month_value, "all_month_value")
 
+    const { time_worked_months, salary, end_date } = data
+
+    const month_value = Math.round(salary * 0.3);
+
+    const all_month_value = Math.round(month_value * time_worked_months);
+    console.log(month_value, time_worked_months)
     const fgts = Math.round(month_value * 0.08 * time_worked_months);
-    console.log(fgts, "fgts")
+
     const thirteenth_salary = Math.round((month_value / 12) * time_worked_months);
-    console.log(thirteenth_salary, "thirteenth_salary")
+
     const vacation_sum = Math.round((month_value / 12) * time_worked_months);
-    console.log(vacation_sum, "vacation_sum")
+
     const vocation = Math.round(vacation_sum + vacation_sum / 3);
-    console.log(vocation, "vocation")
+
 
     const result = Math.round(
         all_month_value + fgts + thirteenth_salary + vocation
     );
-    console.log(result, "result")
+
     const result_with_risk = Math.round(result * risk);
-    console.log(result_with_risk, "result_with_risk")
-    console.log(risk, "risk")
+    const reflex = [
+        {
+          label: "Depósitos do FGTS",
+          value: fgts,
+        },
+        {
+          label: "Décimo terceiro salário",
+          value: thirteenth_salary,
+        },
+        {
+          label: "Férias",
+          value: vocation,
+        },
+      ];
     return {
         valueIndividual: result_with_risk,
-        valuePostulate: result
+        valuePostulate: result,
+        reflex
     }
 
 }

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Flex, Button, Text, Grid, IconButton, ButtonGroup } from "@chakra-ui/react"
+import { Box, Flex, Button, Text, Grid, IconButton, ButtonGroup , GridItem  } from "@chakra-ui/react"
 import { MdAddCircle, } from "react-icons/md";
 import { useColors } from '../../../../../hooks'
 import { toCurrencyScreen } from '../../../../../helpers'
@@ -19,10 +19,41 @@ const RISK_TABLE_REVERSE = {
 function Index({ requests = [], setOpenSelect, setDraftRequest, removeRequest, calcAndSave, custonEdit = false, custonEditFunction, createRequest }) {
     const colors = useColors()
 
-
+    useEffect(() => {
+        console.log(requests, '--------------------=====')
+    }, [requests])
 
     return (
         <Flex w={'100%'} flexDirection={'column'}>
+
+<Flex
+                _hover={{
+                    background: colors.hoverbackground,
+                    borderColor: colors.border.hoverColor,
+                }}
+                mt={5}
+
+                onClick={() => {
+                    if (custonEdit) {
+                        setOpenSelect(true)
+                        return createRequest()
+                    } else {
+                        setOpenSelect(true)
+                    }
+
+                }}
+
+
+                cursor={'pointer'}
+                bg={colors.cardBackground} padding={4} borderRadius={5} w={'100%'} flexDirection={'row'}>
+                <MdAddCircle color={colors.text} size={40} />
+                <Text fontSize={18} mt={2} fontWeight={400} ml={3} mr={3} >
+                    Clique para adicionar um novo pedido
+                </Text>
+            </Flex>
+
+
+
             {requests.length !== 0 && requests.map((value, index) => (
                 <Flex
                     key={value.risco}
@@ -149,35 +180,35 @@ function Index({ requests = [], setOpenSelect, setDraftRequest, removeRequest, c
 
 
                     </Grid>
+
+                    <Grid mt={5} templateColumns='repeat(5, 1fr)' gap={6}>
+                        {value.reflex && value.reflex.length !== 0 && value.reflex.map((e) => (
+                        <GridItem w='100%'  bg='#2d3031' borderRadius={5} >
+                             <Flex my={6} width={'100%'} flexDirection={'column'}>
+                            <Box>
+                                <Text fontSize={15} fontWeight={400} ml={3} mr={3} >
+                                   {e.label}
+                                </Text>
+                            </Box>
+
+                            <Box mt={1}>
+                                <Text fontSize={15} fontWeight={400} ml={3} mr={3} >
+                              R$ {toCurrencyScreen( e.value)}
+                                </Text>
+                            </Box>
+
+
+                        </Flex>
+                        </GridItem>
+                        ))}
+ 
+
+
+</Grid>
                 </Flex>
             ))}
 
-            <Flex
-                _hover={{
-                    background: colors.hoverbackground,
-                    borderColor: colors.border.hoverColor,
-                }}
-                mt={5}
-
-                onClick={() => {
-                    if (custonEdit) {
-                        setOpenSelect(true)
-                        return createRequest()
-                    } else {
-                        setOpenSelect(true)
-                    }
-
-                }}
-
-
-                cursor={'pointer'}
-                bg={colors.cardBackground} padding={4} borderRadius={5} w={'100%'} flexDirection={'row'}>
-                <MdAddCircle color={colors.text} size={40} />
-                <Text fontSize={18} mt={2} fontWeight={400} ml={3} mr={3} >
-                    Clique para adicionar um novo pedido
-                </Text>
-            </Flex>
-
+          
             {!custonEdit && <Flex mt={6} justifyContent={"end"} onClick={() => { calcAndSave() }}>
                 <Button color="#fff">
                     Avançar
