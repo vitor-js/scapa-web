@@ -183,7 +183,7 @@ function Index({ requests = [], setOpenSelect, setDraftRequest, removeRequest, c
 
                     <Grid mt={5} templateColumns='repeat(5, 1fr)' gap={6}>
                         {value.reflex && value.reflex.length !== 0 && value.reflex.map((e) => (
-                        <GridItem w='100%'  bg='#2d3031' borderRadius={5} >
+                        <GridItem key={e.label} w='100%'  bg='#2d3031' borderRadius={5} >
                              <Flex my={6} width={'100%'} flexDirection={'column'}>
                             <Box>
                                 <Text fontSize={15} fontWeight={400} ml={3} mr={3} >
