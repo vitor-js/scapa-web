@@ -179,7 +179,7 @@ function Index({ errors, register, data, draftRequest, setValue, watch, interval
                                 {...registerModal('hora_inicio_intervalo')}
                                 error={errors?.hora_inicio_intervalo?.message}
                                 name='hora_inicio_intervalo'
-                                label='Informe o valor de inicio do intervalo' />
+                                label='Informe o horário que deveria iniciar o interalo (e não iniciou)' />
                         </Box>
 
                         <Box w={'100%'} mt={5}>
@@ -188,7 +188,7 @@ function Index({ errors, register, data, draftRequest, setValue, watch, interval
                                 {...registerModal('hora_fim_intervalo')}
                                 error={errors?.hora_fim_intervalo?.message}
                                 name='hora_fim_intervalo'
-                                label='Informe o valor de fim do intervalo' />
+                                label='Informe o horário que deveria terminar o intervalo' />
                         </Box>
                     </Box>
 
@@ -245,7 +245,7 @@ function Index({ errors, register, data, draftRequest, setValue, watch, interval
                         {...register('hora_inicio_intervalo')}
                         error={errors?.hora_inicio_intervalo?.message}
                         name='hora_inicio_intervalo'
-                        label='Informe o valor de inicio do intervalo' />
+                        label='Informe o horário que deveria iniciar o interalo (e nao iniciou)' />
                 </Box>
 
                 <Box w={'100%'} mt={5}>
@@ -254,7 +254,7 @@ function Index({ errors, register, data, draftRequest, setValue, watch, interval
                         {...register('hora_fim_intervalo')}
                         error={errors?.hora_fim_intervalo?.message}
                         name='hora_fim_intervalo'
-                        label='Informe o valor de fim do intervalo' />
+                        label='Informe o horário que deveria terminar o intervalo' />
                 </Box>
 
 

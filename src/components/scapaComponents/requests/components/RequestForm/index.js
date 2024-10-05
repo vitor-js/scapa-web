@@ -337,11 +337,13 @@ function Index({ handleAddNewRequest, draftRequest, setOpenSelect, handleUpdateR
                         reflex
                     }
 
-                   finishRequest(requestUpdate, valuePostulate, valueIndividual)
+                    finishRequest(requestUpdate, valuePostulate, valueIndividual)
                     return
                 }
 
                 if (INSALUBRIDADE.includes(valueRequest)) {
+
+
                     const sumMonths = insalubridadeSalary.reduce(function (accumulator, value) {
                         return accumulator + value.time
                     }, 0);
@@ -351,6 +353,7 @@ function Index({ handleAddNewRequest, draftRequest, setOpenSelect, handleUpdateR
                     }, 0);
 
                     const salaryMedia = sumValues / sumMonths
+
 
                     const { valueIndividual, valuePostulate, reflex } = calc.insalubridade(data.data, values.insalubridade_grau, RISK_TABLE[risk], salaryMedia)
                     const requestUpdate = {
@@ -396,7 +399,7 @@ function Index({ handleAddNewRequest, draftRequest, setOpenSelect, handleUpdateR
 
                     }
 
-                     finishRequest(requestUpdate, valuePostulate, valueIndividual)
+                    finishRequest(requestUpdate, valuePostulate, valueIndividual)
                     return
                 }
 
@@ -479,13 +482,13 @@ function Index({ handleAddNewRequest, draftRequest, setOpenSelect, handleUpdateR
                 }
 
                 if (ADIOCIONAL_PERICULOSIDADE.includes(valueRequest)) {
-                    const { valueIndividual, valuePostulate , reflex} = calc.adicionalPericulosidade(data.data, RISK_TABLE[risk])
+                    const { valueIndividual, valuePostulate, reflex } = calc.adicionalPericulosidade(data.data, RISK_TABLE[risk])
                     const requestUpdate = {
                         ...newRequest,
                         reflex
 
                     }
-                     finishRequest(requestUpdate, valuePostulate, valueIndividual)
+                    finishRequest(requestUpdate, valuePostulate, valueIndividual)
                     return
                 }
             }

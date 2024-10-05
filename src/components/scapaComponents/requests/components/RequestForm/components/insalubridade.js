@@ -139,7 +139,7 @@ function Index({ errors, register, data, draftRequest, setValue, insalubridadeSa
                     <MdAddCircle color={colors.text} size={20} />
                     <Text fontSize={14} fontWeight={400} ml={3} mr={3} >
 
-                        Clique para criar seu primeiro valor de salário mínimo e o período
+                        Clique para informar o salário mínimo e os períodos correspondentes
                     </Text>
                 </Flex>
             }

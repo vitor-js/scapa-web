@@ -84,7 +84,7 @@ function Index() {
             valuePostulate: v.postulated_individual,
             valueIndividual: v.postulated_individual_value,
             risk: RISK_TABLE[v.risk_success],
-            riskSuccess: v.risk_success,
+            riskSuccess: v.risk_success * 100,
             ...v
 
         }))
