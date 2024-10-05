@@ -119,7 +119,7 @@ function Index({ children }) {
                             </Box>
 
                             <Box my='5'>
-                                <Input mask={"number"} label='Tempo de duração (em meses)' name='proccess_time' error={errors?.proccess_time?.message}  {...register("proccess_time")} />
+                                <Input mask={"number"} label='Se não quiser incluir CÁLCULO DE JUROS coloque 0 (ZERO) no Tempo de Duração do Processo' name='proccess_time' error={errors?.proccess_time?.message}  {...register("proccess_time")} />
                             </Box>
 
                             {/* <Box my='5'>

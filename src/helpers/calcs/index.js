@@ -145,16 +145,18 @@ const insalubridade = (data, grau, risk, salary) => {
     const monthValue = salary * GRAU_RATIO_INSALUBRIDADE[grau];
 
     const fgts = Math.round(monthValue * 0.08 * time);
+    console.log(fgts, " fgts")
     const extraSalary = Math.round((monthValue / 12) * time);
-
+    console.log(extraSalary, " extraSalary")
 
     const vocation = Math.round((monthValue / 12) * time);
 
     const vocationCalc = vocation + vocation / 3;
+    console.log(vocationCalc, " vocationCalc")
 
     const valuePostulate_calc = monthValue * time + extraSalary + vocationCalc + fgts
 
-
+    console.log(valuePostulate_calc)
     const valueIndividual = Math.round(valuePostulate_calc * risk);
 
     const reflex = [
@@ -185,9 +187,8 @@ const calcVerbasRescisorias = (data, reason, risk, have_vacation) => {
     const { time_worked_months, salary, end_date } = data
     const time = parseInt(time_worked_months)
     const end_date_convert = new Date(end_date);
-    console.log(end_date, 'end_date')
-    console.log(end_date_convert.getMonth() + 1, "end_date_convert.getMonth() + 1")
-    const days = getQuantityDays(end_date_convert.getMonth() + 1);
+
+    const days = end_date_convert.getDay() + 1;
 
 
     if (reason === "Dispensa imotivada ou rescisão indireta") {
@@ -202,22 +203,27 @@ const calcVerbasRescisorias = (data, reason, risk, have_vacation) => {
 
 const calcDispensaImotivadaOuRescisãoIndireta = (days, time, salary, risk, have_vacation, end_date_convert) => {
     const SalaryForDaysWorkedInTheLastMonth = (salary / 30) * days;
-
+    console.log(days, "days")
+    console.log(SalaryForDaysWorkedInTheLastMonth, "SalaryForDaysWorkedInTheLastMonth")
     const years = Math.round(time / 12);
 
     const AvisoPrevioIndenizado = Math.round(
         (salary / 30) * (years * 3) + salary
     );
-
+    console.log(AvisoPrevioIndenizado, "AvisoPrevioIndenizado")
 
     const fgtsBase = Math.round(0.08 * salary * time);
-    const fgts = fgtsBase * 0.4;
 
-    const multa = salary;
+    const fgts = fgtsBase * 0.4;
+    console.log(fgts, "fgts")
+
+    let month = end_date_convert.getMonth() + 1;
+
 
     const extraSalary_calc = Math.round(
-        (salary / 12) * end_date_convert.getMonth() + 1
+        (salary / 12) * month
     );
+
     const vocation_calc = vacationCalcVerbas(salary, time, have_vacation)
 
     const valuePostulate_calc = SalaryForDaysWorkedInTheLastMonth + multa + extraSalary_calc + vocation_calc + fgts + AvisoPrevioIndenizado
@@ -262,18 +268,21 @@ const calcPedidoDeDemissao = (days, time, salary, risk, have_vacation, end_date_
 
     const SalaryForDaysWorkedInTheLastMonth = (salary / 30) * days;
     const multa = salary;
+    const last_month = end_date_convert.getMonth() + 1
+    console.log(salary, end_date_convert.getMonth() + 1, "--------")
     const extraSalary_calc = Math.round(
-        (salary / 12) * end_date_convert.getMonth() + 1
+        (salary / 12) * last_month
     );
-
+    console.log(extraSalary_calc)
     const vocation_calc = vacationCalcVerbas(salary, time, have_vacation)
-
+    console.log(vocation_calc)
 
     const valuePostulate_calc = SalaryForDaysWorkedInTheLastMonth + multa + extraSalary_calc + vocation_calc
 
     const postuateValue = Math.round(
         valuePostulate_calc
     );
+    console.log(postuateValue)
     const valueIndividual = postuateValue * risk;
 
     const reflex = [{
@@ -408,24 +417,29 @@ const vacationCalcVerbas = (salary, diffDate, haveVacation) => {
         }
 
         if (haveVacation === "Não") {
-            console.log("caiu no nao")
+            console.log(diffDate, "diffDatediffDatediffDate")
+            console.log("nao")
             if (diffDate <= 12) {
                 const baseCalc = Math.round((salary / 12) * diffDate);
                 const finalcalc = Math.round(baseCalc + baseCalc / 3);
                 return finalcalc;
             }
+
             if (diffDate > 12) {
                 const years = diffDate / 12;
+
                 if (Number.isInteger(years)) {
                     const baseCalc = Math.round((salary / 12) * diffDate);
                     const finalcalc = Math.round(baseCalc + baseCalc / 3);
                     return finalcalc;
                 } else {
                     const getDecimals = years - Math.floor(years);
+
                     const mounths = 12 * getDecimals;
 
                     const baseCalc = Math.round((salary / 12) * mounths);
                     const finalcalc = Math.round(baseCalc + baseCalc / 3);
+
                     return finalcalc;
                 }
             }

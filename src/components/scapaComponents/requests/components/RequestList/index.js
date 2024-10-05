@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Flex, Button, Text, Grid, IconButton, ButtonGroup , GridItem  } from "@chakra-ui/react"
+import { Box, Flex, Button, Text, Grid, IconButton, ButtonGroup, GridItem } from "@chakra-ui/react"
 import { MdAddCircle, } from "react-icons/md";
 import { useColors } from '../../../../../hooks'
 import { toCurrencyScreen } from '../../../../../helpers'
@@ -26,7 +26,7 @@ function Index({ requests = [], setOpenSelect, setDraftRequest, removeRequest, c
     return (
         <Flex w={'100%'} flexDirection={'column'}>
 
-<Flex
+            <Flex
                 _hover={{
                     background: colors.hoverbackground,
                     borderColor: colors.border.hoverColor,
@@ -128,7 +128,6 @@ function Index({ requests = [], setOpenSelect, setDraftRequest, removeRequest, c
                         gap={10}
                         gridTemplateColumns={['1fr', '1fr 1fr', '1fr 1fr 1fr']}
                     >
-
                         <Flex my={6} width={'100%'} flexDirection={'column'}>
                             <Box>
                                 <Text fontSize={15} fontWeight={400} ml={3} mr={3} >
@@ -183,32 +182,32 @@ function Index({ requests = [], setOpenSelect, setDraftRequest, removeRequest, c
 
                     <Grid mt={5} templateColumns='repeat(5, 1fr)' gap={6}>
                         {value.reflex && value.reflex.length !== 0 && value.reflex.map((e) => (
-                        <GridItem key={e.label} w='100%'  bg='#2d3031' borderRadius={5} >
-                             <Flex my={6} width={'100%'} flexDirection={'column'}>
-                            <Box>
-                                <Text fontSize={15} fontWeight={400} ml={3} mr={3} >
-                                   {e.label}
-                                </Text>
-                            </Box>
+                            <GridItem key={e.label} w='100%' bg={colors.cardBackground} borderRadius={5} >
+                                <Flex my={6} width={'100%'} flexDirection={'column'}>
+                                    <Box>
+                                        <Text fontSize={15} fontWeight={400} ml={3} mr={3} >
+                                            {e.label}
+                                        </Text>
+                                    </Box>
 
-                            <Box mt={1}>
-                                <Text fontSize={15} fontWeight={400} ml={3} mr={3} >
-                              R$ {toCurrencyScreen( e.value)}
-                                </Text>
-                            </Box>
+                                    <Box mt={1}>
+                                        <Text fontSize={15} fontWeight={400} ml={3} mr={3} >
+                                            R$ {toCurrencyScreen(e.value)}
+                                        </Text>
+                                    </Box>
 
 
-                        </Flex>
-                        </GridItem>
+                                </Flex>
+                            </GridItem>
                         ))}
- 
 
 
-</Grid>
+
+                    </Grid>
                 </Flex>
             ))}
 
-          
+
             {!custonEdit && <Flex mt={6} justifyContent={"end"} onClick={() => { calcAndSave() }}>
                 <Button color="#fff">
                     Avançar
