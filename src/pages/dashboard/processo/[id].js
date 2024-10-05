@@ -1,9 +1,11 @@
+
+
 import { LayoutDashboardProccess } from '../../../layouts'
 import { HeaderPages, WrapperBody, Input, } from '../../../components'
 import { MdEditDocument } from 'react-icons/md'
 import { useRouter } from 'next/router'
 import { useProcces, useAuth, useColors } from '../../../hooks'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { Text, Box, Flex, Grid, Button } from '@chakra-ui/react';
 import * as yup from 'yup';
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
@@ -11,7 +13,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { toast } from 'react-hot-toast';
 import { api } from '@/service'
 import { queryClient } from '../../../service/queryClient';
-import { toCurrencyScreen } from '../../../helpers'
+import { toCurrencyScreen, naiveToBrlDate, monthDiff } from '../../../helpers'
 
 
 const schemForm = yup.object().shape({
@@ -22,7 +24,14 @@ const schemForm = yup.object().shape({
     description: yup.string().required('Campo obrigatório'),
     // end_date: yup.date().required('Campo obrigatório'),
     // start_date: yup.date().required('Campo obrigatório'),
-    // salary: yup.string().required('Campo obrigatório'),
+    salary: yup.string().required('Campo obrigatório'),
+})
+
+const schemFormDate = yup.object().shape({
+
+    end_date: yup.date().required('Campo obrigatório'),
+    start_date: yup.date().required('Campo obrigatório'),
+
 })
 
 
@@ -35,7 +44,8 @@ function Index() {
 
     const { query: request } = useProcces(id, authData.id)
     const { data: requestData, isLoading, isFetching, isError, refetch, } = request;
-
+    const [end_date_value, set_end_date_value] = useState()
+    const [start_date_value, set_start_date_value] = useState()
 
     const colors = useColors()
 
@@ -47,6 +57,17 @@ function Index() {
         formState: { errors, isSubmitting, dirtyFields, },
     } = useForm({
         resolver: yupResolver(schemForm),
+    });
+
+
+    const {
+        register: resiterDate,
+        handleSubmit: handleSubmitDate,
+        setValue: setValueFormData,
+
+        formState: { errors: errorsDate },
+    } = useForm({
+        resolver: yupResolver(schemFormDate),
     });
 
     const handleSubmitForm = async (values) => {
@@ -64,15 +85,12 @@ function Index() {
 
 
     useEffect(() => {
+
         if (!requestData) return
-        // const end_date = requestData.data.end_date ? new Date(requestData.data.end_date) : null;
-        // const start_date = requestData.data.start_date ? new Date(requestData.data.start_date) : null;
-
-        // setValueForm("end_date", "22-10-2024")
-        // setValueForm("start_date", start_date)
 
 
-        console.log(requestData, 'aaaaaaaaaaddddd')
+
+        // console.log(requestData, 'aaaaaaaaaaddddd')
         setValueForm('title', requestData.data.title)
         setValueForm('number_process', requestData.data.number_process)
         setValueForm('autor', requestData.data.autor)
@@ -80,8 +98,19 @@ function Index() {
         setValueForm('description', requestData.data.description)
         setValueForm("proccess_time", requestData.data.proccess_time)
 
-        // setValueForm("salary", toCurrencyScreen(requestData.data.salary))
+        setValueForm("salary", toCurrencyScreen(requestData.data.salary))
         setValueForm("reu_cost", toCurrencyScreen(requestData.data.reu_cost))
+
+        if (requestData.data.end_date !== "false" && requestData.data.start_date !== "false") {
+            console.log(typeof requestData.data.start_date, "asdddfgaaaaaaaaaaaaaaaaaaasss")
+            const ParseStartDate = new Date(requestData.data.start_date)
+            const ParseEndDate = new Date(requestData.data.end_date)
+
+
+            set_end_date_value(ParseEndDate.toLocaleString("pt-br", { timeZone: 'UTC' }).substring(0, 10))
+            set_start_date_value(ParseStartDate.toLocaleString("pt-br", { timeZone: 'UTC' }).substring(0, 10))
+
+        }
     }, [requestData])
 
 
@@ -99,6 +128,25 @@ function Index() {
 
     }
 
+    const handleSubmitFormDate = async (v) => {
+        const proccess_time_work = monthDiff(new Date(v.start_date), new Date(v.end_date))
+        console.log(v.start_date, "start_date")
+        console.log(v.end_date, 'end_date')
+        try {
+            await api.put(`proccess/${id}`, {
+                start_date: v.start_date.toString(),
+                end_date: v.end_date.toString(),
+                time_worked_months: proccess_time_work,
+            })
+            reset()
+            queryClient.invalidateQueries('proccess');
+            refetch()
+            toast.success('Atualização feita com sucesso!');
+        } catch (e) {
+            console.log(e)
+            toast.error('Algo deu errado, tente novamente.');
+        }
+    }
 
 
 
@@ -137,11 +185,8 @@ function Index() {
                                 <Input label='Réu' name='reu' error={errors?.reu?.message} {...register("reu")} />
                                 <Input label='Custo do Réu' mask="currency" name='reu_cost' error={errors?.description?.reu_cost}  {...register("reu_cost")} />
 
-                                {/* <Input type='date' name='start_date' label='Data de início do contrato de trabalho' error={errors?.start_date?.message}  {...register("start_date")} />
 
-
-                                <Input type='date' name='end_date' label='Data de início do contrato de trabalho' error={errors?.end_date?.message}  {...register("end_date")} /> */}
-                                {/* <Input mask="currency" name='salary' label='Informe o valor do salário' error={errors?.salary?.message}  {...register("salary")} /> */}
+                                <Input mask="currency" name='salary' label='Informe o valor do salário' error={errors?.salary?.message}  {...register("salary")} />
 
                             </Grid>
                             <Box mt={4}>
@@ -155,6 +200,84 @@ function Index() {
                             </Flex>
 
                         </Flex>
+
+                        <Flex as='form'
+                            onSubmit={handleSubmitDate(handleSubmitFormDate)}
+                            mt={5} width="100%" bg={colors.cardBackground} padding={4} borderRadius={5} flexDirection={'column'}>
+                            <Text fontSize='2xl' fontWeight={600}>
+                                Contrato de trabalho
+                            </Text>
+
+
+                            <Text fontSize='1xl' fontWeight={600} mt={3}>
+                                Valores já registrados
+                            </Text>
+                            <Grid mt={1} gridTemplateColumns={['1fr', '1fr 1fr',]} gap={4}>
+
+                                <Flex >
+                                    <Flex mt={0} width={'100%'} flexDirection={'column'}>
+                                        <Box>
+                                            <Text fontSize={15} fontWeight={400} >
+                                                Data de início
+                                            </Text>
+                                        </Box>
+
+                                        <Box >
+                                            <Text fontSize={15} fontWeight={400}  >
+                                                {start_date_value || "Nenhum valor cadastrado"}
+                                            </Text>
+                                        </Box>
+
+
+                                    </Flex>
+                                </Flex>
+
+
+                                <Flex >
+                                    <Flex mt={0} width={'100%'} flexDirection={'column'}>
+                                        <Box>
+                                            <Text fontSize={15} fontWeight={400}  >
+                                                Data de fim
+                                            </Text>
+                                        </Box>
+
+                                        <Box >
+                                            <Text fontSize={15} fontWeight={400}  >
+                                                {end_date_value || "Nenhum valor cadastrado"}
+                                            </Text>
+                                        </Box>
+
+
+                                    </Flex>
+                                </Flex>
+
+
+
+                            </Grid>
+
+                            <Text mt={5} fontSize='1xl' fontWeight={600}>
+                                Selecione novas datas caso deseje editar
+                            </Text>
+                            <Grid mt={2} gridTemplateColumns={['1fr', '1fr 1fr',]} gap={4}>
+
+
+
+                                <Input type='date' name='start_date' label='Data de início do contrato de trabalho' error={errorsDate?.start_date?.message}  {...resiterDate("start_date", { valueAsDate: true })} />
+
+
+                                <Input type='date' name='end_date' label='Data de fim do contrato de trabalho' error={errorsDate?.end_date?.message}  {...resiterDate("end_date", { valueAsDate: true })} />
+
+
+                            </Grid>
+                            <Flex mt={4} alignContent={'flex-end'} justifyContent={'flex-end'} justifyItems={'flex-end'} >
+                                <Button color="#fff" type='submit'>
+                                    Atualizar
+                                </Button>
+                            </Flex>
+
+                        </Flex>
+
+
 
                         <Flex as='form' onSubmit={async (e) => {
                             e.preventDefault()

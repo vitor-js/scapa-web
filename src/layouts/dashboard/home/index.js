@@ -1,9 +1,10 @@
 import React from 'react';
 
 import { Grid, GridItem, Flex } from '@chakra-ui/react'
-import { HeaderBar, DashboardHomeMenu, Input } from '../../../components'
+import { HeaderBar, DashboardHomeMenu, Input, Select } from '../../../components'
 import { useDisclosure } from '@chakra-ui/react'
 import { useColors, useAuth } from '../../../hooks'
+
 import {
     Modal,
     ModalOverlay,
@@ -37,9 +38,25 @@ function Index({ children }) {
         proccess_time: yup.string().required('Campo obrigatório'),
         autor: yup.string().required('Campo obrigatório'),
         reu: yup.string().required('Campo obrigatório'),
-        // salary: yup.string().required('Campo obrigatório'),
-        // start_date: yup.date().required('Campo obrigatório'),
-        // end_date: yup.date().required('Campo obrigatório'),
+        end_date: yup.lazy((value) => {
+            if (value !== undefined && value !== "") {
+                return yup.string().required('Este campo é origatório');
+            }
+            return yup.string().nullable().optional();
+        }),
+        start_date: yup.lazy((value) => {
+            if (value !== undefined && value !== "") {
+                return yup.string().required('Este campo é origatório');
+            }
+            return yup.string().nullable().optional();
+        }),
+        salary: yup.lazy((value) => {
+            if (value !== undefined && value !== "") {
+                return yup.string().required('Este campo é origatório');
+            }
+            return yup.string().nullable().optional();
+        }),
+        have_calc: yup.string().required('Campo obrigatório'),
     })
 
 
@@ -48,29 +65,52 @@ function Index({ children }) {
         register,
         handleSubmit,
         formState: { errors },
+        watch,
         reset,
     } = useForm({ resolver: yupResolver(schema) })
 
+    const have_calc_value = watch('have_calc')
+
     const handleSubmitForm = async (values) => {
         try {
-            // console.log(values)
-            // // const proccess_time_work = monthDiff(values.start_date, values.end_date)
-            // console.log(proccess_time_work)
-            const { data } = await api.post("proccess", {
-                ...values, reu_cost: currencyToBackend(values.reu_cost), user_id: authData.id,
-                // start_date: values.start_date.toString(),
-                // end_date: values.end_date.toString(),
-                time_worked_months: 0,
-                description: "",
-                salary: 0
 
-            })
+            let idredirect = 0
+            if (have_calc_value === "Sim") {
+                // console.log(values)
+                const proccess_time_work = monthDiff(new Date(values.start_date), new Date(values.end_date))
+                // console.log(proccess_time_work)
+
+                const { data } = await api.post("proccess", {
+                    ...values, reu_cost: currencyToBackend(values.reu_cost), user_id: authData.id,
+                    start_date: values.start_date.toString(),
+                    end_date: values.end_date.toString(),
+                    description: "",
+                    salary: currencyToBackend(values.salary),
+                    time_worked_months: proccess_time_work,
+                    have_calc: true
+
+                })
+                idredirect = data.data?.id
+            } else {
+                const { data } = await api.post("proccess", {
+                    ...values, reu_cost: currencyToBackend(values.reu_cost), user_id: authData.id,
+                    // start_date: values.start_date.toString(),
+                    // end_date: values.end_date.toString(),
+                    time_worked_months: 0,
+                    description: "",
+                    salary: 0,
+                    have_calc: false
+
+                })
+                idredirect = data.data?.id
+            }
+
 
             reset()
             queryClient.invalidateQueries('proccess');
             onClose()
 
-            router.push(`/dashboard/processo/${data.data?.id}`)
+            router.push(`/dashboard/processo/${idredirect}`)
 
 
 
@@ -78,7 +118,7 @@ function Index({ children }) {
 
             toast.success("Cadastro realizado com sucesso")
         } catch (e) {
-            console.log(e)
+            console.log(e, 'a')
             toast.error("Algo deu errado, tente novamente!")
         }
     }
@@ -122,18 +162,39 @@ function Index({ children }) {
                                 <Input mask={"number"} label='Se não quiser incluir CÁLCULO DE JUROS coloque 0 (ZERO) no Tempo de Duração do Processo' name='proccess_time' error={errors?.proccess_time?.message}  {...register("proccess_time")} />
                             </Box>
 
-                            {/* <Box my='5'>
-                                <Input mask="currency" label='Valor so salário ou a média dos salários' name='salary' error={errors?.salary?.message} {...register("salary")} />
+
+                            <Box w={'100%'} mt={5}>
+                                <Select label='Deseja usar o módulo de cálculo ?' options={[
+                                    {
+                                        label: "Sim",
+                                        value: "Sim"
+                                    },
+                                    {
+                                        label: "Não",
+                                        value: "Não"
+                                    }
+                                ]}
+                                    {...register('have_calc')}
+                                    error={errors?.have_calc?.message}
+                                    name='have_calc'
+                                />
                             </Box>
 
+                            {have_calc_value === "Sim" && <>
+                                <Box my='5'>
+                                    <Input mask="currency" label='Valor so salário ou a média dos salários' name='salary' error={errors?.salary?.message} {...register("salary")} />
+                                </Box>
 
-                            <Box my='5'>
-                                <Input type='date' name='start_date' label='Data de início do contrato de trabalho' error={errors?.start_date?.message}  {...register("start_date")} />
-                            </Box>
 
-                            <Box my='5'>
-                                <Input type='date' name='end_date' label='Data de início do contrato de trabalho' error={errors?.end_date?.message}  {...register("end_date")} />
-                            </Box> */}
+                                <Box my='5'>
+                                    <Input type='date' name='start_date' label='Data de início do contrato de trabalho' error={errors?.start_date?.message}  {...register("start_date")} />
+                                </Box>
+
+                                <Box my='5'>
+                                    <Input type='date' name='end_date' label='Data de início do contrato de trabalho' error={errors?.end_date?.message}  {...register("end_date")} />
+                                </Box>
+                            </>}
+
 
 
                             <Box my='5'>

@@ -2,5 +2,6 @@ import converteNaiveDate from './naiveToBrlDate'
 import toCurrencyScreen from './toCurrencyScreen'
 import currencyToBackend from './currencyToNumber'
 import monthDiff from './diffDate'
+import naiveToBrlDate from './naiveToBrlDate'
 
-export { converteNaiveDate, toCurrencyScreen, currencyToBackend, monthDiff }
+export { converteNaiveDate, naiveToBrlDate, toCurrencyScreen, currencyToBackend, monthDiff }

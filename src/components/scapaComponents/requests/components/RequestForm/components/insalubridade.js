@@ -7,6 +7,7 @@ import { MdAddCircle } from "react-icons/md";
 import { useColors } from '../../../../../../hooks'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
+import { FaTrash } from "react-icons/fa";
 import {
     Modal,
     ModalOverlay,
@@ -163,51 +164,63 @@ function Index({ errors, register, data, draftRequest, setValue, insalubridadeSa
                         </Text>
                     </Flex>
                     {insalubridadeSalary.map((e, index) => (<>
-                        <Flex
+                        <Box
                             _hover={{
                                 background: colors.hoverbackground,
                                 borderColor: colors.border.hoverColor,
                             }}
-                            onClick={() => {
-                                onOpen()
-                            }}
+
                             cursor={'pointer'}
                             bg={colors.cardBackground} padding={4} borderRadius={5} mt={4} w={'100%'} flexDirection={'row'} alignItems={'center'}>
-
-                            {index + 1}
-                            <Flex mt={4} width={'100%'} flexDirection={'column'}>
-                                <Box>
-                                    <Text fontSize={15} fontWeight={400} ml={3} mr={3} >
-                                        Périodo (em meses)
-                                    </Text>
-                                </Box>
-
-                                <Box >
-                                    <Text fontSize={15} fontWeight={400} ml={3} mr={3} >
-                                        {e.time}
-                                    </Text>
-                                </Box>
-
-
+                            <Flex onClick={() => {
+                                setInsalubridadeSalary((old) => {
+                                    let draft = old
+                                    draft.splice(index, 1)
+                                    return [...draft]
+                                })
+                                reset()
+                                onClose()
+                            }}
+                                justifyContent={'end'} cursor={'pointer'} textAlign={"end"} w={'100%'} >
+                                <FaTrash size={20} bg={colors.text} />
                             </Flex>
 
-                            <Flex mt={4} width={'100%'} flexDirection={'column'}>
-                                <Box>
-                                    <Text fontSize={15} fontWeight={400} ml={3} mr={3} >
-                                        Valor
-                                    </Text>
-                                </Box>
+                            <Flex>
+                                <Flex mt={4} width={'100%'} flexDirection={'column'}>
+                                    <Box>
+                                        <Text fontSize={15} fontWeight={400} ml={3} mr={3} >
+                                            Périodo (em meses)
+                                        </Text>
+                                    </Box>
 
-                                <Box >
-                                    <Text fontSize={15} fontWeight={400} ml={3} mr={3} >
-                                        R$  {toCurrencyScreen(e.value)}
-                                    </Text>
-                                </Box>
+                                    <Box >
+                                        <Text fontSize={15} fontWeight={400} ml={3} mr={3} >
+                                            {e.time}
+                                        </Text>
+                                    </Box>
 
 
+                                </Flex>
+
+                                <Flex mt={4} width={'100%'} flexDirection={'column'}>
+                                    <Box>
+                                        <Text fontSize={15} fontWeight={400} ml={3} mr={3} >
+                                            Valor
+                                        </Text>
+                                    </Box>
+
+                                    <Box >
+                                        <Text fontSize={15} fontWeight={400} ml={3} mr={3} >
+                                            R$  {toCurrencyScreen(e.value)}
+                                        </Text>
+                                    </Box>
+
+
+                                </Flex>
                             </Flex>
 
-                        </Flex>
+
+                        </Box>
                     </>))}
 
 
