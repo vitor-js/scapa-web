@@ -6,11 +6,12 @@ import { Box, Flex, Button } from "@chakra-ui/react"
 import Alert from './components/alert'
 import FirstStep from './components/firstStep'
 import { useRouter } from 'next/router'
+import { MdArrowBack } from "react-icons/md";
 
 function Index() {
     const colors = useColors()
     const { authData } = useAuth()
-    const { query } = useRouter()
+    const { query, push } = useRouter()
     const { id } = query
 
 
@@ -20,7 +21,10 @@ function Index() {
     const [preRequests, setPrerequests] = useState([])
 
     return <>
+
+
         <Wizard>
+
             <Alert data={requestData} setPrerequests={setPrerequests} />
             <FirstStep data={requestData} preRequests={preRequests} />
 

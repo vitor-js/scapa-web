@@ -159,7 +159,7 @@ function Index({ children }) {
                             </Box>
 
                             <Box my='5'>
-                                <Input mask={"number"} label='Se não quiser incluir CÁLCULO DE JUROS coloque 0 (ZERO) no Tempo de Duração do Processo' name='proccess_time' error={errors?.proccess_time?.message}  {...register("proccess_time")} />
+                                <Input mask={"number"} label='Tempo de duração do procecesso - Se não quiser incluir CÁLCULO DE JUROS coloque 0 (ZERO) no Tempo de Duração do Processo' name='proccess_time' error={errors?.proccess_time?.message}  {...register("proccess_time")} />
                             </Box>
 
 
@@ -182,7 +182,7 @@ function Index({ children }) {
 
                             {have_calc_value === "Sim" && <>
                                 <Box my='5'>
-                                    <Input mask="currency" label='Valor so salário ou a média dos salários' name='salary' error={errors?.salary?.message} {...register("salary")} />
+                                    <Input mask="currency" label='Valor ou salário ou a média dos salários' name='salary' error={errors?.salary?.message} {...register("salary")} />
                                 </Box>
 
 
@@ -210,7 +210,7 @@ function Index({ children }) {
 
                     <ModalFooter>
                         <Button color="#fff" colorScheme='blue' mr={3} type='submit'>
-                            <Text color={colors.text}>
+                            <Text color="#fff">
                                 Salvar
                             </Text>
 

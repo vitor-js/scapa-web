@@ -15,21 +15,21 @@ import { toast } from 'react-hot-toast';
 
 const ACTIONS = [
     {
-        label: "Horas Extras",
+        label: "Horas Extras - (com cálculo)",
         value: "Horas Extras"
     }
     ,
     {
-        label: "Intervalo Intrajornada",
+        label: "Intervalo Intrajornada - (com cálculo)",
         value: "Intervalo Intrajornada"
     },
     {
-        label: "Verbas Rescisórias",
+        label: "Verbas Rescisórias - (com cálculo)",
         value: "Verbas Rescisórias"
     },
 
     {
-        label: "Pausas não realizadas",
+        label: "Pausas não realizadas - (com cálculo)",
         value: "Pausas não realizadas"
     },
     {
@@ -41,32 +41,32 @@ const ACTIONS = [
         value: "Adicional Noturno"
     },
     {
-        label: "Adicional de Insalubridade",
+        label: "Adicional de Insalubridade - (com cálculo)",
         value: "Adicional de Insalubridade"
     },
     {
-        label: "Adicional de Periculosidade",
+        label: "Adicional de Periculosidade - (com cálculo)",
         value: "Adicional de Periculosidade"
     },
 
 
     {
-        label: "Diferenças salariais por equiparação salarial",
+        label: "Diferenças salariais por equiparação salarial - (com cálculo)",
         value: "Diferenças salariais por equiparação salarial"
     }, {
-        label: "Diferenças salariais por acúmulo de função",
+        label: "Diferenças salariais por acúmulo de função - (com cálculo)",
         value: "Diferenças salariais por acúmulo de função"
     },
     {
-        label: "Diferenças salariais convencionais",
+        label: "Diferenças salariais convencionais - (com cálculo)",
         value: "Diferenças salariais convencionais"
     },
     {
-        label: "Diferenças reflexas de vantagens salariais",
+        label: "Diferenças reflexas de vantagens salariais - (com cálculo)",
         value: "Diferenças reflexas de vantagens salariais"
     },
     {
-        label: "Diferenças salariais (genérico)",
+        label: "Diferenças salariais (genérico) - (com cálculo)",
         value: "Diferenças salariais (genérico)"
     },
 
@@ -83,23 +83,23 @@ const ACTIONS = [
         value: "Indenização estabilitária"
     },
     {
-        label: "Décimo terceiro integral",
+        label: "Décimo terceiro integral - (com cálculo)",
         value: "Décimo terceiro integral"
     },
     {
-        label: "Décimo terceiro proporcional",
+        label: "Décimo terceiro proporcional - (com cálculo)",
         value: "Décimo terceiro proporcional"
     },
     {
-        label: "Férias integrais",
+        label: "Férias integrais - (com cálculo)",
         value: "Férias integrais"
     },
     {
-        label: "Férias proporcionais",
+        label: "Férias proporcionais - (com cálculo)",
         value: "Férias proporcionais"
     },
     {
-        label: "Depósitos do FGTS",
+        label: "Depósitos do FGTS - (com cálculo)",
         value: "Depósitos do FGTS"
     },
     {

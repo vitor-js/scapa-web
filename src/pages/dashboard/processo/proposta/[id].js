@@ -28,6 +28,8 @@ import {
 } from '@chakra-ui/react'
 import { Suspense } from 'react';
 import { currencyToBackend } from '@/helpers';
+import { MdArrowBack } from "react-icons/md";
+
 
 const RISK_TABLE = {
     Inexistente: 0.0,
@@ -41,7 +43,7 @@ const RISK_TABLE = {
 
 
 function Index() {
-    const { query } = useRouter()
+    const { query, push } = useRouter()
     const { id, proccess_id } = query
     const { authData } = useAuth()
 
@@ -184,8 +186,12 @@ function Index() {
 
                 <HeaderPages title={`Proposta  ${requestData ? requestData.data.type : ""}`} icon={MdEditDocument} />
                 <>
-                    <WrapperBody>
 
+                    <WrapperBody>
+                        <Flex width={"100%"} onClick={() => { push(`/dashboard/processo/propostas/${proccess_id}`) }} mb={8} cursor={'pointer'} >
+                            <MdArrowBack color={colors.text} size={20} />
+                            <Text ml={3} mr={3} >Clique para voltar</Text>
+                        </Flex>
                         {openSelect && (
 
                             <Flex flexDirection={"column"} w='100%'>

@@ -54,7 +54,7 @@ function Index({ data, setPrerequests }) {
                 risk: v.risk_success
             })))
             setPrerequests([...formatRequests])
-             return actions.goNextPage()
+            return actions.goNextPage()
         } catch (e) {
             console.log(e)
         }
@@ -66,10 +66,10 @@ function Index({ data, setPrerequests }) {
         <Box width={'100%'}>
 
 
-            <Flex alignItems={'center'} onClick={() => { push(`/dashboard/processo/${id}`) }} mb={8} cursor={'pointer'} >
+            {/* <Flex alignItems={'center'} onClick={() => { push(`/dashboard/processo/${id}`) }} mb={8} cursor={'pointer'} >
                 <MdArrowBack color={colors.text} size={20} />
                 <Text ml={3} mr={3} >Clique para voltar</Text>
-            </Flex>
+            </Flex> */}
 
             <Text color={colors.text} fontSize='4xl' fontWeight={600}  >
                 Alguns avisos importantes
