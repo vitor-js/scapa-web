@@ -184,7 +184,7 @@ function Index({ requests = [], setRequests, data }) {
 
     return (<>
         <>
-            <Flex flexDirection={'column'}>
+            <Flex flexDirection={'column'} Flex w={'100%'}>
 
                 <Flex alignItems={'center'} onClick={() => { router.push(`/dashboard/processo/propostas/${id}`) }} mb={8} cursor={'pointer'} >
                     <MdArrowBack color={colors.text} size={20} />
