@@ -138,7 +138,8 @@ function Index() {
             queryClient.invalidateQueries('procces')
             setOpenSelect(false)
             toast.success("Pedido adicionado com sucesso")
-        } catch {
+        } catch (e) {
+            console.log(e, 'aaaaaaaatttttttttttttttttrpppppppp')
             toast.error("Algo deu errado, tente novamente!")
         }
 
@@ -155,18 +156,18 @@ function Index() {
             ...params
         }
 
-
+        console.log(newObject, 'newObjectnewObjectnewObject')
 
         try {
 
             const { proposal_id, id } = draftRequest
             await api.put(`/proposal/request/${id}/${proposal_id}`, newObject)
             queryClient.invalidateQueries('proposal');
-            // setOpenSelect(false)
-            // setDraftRequest(undefined)
+            setOpenSelect(false)
+            setDraftRequest(undefined)
             toast.success("Pedido adicionado com sucesso")
         } catch (e) {
-            console.log(e)
+            console.log(e, 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaasssssssssssssssssssssssssssssspppppppp')
             toast.error("Algo deu errado, tente novamente!")
         }
 
