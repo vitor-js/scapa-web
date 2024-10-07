@@ -13,7 +13,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { toast } from 'react-hot-toast';
 import { api } from '@/service'
 import { queryClient } from '../../../service/queryClient';
-import { toCurrencyScreen, naiveToBrlDate, monthDiff } from '../../../helpers'
+import { toCurrencyScreen, naiveToBrlDate, monthDiff, currencyToBackend } from '../../../helpers'
 
 
 const schemForm = yup.object().shape({
@@ -24,13 +24,14 @@ const schemForm = yup.object().shape({
     description: yup.string().required('Campo obrigatório'),
     // end_date: yup.date().required('Campo obrigatório'),
     // start_date: yup.date().required('Campo obrigatório'),
-    salary: yup.string().required('Campo obrigatório'),
+
 })
 
 const schemFormDate = yup.object().shape({
 
-    end_date: yup.date().required('Campo obrigatório'),
-    start_date: yup.date().required('Campo obrigatório'),
+    // end_date: yup.date().required('Campo obrigatório'),
+    // start_date: yup.date().required('Campo obrigatório'),
+    salary: yup.string().required('Campo obrigatório'),
 
 })
 
@@ -100,7 +101,7 @@ function Index() {
 
         setValueForm("salary", toCurrencyScreen(requestData.data.salary))
         setValueForm("reu_cost", toCurrencyScreen(requestData.data.reu_cost))
-
+        setValueFormData("salary", toCurrencyScreen(requestData.data.salary))
         if (requestData.data.end_date !== "false" && requestData.data.start_date !== "false") {
             console.log(typeof requestData.data.start_date, "asdddfgaaaaaaaaaaaaaaaaaaasss")
             const ParseStartDate = new Date(requestData.data.start_date)
@@ -129,14 +130,17 @@ function Index() {
     }
 
     const handleSubmitFormDate = async (v) => {
-        const proccess_time_work = monthDiff(new Date(v.start_date), new Date(v.end_date))
-        console.log(v.start_date, "start_date")
-        console.log(v.end_date, 'end_date')
+        console.log(currencyToBackend(v.salary))
+        const start = isNaN(v.start_date) ? new Date(requestData.data.start_date) : new Date(v.start_date)
+        const end = isNaN(v.end_date) ? new Date(requestData.data.end_date) : new Date(v.end_date)
+        const proccess_time_work = monthDiff(start, end)
+
         try {
             await api.put(`proccess/${id}`, {
-                start_date: v.start_date.toString(),
-                end_date: v.end_date.toString(),
+                start_date: start.toString(),
+                end_date: end.toString(),
                 time_worked_months: proccess_time_work,
+                salary: currencyToBackend(v.salary)
             })
             reset()
             queryClient.invalidateQueries('proccess');
@@ -186,7 +190,7 @@ function Index() {
                                 <Input label='Custo do Réu' mask="currency" name='reu_cost' error={errors?.description?.reu_cost}  {...register("reu_cost")} />
 
 
-                                <Input mask="currency" name='salary' label='Informe o valor do salário' error={errors?.salary?.message}  {...register("salary")} />
+
 
                             </Grid>
                             <Box mt={4}>
@@ -269,6 +273,10 @@ function Index() {
 
 
                             </Grid>
+                            <Grid mt={2} gridTemplateColumns={['2fr',]} gap={4}>
+                                <Input mask="currency" name='salary' label='Informe o valor do salário' error={errorsDate?.salary?.message}  {...resiterDate("salary")} />
+                            </Grid>
+
                             <Flex mt={4} alignContent={'flex-end'} justifyContent={'flex-end'} justifyItems={'flex-end'} >
                                 <Button color="#fff" type='submit'>
                                     Atualizar
