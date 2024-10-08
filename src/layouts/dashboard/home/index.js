@@ -159,7 +159,7 @@ function Index({ children }) {
                             </Box>
 
                             <Box my='5'>
-                                <Input mask={"number"} label='Tempo de duração do procecesso - Se não quiser incluir CÁLCULO DE JUROS coloque 0 (ZERO) no Tempo de Duração do Processo' name='proccess_time' error={errors?.proccess_time?.message}  {...register("proccess_time")} />
+                                <Input mask={"number"} label='Tempo de duração do procecesso (em meses) - Se não quiser incluir CÁLCULO DE JUROS coloque 0 (ZERO) no Tempo de Duração do Processo' name='proccess_time' error={errors?.proccess_time?.message}  {...register("proccess_time")} />
                             </Box>
 
 
@@ -182,7 +182,7 @@ function Index({ children }) {
 
                             {have_calc_value === "Sim" && <>
                                 <Box my='5'>
-                                    <Input mask="currency" label='Valor ou salário ou a média dos salários' name='salary' error={errors?.salary?.message} {...register("salary")} />
+                                    <Input mask="currency" label='Valor do salário ou a média dos salários' name='salary' error={errors?.salary?.message} {...register("salary")} />
                                 </Box>
 
 

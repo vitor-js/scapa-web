@@ -21,9 +21,7 @@ const schemForm = yup.object().shape({
     number_process: yup.string().required('Campo obrigatório'),
     autor: yup.string().required('Campo obrigatório'),
     reu: yup.string().required('Campo obrigatório'),
-    description: yup.string().required('Campo obrigatório'),
-    // end_date: yup.date().required('Campo obrigatório'),
-    // start_date: yup.date().required('Campo obrigatório'),
+    // description: yup.string().required('Campo obrigatório'),
 
 })
 
@@ -72,6 +70,7 @@ function Index() {
     });
 
     const handleSubmitForm = async (values) => {
+        console.log(values)
         try {
             await api.put(`proccess/${id}`, { ...values })
             reset()
@@ -162,7 +161,7 @@ function Index() {
             {requestData && (
                 <>
                     <WrapperBody>
-                        <Flex as='form' onSubmit={handleSubmit(handleSubmitForm)} mt={5} width="100%" bg={colors.cardBackground} padding={4} borderRadius={5} flexDirection={'column'}>
+                        <Flex as='form' mt={5} width="100%" bg={colors.cardBackground} padding={4} borderRadius={5} flexDirection={'column'}>
                             <Text fontWeight="bold" fontSize="2xl" color={colors.text}>Informações Básicas do Processo</Text>
                             <Grid mt={5} gridTemplateColumns={['1fr', '1fr 1fr',]} gap={4}>
                                 <Input
@@ -198,7 +197,7 @@ function Index() {
                             </Box>
 
                             <Flex mt={4} alignContent={'flex-end'} justifyContent={'flex-end'} justifyItems={'flex-end'} >
-                                <Button color="#fff" type='submit'>
+                                <Button onClick={handleSubmit(handleSubmitForm)} color="#fff" type='submit'>
                                     Atualizar
                                 </Button>
                             </Flex>

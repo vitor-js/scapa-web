@@ -603,7 +603,7 @@ function Index({ handleAddNewRequest, draftRequest, setOpenSelect, handleUpdateR
             }
 
 
-            {!VALUES_WITH_CALCS.includes(valueRequest) || salaryValue === undefined || !haveCalc ? <>
+            {!VALUES_WITH_CALCS.includes(valueRequest) || salaryValue === undefined ? <>
                 <Box w={'100%'} mt={5}>
                     <Input label='Valor individual postulado'
                         {...register('valor_individual_postulado')}
@@ -615,7 +615,8 @@ function Index({ handleAddNewRequest, draftRequest, setOpenSelect, handleUpdateR
                         }}
                         mask='currency' />
                 </Box>
-            </> : null}
+            </> : null
+            }
 
 
             <Box w={'100%'} mt={5}>
@@ -633,72 +634,81 @@ function Index({ handleAddNewRequest, draftRequest, setOpenSelect, handleUpdateR
 
 
 
-            {!VALUES_WITH_CALCS.includes(valueRequest) || salaryValue === undefined || !haveCalc ? <>
+            {
+                !VALUES_WITH_CALCS.includes(valueRequest) || salaryValue === undefined ? <>
 
-                <Box w={'100%'} mt={5}>
-                    <Input mask='currency'
-                        {...register('ratio')}
+                    <Box w={'100%'} mt={5}>
+                        <Input mask='currency'
+                            {...register('ratio')}
 
-                        name='ratio'
-                        label='Risco de exito' value={ratio} disabled={true} />
-                </Box>
-
-
-            </> : null}
+                            name='ratio'
+                            label='Risco de exito' value={ratio} disabled={true} />
+                    </Box>
 
 
-            {!VALUES_WITH_CALCS.includes(valueRequest) || salaryValue === undefined || !haveCalc ? <>
-
-                <Box w={'100%'} mt={5}>
-
-                    <Input mask='currency'
-                        {...register('valor_individualizado')}
-                        name='valor_individualizado'
-                        label='Valor individualizado' disabled={true} />
-                </Box>
-
-
-            </> : null}
-
-
-            {VALUES_WITH_CALCS_DIFF_SALARY.includes(valueRequest) && salaryValue !== undefined || !haveCalc ?
-                <>
-                    <CalculeComponents.DiffSalary
-                        register={register} errors={errors} data={data} draftRequest={draftRequest} setValue={setValue}
-                    />
-                </> : null
-            }
-
-            {INSALUBRIDADE.includes(valueRequest) && salaryValue !== undefined || !haveCalc ?
-                <>
-                    <CalculeComponents.Insalubridade
-                        insalubridadeSalary={insalubridadeSalary} setInsalubridadeSalary={setInsalubridadeSalary} register={register} errors={errors} data={data} draftRequest={draftRequest} setValue={setValue}
-                    />
-                </> : null
-            }
-
-            {VERBAS.includes(valueRequest) && salaryValue !== undefined || !haveCalc ?
-                <>
-                    <CalculeComponents.Verbas
-                        register={register} errors={errors} data={data} draftRequest={draftRequest} setValue={setValue}
-                    />
                 </> : null
             }
 
 
-            {HORA_EXTRA.includes(valueRequest) && salaryValue !== undefined || !haveCalc ?
-                <>
-                    <CalculeComponents.HoraExtra
-                        watch={watch} extraHour={extraHour} setExtraHour={setExtraHour} register={register} errors={errors} data={data} draftRequest={draftRequest} setValue={setValue}
-                    />
+            {
+                !VALUES_WITH_CALCS.includes(valueRequest) || salaryValue === undefined ? <>
+
+                    <Box w={'100%'} mt={5}>
+
+                        <Input mask='currency'
+                            {...register('valor_individualizado')}
+                            name='valor_individualizado'
+                            label='Valor individualizado' disabled={true} />
+                    </Box>
+
+
                 </> : null
             }
-            {INTERVALO.includes(valueRequest) && salaryValue !== undefined || !haveCalc ?
-                <>
-                    <CalculeComponents.Intervalo
-                        watch={watch} interval={interval} setInterval={setInterval} register={register} errors={errors} data={data} draftRequest={draftRequest} setValue={setValue}
-                    />
-                </> : null
+
+
+            {
+                VALUES_WITH_CALCS_DIFF_SALARY.includes(valueRequest) && salaryValue !== undefined ?
+                    <>
+                        <CalculeComponents.DiffSalary
+                            register={register} errors={errors} data={data} draftRequest={draftRequest} setValue={setValue}
+                        />
+                    </> : null
+            }
+
+            {
+                INSALUBRIDADE.includes(valueRequest) && salaryValue !== undefined ?
+                    <>
+                        <CalculeComponents.Insalubridade
+                            insalubridadeSalary={insalubridadeSalary} setInsalubridadeSalary={setInsalubridadeSalary} register={register} errors={errors} data={data} draftRequest={draftRequest} setValue={setValue}
+                        />
+                    </> : null
+            }
+
+            {
+                VERBAS.includes(valueRequest) && salaryValue !== undefined ?
+                    <>
+                        <CalculeComponents.Verbas
+                            register={register} errors={errors} data={data} draftRequest={draftRequest} setValue={setValue}
+                        />
+                    </> : null
+            }
+
+
+            {
+                HORA_EXTRA.includes(valueRequest) && salaryValue !== undefined ?
+                    <>
+                        <CalculeComponents.HoraExtra
+                            watch={watch} extraHour={extraHour} setExtraHour={setExtraHour} register={register} errors={errors} data={data} draftRequest={draftRequest} setValue={setValue}
+                        />
+                    </> : null
+            }
+            {
+                INTERVALO.includes(valueRequest) && salaryValue !== undefined ?
+                    <>
+                        <CalculeComponents.Intervalo
+                            watch={watch} interval={interval} setInterval={setInterval} register={register} errors={errors} data={data} draftRequest={draftRequest} setValue={setValue}
+                        />
+                    </> : null
             }
 
 
@@ -720,7 +730,7 @@ function Index({ handleAddNewRequest, draftRequest, setOpenSelect, handleUpdateR
 
 
 
-        </Flex>
+        </Flex >
     );
 }
 

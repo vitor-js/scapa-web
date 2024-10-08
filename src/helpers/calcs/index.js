@@ -224,6 +224,8 @@ const calcDispensaImotivadaOuRescisãoIndireta = (days, time, salary, risk, have
         (salary / 12) * month
     );
 
+    const multa = salary
+
     const vocation_calc = vacationCalcVerbas(salary, time, have_vacation)
 
     const valuePostulate_calc = SalaryForDaysWorkedInTheLastMonth + multa + extraSalary_calc + vocation_calc + fgts + AvisoPrevioIndenizado
