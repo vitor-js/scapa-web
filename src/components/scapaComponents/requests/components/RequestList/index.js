@@ -109,14 +109,13 @@ function Index({ requests = [], setOpenSelect, setDraftRequest, removeRequest, c
                     <Flex my={6} width={'100%'} flexDirection={'column'}>
                         <Box>
                             <Text fontSize={15} fontWeight={400} ml={3} mr={3} >
-                                Valor individual postulado
+                                Valor individualizado com gestão de risco
                             </Text>
                         </Box>
 
                         <Box mt={1}>
                             <Text fontSize={15} fontWeight={400} ml={3} mr={3} >
-                                {console.log("value.valuePostulate", value)}
-                                {toCurrencyScreen(value.valuePostulate)}
+                                {toCurrencyScreen(value.valueIndividual)}
                             </Text>
                         </Box>
 
@@ -131,13 +130,14 @@ function Index({ requests = [], setOpenSelect, setDraftRequest, removeRequest, c
                         <Flex my={6} width={'100%'} flexDirection={'column'}>
                             <Box>
                                 <Text fontSize={15} fontWeight={400} ml={3} mr={3} >
-                                    Valor individualizado com gestão de risco
+                                    Valor individual postulado
                                 </Text>
                             </Box>
 
                             <Box mt={1}>
                                 <Text fontSize={15} fontWeight={400} ml={3} mr={3} >
-                                    {toCurrencyScreen(value.valueIndividual)}
+                                    {console.log("value.valuePostulate", value)}
+                                    {toCurrencyScreen(value.valuePostulate)}
                                 </Text>
                             </Box>
 
@@ -179,31 +179,40 @@ function Index({ requests = [], setOpenSelect, setDraftRequest, removeRequest, c
 
 
                     </Grid>
+                    {value.reflex && value.reflex.length !== 0 &&
+                        <>
+                            <Flex w={"100%"}>
+                                <Text fontSize={18} fontWeight={600} ml={3} mr={3} >
+                                    Reflexos
+                                </Text>
+                                <Grid mt={5} templateColumns='repeat(5, 1fr)' gap={6}>
+                                    {value.reflex && value.reflex.length !== 0 && value.reflex.map((e) => (
+                                        <GridItem key={e.label} w='100%' bg={colors.cardBackground} borderRadius={5} >
+                                            <Flex my={6} width={'100%'} flexDirection={'column'}>
+                                                <Box>
+                                                    <Text fontSize={15} fontWeight={400} ml={3} mr={3} >
+                                                        {e.label}
+                                                    </Text>
+                                                </Box>
 
-                    <Grid mt={5} templateColumns='repeat(5, 1fr)' gap={6}>
-                        {value.reflex && value.reflex.length !== 0 && value.reflex.map((e) => (
-                            <GridItem key={e.label} w='100%' bg={colors.cardBackground} borderRadius={5} >
-                                <Flex my={6} width={'100%'} flexDirection={'column'}>
-                                    <Box>
-                                        <Text fontSize={15} fontWeight={400} ml={3} mr={3} >
-                                            {e.label}
-                                        </Text>
-                                    </Box>
-
-                                    <Box mt={1}>
-                                        <Text fontSize={15} fontWeight={400} ml={3} mr={3} >
-                                            R$ {toCurrencyScreen(e.value)}
-                                        </Text>
-                                    </Box>
+                                                <Box mt={1}>
+                                                    <Text fontSize={15} fontWeight={400} ml={3} mr={3} >
+                                                        R$ {toCurrencyScreen(e.value)}
+                                                    </Text>
+                                                </Box>
 
 
-                                </Flex>
-                            </GridItem>
-                        ))}
+                                            </Flex>
+                                        </GridItem>
+                                    ))}
 
 
 
-                    </Grid>
+                                </Grid>
+                            </Flex>
+                        </>
+                    }
+
                 </Flex>
             ))}
 
