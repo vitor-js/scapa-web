@@ -253,8 +253,20 @@ function Index({ handleAddNewRequest, draftRequest, setOpenSelect, handleUpdateR
         pedido: yup
             .string()
             .required('Este campo é origatório'),
-        valor_individual_postulado: yup.string().required('Este campo é origatório'),
-        risco: yup.string().required('Este campo é origatório'),
+        valor_individual_postulado: yup.lazy((value) => {
+            if (value !== undefined && value !== "") {
+                return yup.string().required('Este campo é origatório');
+            }
+            return yup.string().nullable().optional();
+        }),
+        risco: yup.lazy((value) => {
+            if (value !== undefined && value !== "") {
+                return yup.string().required('Este campo é origatório');
+            }
+            return yup.string().nullable().optional();
+        }),
+
+
         // diff_value_salary: yup.string().required('Este campo é origatório'),
         // diff_salary_type: yup.string().required('Este campo é origatório'),
         custon_request: yup.lazy((value) => {
@@ -301,7 +313,7 @@ function Index({ handleAddNewRequest, draftRequest, setOpenSelect, handleUpdateR
     })
 
     const submit = async (values) => {
-
+        console.log(values)
         const pedido = getValues("pedido")
         const custonPeido = getValues("custon_request")
         const newRequest = {
@@ -326,7 +338,7 @@ function Index({ handleAddNewRequest, draftRequest, setOpenSelect, handleUpdateR
 
             if (VALUES_WITH_CALCS.includes(valueRequest)) {
                 if (VALUES_WITH_CALCS_DIFF_SALARY.includes(valueRequest)) {
-                    const { valueIndividual, valuePostulate, reflex } = calc.diffSalaty(values.diff_salary_type, values.diff_value_salary, data.data, RISK_TABLE[risk])
+                    const { valueIndividual, valuePostulate, reflex, principal } = calc.diffSalaty(values.diff_salary_type, values.diff_value_salary, data.data, RISK_TABLE[risk])
 
 
 
@@ -334,7 +346,8 @@ function Index({ handleAddNewRequest, draftRequest, setOpenSelect, handleUpdateR
                         ...newRequest,
                         diference_type: values.diff_salary_type,
                         diference_value: parseFloat(currencyToBackend(values.diff_value_salary)),
-                        reflex
+                        reflex,
+                        principal
                     }
 
                     finishRequest(requestUpdate, valuePostulate, valueIndividual)
@@ -355,12 +368,13 @@ function Index({ handleAddNewRequest, draftRequest, setOpenSelect, handleUpdateR
                     const salaryMedia = sumValues / sumMonths
 
 
-                    const { valueIndividual, valuePostulate, reflex } = calc.insalubridade(data.data, values.insalubridade_grau, RISK_TABLE[risk], salaryMedia)
+                    const { valueIndividual, valuePostulate, reflex, principal } = calc.insalubridade(data.data, values.insalubridade_grau, RISK_TABLE[risk], salaryMedia)
                     const requestUpdate = {
                         ...newRequest,
                         insalubridade_grau: values.insalubridade_grau,
                         insalubridade_salario: { data: insalubridadeSalary },
-                        reflex
+                        reflex,
+                        principal
                     }
                     finishRequest(requestUpdate, valuePostulate, valueIndividual)
                     return
@@ -389,13 +403,14 @@ function Index({ handleAddNewRequest, draftRequest, setOpenSelect, handleUpdateR
 
                         }]
                     } : { data: extraHour }
-                    const { valueIndividual, valuePostulate, reflex } = calc.calcHoraExtra(data.data, values.extra_hour_variation, RISK_TABLE[risk], extraHour, values.week_limit, values)
+                    const { valueIndividual, valuePostulate, reflex, principal } = calc.calcHoraExtra(data.data, values.extra_hour_variation, RISK_TABLE[risk], extraHour, values.week_limit, values)
                     const requestUpdate = {
                         ...newRequest,
                         extra_hour_variation: values.extra_hour_variation === "Sim" ? true : false,
                         extra_hour_object: objectHoraExtra,
                         week_limit: values.week_limit,
-                        reflex
+                        reflex,
+                        principal
 
                     }
 
@@ -482,10 +497,10 @@ function Index({ handleAddNewRequest, draftRequest, setOpenSelect, handleUpdateR
                 }
 
                 if (ADIOCIONAL_PERICULOSIDADE.includes(valueRequest)) {
-                    const { valueIndividual, valuePostulate, reflex } = calc.adicionalPericulosidade(data.data, RISK_TABLE[risk])
+                    const { valueIndividual, valuePostulate, reflex, principal } = calc.adicionalPericulosidade(data.data, RISK_TABLE[risk])
                     const requestUpdate = {
                         ...newRequest,
-                        reflex
+                        reflex, principal
 
                     }
                     finishRequest(requestUpdate, valuePostulate, valueIndividual)

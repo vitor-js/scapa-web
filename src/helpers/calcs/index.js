@@ -110,7 +110,7 @@ const diffSalaty = (diferenceType, diff_value_salary, data, risk) => {
     const vocationBase = (monthValue / 12) * time;
     const vocation = Math.round(vocationBase + vocationBase / 3);
 
-
+    const principal = sumMonthValue
     const valuePostulate_calc = sumMonthValue + vocation + extraSalary + fgts
 
 
@@ -133,7 +133,8 @@ const diffSalaty = (diferenceType, diff_value_salary, data, risk) => {
     return {
         valueIndividual: valueIndividual,
         valuePostulate: valuePostulate_calc,
-        reflex
+        reflex,
+        principal
     }
 }
 
@@ -155,7 +156,7 @@ const insalubridade = (data, grau, risk, salary) => {
     console.log(vocationCalc, " vocationCalc")
 
     const valuePostulate_calc = monthValue * time + extraSalary + vocationCalc + fgts
-
+    const principal = monthValue * time
     console.log(valuePostulate_calc)
     const valueIndividual = Math.round(valuePostulate_calc * risk);
 
@@ -177,7 +178,8 @@ const insalubridade = (data, grau, risk, salary) => {
     return {
         valueIndividual,
         valuePostulate: valuePostulate_calc,
-        reflex
+        reflex,
+        principal
     }
 }
 
@@ -229,6 +231,7 @@ const calcDispensaImotivadaOuRescisãoIndireta = (days, time, salary, risk, have
     const vocation_calc = vacationCalcVerbas(salary, time, have_vacation)
 
     const valuePostulate_calc = SalaryForDaysWorkedInTheLastMonth + multa + extraSalary_calc + vocation_calc + fgts + AvisoPrevioIndenizado
+
     const reflex = [{
         label: "Salário dos dias trabalhados no último mês",
         value: SalaryForDaysWorkedInTheLastMonth
@@ -551,6 +554,7 @@ const calcHoraExtra = (data, variation, risk, extraHour, limit, valuesForm) => {
     const valuePostulate = Math.round(
         apuracaoDeHorasExtrasTotal + extraSalary + vocationCalc + RSR + fgts
     );
+    const principal = apuracaoDeHorasExtrasTotal
     console.log(valuePostulate, "valuePostulate")
 
     const valueIndividual = Math.round(valuePostulate * risk);
@@ -575,7 +579,8 @@ const calcHoraExtra = (data, variation, risk, extraHour, limit, valuesForm) => {
     return {
         valueIndividual,
         valuePostulate: valuePostulate,
-        reflex
+        reflex,
+        principal
     }
 
 }
@@ -656,7 +661,7 @@ const adicionalPericulosidade = (data, risk) => {
     const month_value = Math.round(salary * 0.3);
     console.log(month_value, "month_value")
     const all_month_value = Math.round(month_value * time_worked_months);
-
+    console.log(all_month_value, "all_month_value")
     const fgts = Math.round(month_value * 0.08 * time_worked_months);
 
     const thirteenth_salary = Math.round((month_value / 12) * time_worked_months);
@@ -664,12 +669,13 @@ const adicionalPericulosidade = (data, risk) => {
     const vacation_sum = Math.round((month_value / 12) * time_worked_months);
 
     const vocation = Math.round(vacation_sum + vacation_sum / 3);
-
+    console.log(all_month_value, fgts, thirteenth_salary, vocation)
 
     const result = Math.round(
         all_month_value + fgts + thirteenth_salary + vocation
     );
-    console.log(result)
+    const principal = all_month_value
+
     const result_with_risk = Math.round(result * risk);
     const reflex = [
         {
@@ -688,7 +694,8 @@ const adicionalPericulosidade = (data, risk) => {
     return {
         valueIndividual: result_with_risk,
         valuePostulate: result,
-        reflex
+        reflex,
+        principal
     }
 
 }
