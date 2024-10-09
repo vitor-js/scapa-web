@@ -7,6 +7,13 @@ import { IoTrashBinOutline } from "react-icons/io5";
 
 import { FaEdit } from "react-icons/fa";
 const RISK_TABLE_REVERSE = {
+    "0.1": "Inexistente",
+    "0.1": "Muito Baixo",
+    "0.25": "Baixo",
+    "0.5": "Médio",
+    "0.75": "Alto",
+    "0.90": "Muito Alto",
+    "1": "Total",
     0: "Inexistente",
     10: "Muito Baixo",
     25: "Baixo",
