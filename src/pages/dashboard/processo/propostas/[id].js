@@ -73,14 +73,14 @@ function Index() {
                 router.push(`/dashboard/processo/nova-proposta/${id}?type=${type}`)
             }} mt={5} width={'100%'}>
                 <Text fontSize={'2xl'} fontWeight={600}>
-                    Modelo de proposta {type}
+                    Proposta {type}
                 </Text>
                 <Box _hover={{
                     background: colors.hoverbackground,
                     borderColor: colors.border.hoverColor,
                 }} bg={colors.cardBackground} padding={4} borderRadius={5} mt={4} cursor={'pointer'} >
                     <Text fontSize={'1xl'} fontWeight={400}>
-                        Clique para criar modelo de proposta
+                        Clique para criar a proposta
                     </Text>
                 </Box>
             </Box>
@@ -104,22 +104,6 @@ function Index() {
                     <Flex my={6} width={'100%'} flexDirection={'column'}>
                         <Box>
                             <Text fontSize={15} fontWeight={400} ml={3} mr={3} >
-                                Valor Total da proposta
-                            </Text>
-                        </Box>
-
-                        <Box mt={1}>
-                            <Text fontSize={15} fontWeight={400} ml={3} mr={3} >
-                                {toCurrencyScreen(value.total_value)}
-                            </Text>
-                        </Box>
-
-
-                    </Flex>
-
-                    <Flex my={6} width={'100%'} flexDirection={'column'}>
-                        <Box>
-                            <Text fontSize={15} fontWeight={400} ml={3} mr={3} >
                                 Valor Total Postulado
                             </Text>
                         </Box>
@@ -132,7 +116,6 @@ function Index() {
 
 
                     </Flex>
-
                     <Flex my={6} width={'100%'} flexDirection={'column'}>
                         <Box>
                             <Text fontSize={15} fontWeight={400} ml={3} mr={3} >
@@ -148,6 +131,26 @@ function Index() {
 
 
                     </Flex>
+
+                    <Flex my={6} width={'100%'} flexDirection={'column'}>
+                        <Box>
+                            <Text fontSize={15} fontWeight={400} ml={3} mr={3} >
+                                Valor Total da proposta
+                            </Text>
+                        </Box>
+
+                        <Box mt={1}>
+                            <Text fontSize={15} fontWeight={400} ml={3} mr={3} >
+                                {toCurrencyScreen(value.total_value)}
+                            </Text>
+                        </Box>
+
+
+                    </Flex>
+
+
+
+
 
                     <Flex my={6} width={'100%'} flexDirection={'column'} alignItems={'flex-end'}>
 

@@ -54,7 +54,7 @@ function Index({ requests = [], setOpenSelect, setDraftRequest, removeRequest, c
                 cursor={'pointer'}
                 bg={colors.cardBackground} padding={4} borderRadius={5} w={'100%'} flexDirection={'row'}>
                 <MdAddCircle color={colors.text} size={40} />
-                <Text fontSize={18} mt={2} fontWeight={400} ml={3} mr={3} >
+                <Text fontSize={22} mt={2} fontWeight={800} ml={3} mr={3}  >
                     Clique para adicionar um novo pedido
                 </Text>
             </Flex>
@@ -129,21 +129,7 @@ function Index({ requests = [], setOpenSelect, setDraftRequest, removeRequest, c
 
                     </Flex>
                     {console.log(value, 'value.principal')}
-                    {value.principal !== null && <Flex my={6} width={'100%'} flexDirection={'column'}>
-                        <Box>
-                            <Text fontSize={15} fontWeight={400} ml={3} mr={3} >
-                                Valor principal
-                            </Text>
-                        </Box>
 
-                        <Box mt={1}>
-                            <Text fontSize={15} fontWeight={400} ml={3} mr={3} >
-                                {toCurrencyScreen(value.principal)}
-                            </Text>
-                        </Box>
-
-
-                    </Flex>}
 
 
                     <Grid
@@ -212,6 +198,24 @@ function Index({ requests = [], setOpenSelect, setDraftRequest, removeRequest, c
                             <Flex w={"100%"}>
 
                                 <Grid mt={0} templateColumns='repeat(5, 1fr)' gap={6}>
+
+                                    {value.principal !== null && <GridItem key={e.label} w='100%' bg={colors.cardBackground} borderRadius={5} ><Flex my={6} width={'100%'} flexDirection={'column'}>
+                                        <Box>
+                                            <Text fontSize={15} fontWeight={400} ml={3} mr={3} >
+                                                Valor principal
+                                            </Text>
+                                        </Box>
+
+                                        <Box mt={1}>
+                                            <Text fontSize={15} fontWeight={400} ml={3} mr={3} >
+                                                {toCurrencyScreen(value.principal)}
+                                            </Text>
+                                        </Box>
+
+
+                                    </Flex>
+                                    </GridItem>
+                                    }
                                     {value.reflex && value.reflex.length !== 0 && value.reflex.map((e) => (
                                         <GridItem key={e.label} w='100%' bg={colors.cardBackground} borderRadius={5} >
                                             <Flex my={6} width={'100%'} flexDirection={'column'}>

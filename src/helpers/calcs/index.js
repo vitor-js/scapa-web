@@ -194,7 +194,7 @@ const calcVerbasRescisorias = (data, reason, risk, have_vacation) => {
 
 
     if (reason === "Dispensa imotivada ou rescisão indireta") {
-        return calcDispensaImotivadaOuRescisãoIndireta(days, time, salary, risk, have_vacation, end_date_convert);
+        return (days, time, salary, risk, have_vacation, end_date_convert);
     }
     if (reason === "Pedido de demissão") { return calcPedidoDeDemissao(days, time, salary, risk, have_vacation, end_date_convert); }
     if (reason === "Comum acordo") { return calcComumAcordo(days, time, salary, risk, have_vacation, end_date_convert); }

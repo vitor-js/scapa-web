@@ -118,8 +118,7 @@ function Index({ errors, register, data, draftRequest, setValue, insalubridadeSa
 
 
             <Box w={'100%'} mt={5}>
-                <Select label='Gostaríamos de solicitar a gentileza de selecionar o grau de
-            insalubridade' options={GRAU_VALUES}
+                <Select label='Seleciona o grau de insalubridade' options={GRAU_VALUES}
                     {...register('insalubridade_grau')}
                     error={errors?.insalubridade_grau?.message}
                     name='insalubridade_grau'
@@ -138,7 +137,7 @@ function Index({ errors, register, data, draftRequest, setValue, insalubridadeSa
                     cursor={'pointer'}
                     bg={colors.cardBackground} padding={4} borderRadius={5} mt={4} w={'100%'} flexDirection={'row'} alignItems={'center'}>
                     <MdAddCircle color={colors.text} size={20} />
-                    <Text fontSize={14} fontWeight={400} ml={3} mr={3} >
+                    <Text fontSize={22} fontWeight={800} ml={3} mr={3} >
 
                         Clique para informar o salário mínimo e os períodos correspondentes
                     </Text>

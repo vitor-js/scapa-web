@@ -42,7 +42,7 @@ function Index({ children }) {
             if (value !== undefined && value !== "") {
                 return yup.string().required('Este campo é origatório');
             }
-            return yup.string().nullable().optional();
+            return yup.string();
         }),
         start_date: yup.lazy((value) => {
             if (value !== undefined && value !== "") {
@@ -191,7 +191,7 @@ function Index({ children }) {
                                 </Box>
 
                                 <Box my='5'>
-                                    <Input type='date' name='end_date' label='Data de início do contrato de trabalho' error={errors?.end_date?.message}  {...register("end_date")} />
+                                    <Input type='date' name='end_date' label='Data de término do contrato de trabalho' error={errors?.end_date?.message}  {...register("end_date")} />
                                 </Box>
                             </>}
 
