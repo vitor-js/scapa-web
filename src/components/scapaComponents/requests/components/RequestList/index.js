@@ -60,203 +60,203 @@ function Index({ requests = [], setOpenSelect, setDraftRequest, removeRequest, c
             </Flex>
 
 
+            <Flex my={6} width={'100%'} flexDirection={'column-reverse'}>
+                {requests.length !== 0 && requests.map((value, index) => (
+                    <Flex
+                        key={value.risco}
+                        bg={colors.cardBackground} padding={4} borderRadius={5} mt={4} w={'100%'} flexDirection={'column'}>
 
-            {requests.length !== 0 && requests.map((value, index) => (
-                <Flex
-                    key={value.risco}
-                    bg={colors.cardBackground} padding={4} borderRadius={5} mt={4} w={'100%'} flexDirection={'column'}>
-
-                    <Flex my={6} width={'100%'} flexDirection={'row'} alignItems={"center"} justifyContent={'space-between'}>
-                        <Text fontSize={18} fontWeight={600} ml={3} mr={3} >
-                            {value.requestValue}
-                        </Text>
-                        <Box cursor={"pointer"} >
-                            <ButtonGroup gap="2">
-                                <IconButton
-                                    size="md"
-                                    fontSize="lg"
-                                    variant="ghost"
-                                    backgroundColor={colors.background}
-                                    borderColor={colors.border.hoverColor}
-                                    borderWidth={1}
-                                    onClick={() => {
-                                        if (custonEdit) {
-                                            return custonEditFunction(value)
-                                        } else {
-                                            setDraftRequest({ ...value })
-                                            setOpenSelect(true)
-                                        }
-
-                                    }}
-                                    cursor="pointer"
-                                    transition="ease all 0.1s"
-                                    icon={<FaEdit />}
-
-                                />
-                                <IconButton
-                                    size="md"
-                                    fontSize="lg"
-                                    variant="ghost"
-                                    backgroundColor={colors.background}
-                                    borderColor={colors.border.hoverColor}
-                                    borderWidth={1}
-                                    cursor="pointer"
-                                    transition="ease all 0.1s"
-                                    onClick={() => removeRequest(index)}
-                                    icon={<IoTrashBinOutline />}
-                                    aria-label={`Exit aplication`}
-                                />
-                            </ButtonGroup>
-
-
-                        </Box>
-
-                    </Flex>
-
-                    <Flex my={6} width={'100%'} flexDirection={'column'}>
-                        <Box>
-                            <Text fontSize={15} fontWeight={400} ml={3} mr={3} >
-                                Valor individualizado com gestão de risco
+                        <Flex my={6} width={'100%'} flexDirection={'row'} alignItems={"center"} justifyContent={'space-between'}>
+                            <Text fontSize={18} fontWeight={600} ml={3} mr={3} >
+                                {value.requestValue}
                             </Text>
-                        </Box>
-
-                        <Box mt={1}>
-                            <Text fontSize={15} fontWeight={400} ml={3} mr={3} >
-                                {toCurrencyScreen(value.valueIndividual)}
-                            </Text>
-                        </Box>
-
-
-                    </Flex>
-                    {console.log(value, 'value.principal')}
-
-
-
-                    <Grid
-                        alignItems={"center"}
-                        gap={10}
-                        gridTemplateColumns={['1fr', '1fr 1fr', '1fr 1fr 1fr']}
-                    >
-                        <Flex my={6} width={'100%'} flexDirection={'column'}>
-                            <Box>
-                                <Text fontSize={15} fontWeight={400} ml={3} mr={3} >
-                                    Valor individual postulado
-                                </Text>
-                            </Box>
-
-                            <Box mt={1}>
-                                <Text fontSize={15} fontWeight={400} ml={3} mr={3} >
-                                    {console.log("value.valuePostulate", value)}
-                                    {toCurrencyScreen(value.valuePostulate)}
-                                </Text>
-                            </Box>
-
-
-                        </Flex>
-
-
-                        <Flex width={'100%'} flexDirection={'column'}>
-                            <Box>
-                                <Text fontSize={15} fontWeight={400} ml={3} mr={3} >
-                                    Risco
-                                </Text>
-                            </Box>
-
-                            <Box mt={1}>
-                                <Text fontSize={15} fontWeight={400} ml={3} mr={3} >
-
-                                    {RISK_TABLE_REVERSE[value.riskSuccess]}
-                                </Text>
-                            </Box>
-
-
-                        </Flex>
-                        <Flex my={6} width={'100%'} flexDirection={'column'}>
-                            <Box>
-                                <Text fontSize={15} fontWeight={400} ml={3} mr={3} >
-                                    Risco de Exito
-                                </Text>
-                            </Box>
-
-                            <Box mt={1}>
-                                <Text fontSize={15} fontWeight={400} ml={3} mr={3} >
-                                    {value.riskSuccess}%
-                                </Text>
-                            </Box>
-
-
-                        </Flex>
-
-
-                    </Grid>
-                    {value.reflex && value.reflex.length !== 0 ?
-                        <>
-
-                            {VERBAS.includes(value.requestValue) ? null : <Text fontSize={18} fontWeight={600} ml={3} mr={3} >
-                                Reflexos
-                            </Text>}
-
-
-                            <Flex w={"100%"}>
-
-                                <Grid mt={0} templateColumns='repeat(5, 1fr)' gap={6}>
-
-                                    {value.principal !== null &&
-                                        <>
-
-                                            {VERBAS.includes(value.requestValue) ? null :
-
-                                                <>
-                                                    <GridItem w='100%' bg={colors.cardBackground} borderRadius={5} ><Flex my={6} width={'100%'} flexDirection={'column'}></Flex>
-                                                        <Box>
-                                                            <Text fontSize={15} fontWeight={400} ml={3} mr={3} >
-                                                                Valor principal
-                                                            </Text>
-                                                        </Box>
-
-                                                        <Box mt={1}>
-                                                            <Text fontSize={15} fontWeight={400} ml={3} mr={3} >
-                                                                {toCurrencyScreen(value.principal)}
-                                                            </Text>
-                                                        </Box>
-                                                    </GridItem>
-                                                </>
+                            <Box cursor={"pointer"} >
+                                <ButtonGroup gap="2">
+                                    <IconButton
+                                        size="md"
+                                        fontSize="lg"
+                                        variant="ghost"
+                                        backgroundColor={colors.background}
+                                        borderColor={colors.border.hoverColor}
+                                        borderWidth={1}
+                                        onClick={() => {
+                                            if (custonEdit) {
+                                                return custonEditFunction(value)
+                                            } else {
+                                                setDraftRequest({ ...value })
+                                                setOpenSelect(true)
                                             }
 
-                                        </>
+                                        }}
+                                        cursor="pointer"
+                                        transition="ease all 0.1s"
+                                        icon={<FaEdit />}
+
+                                    />
+                                    <IconButton
+                                        size="md"
+                                        fontSize="lg"
+                                        variant="ghost"
+                                        backgroundColor={colors.background}
+                                        borderColor={colors.border.hoverColor}
+                                        borderWidth={1}
+                                        cursor="pointer"
+                                        transition="ease all 0.1s"
+                                        onClick={() => removeRequest(index)}
+                                        icon={<IoTrashBinOutline />}
+                                        aria-label={`Exit aplication`}
+                                    />
+                                </ButtonGroup>
 
 
-                                    }
-                                    {value.reflex && value.reflex.length !== 0 && value.reflex.map((e) => (
-                                        <GridItem key={e.label} w='100%' bg={colors.cardBackground} borderRadius={5} >
-                                            <Flex my={6} width={'100%'} flexDirection={'column'}>
-                                                <Box>
-                                                    <Text fontSize={15} fontWeight={400} ml={3} mr={3} >
-                                                        {e.label}
-                                                    </Text>
-                                                </Box>
+                            </Box>
 
-                                                <Box mt={1}>
-                                                    <Text fontSize={15} fontWeight={400} ml={3} mr={3} >
-                                                        R$ {toCurrencyScreen(e.value)}
-                                                    </Text>
-                                                </Box>
+                        </Flex>
 
+                        <Flex my={6} width={'100%'} flexDirection={'column'}>
+                            <Box>
+                                <Text fontSize={15} fontWeight={400} ml={3} mr={3} >
+                                    Valor individualizado com gestão de risco
+                                </Text>
+                            </Box>
 
-                                            </Flex>
-                                        </GridItem>
-                                    ))}
+                            <Box mt={1}>
+                                <Text fontSize={15} fontWeight={400} ml={3} mr={3} >
+                                    {toCurrencyScreen(value.valueIndividual)}
+                                </Text>
+                            </Box>
 
 
+                        </Flex>
+                        {console.log(value, 'value.principal')}
 
-                                </Grid>
+
+
+                        <Grid
+                            alignItems={"center"}
+                            gap={10}
+                            gridTemplateColumns={['1fr', '1fr 1fr', '1fr 1fr 1fr']}
+                        >
+                            <Flex my={6} width={'100%'} flexDirection={'column'}>
+                                <Box>
+                                    <Text fontSize={15} fontWeight={400} ml={3} mr={3} >
+                                        Valor individual postulado
+                                    </Text>
+                                </Box>
+
+                                <Box mt={1}>
+                                    <Text fontSize={15} fontWeight={400} ml={3} mr={3} >
+                                        {console.log("value.valuePostulate", value)}
+                                        {toCurrencyScreen(value.valuePostulate)}
+                                    </Text>
+                                </Box>
+
+
                             </Flex>
-                        </> : null
-                    }
 
-                </Flex >
-            ))}
 
+                            <Flex width={'100%'} flexDirection={'column'}>
+                                <Box>
+                                    <Text fontSize={15} fontWeight={400} ml={3} mr={3} >
+                                        Risco
+                                    </Text>
+                                </Box>
+
+                                <Box mt={1}>
+                                    <Text fontSize={15} fontWeight={400} ml={3} mr={3} >
+
+                                        {RISK_TABLE_REVERSE[value.riskSuccess]}
+                                    </Text>
+                                </Box>
+
+
+                            </Flex>
+                            <Flex my={6} width={'100%'} flexDirection={'column'}>
+                                <Box>
+                                    <Text fontSize={15} fontWeight={400} ml={3} mr={3} >
+                                        Risco de Exito
+                                    </Text>
+                                </Box>
+
+                                <Box mt={1}>
+                                    <Text fontSize={15} fontWeight={400} ml={3} mr={3} >
+                                        {value.riskSuccess}%
+                                    </Text>
+                                </Box>
+
+
+                            </Flex>
+
+
+                        </Grid>
+                        {value.reflex && value.reflex.length !== 0 ?
+                            <>
+
+                                {VERBAS.includes(value.requestValue) ? null : <Text fontSize={18} fontWeight={600} ml={3} mr={3} >
+                                    Reflexos
+                                </Text>}
+
+
+                                <Flex w={"100%"}>
+
+                                    <Grid mt={0} templateColumns='repeat(5, 1fr)' gap={6}>
+
+                                        {value.principal !== null &&
+                                            <>
+
+                                                {VERBAS.includes(value.requestValue) ? null :
+
+                                                    <>
+                                                        <GridItem w='100%' bg={colors.cardBackground} borderRadius={5} ><Flex my={6} width={'100%'} flexDirection={'column'}></Flex>
+                                                            <Box>
+                                                                <Text fontSize={15} fontWeight={400} ml={3} mr={3} >
+                                                                    Valor principal
+                                                                </Text>
+                                                            </Box>
+
+                                                            <Box mt={1}>
+                                                                <Text fontSize={15} fontWeight={400} ml={3} mr={3} >
+                                                                    {toCurrencyScreen(value.principal)}
+                                                                </Text>
+                                                            </Box>
+                                                        </GridItem>
+                                                    </>
+                                                }
+
+                                            </>
+
+
+                                        }
+                                        {value.reflex && value.reflex.length !== 0 && value.reflex.map((e) => (
+                                            <GridItem key={e.label} w='100%' bg={colors.cardBackground} borderRadius={5} >
+                                                <Flex my={6} width={'100%'} flexDirection={'column'}>
+                                                    <Box>
+                                                        <Text fontSize={15} fontWeight={400} ml={3} mr={3} >
+                                                            {e.label}
+                                                        </Text>
+                                                    </Box>
+
+                                                    <Box mt={1}>
+                                                        <Text fontSize={15} fontWeight={400} ml={3} mr={3} >
+                                                            R$ {toCurrencyScreen(e.value)}
+                                                        </Text>
+                                                    </Box>
+
+
+                                                </Flex>
+                                            </GridItem>
+                                        ))}
+
+
+
+                                    </Grid>
+                                </Flex>
+                            </> : null
+                        }
+
+                    </Flex >
+                ))}
+            </Flex>
 
             {
                 !custonEdit && <Flex mt={6} justifyContent={"end"} onClick={() => { calcAndSave() }}>
