@@ -199,7 +199,7 @@ function Index({ requests = [], setOpenSelect, setDraftRequest, removeRequest, c
 
                                 <Grid mt={0} templateColumns='repeat(5, 1fr)' gap={6}>
 
-                                    {value.principal !== null && <GridItem key={e.label} w='100%' bg={colors.cardBackground} borderRadius={5} ><Flex my={6} width={'100%'} flexDirection={'column'}>
+                                    {value.principal !== null && <GridItem w='100%' bg={colors.cardBackground} borderRadius={5} ><Flex my={6} width={'100%'} flexDirection={'column'}>
                                         <Box>
                                             <Text fontSize={15} fontWeight={400} ml={3} mr={3} >
                                                 Valor principal
