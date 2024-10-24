@@ -410,10 +410,11 @@ function Index({ handleAddNewRequest, draftRequest, setOpenSelect, handleUpdateR
                         extra_hour_object: objectHoraExtra,
                         week_limit: values.week_limit,
                         reflex,
-                        principal
+                        principal,
+                        days_working_week: parseInt(values.days_working_week)
 
                     }
-
+                    console.log(requestUpdate, 'requestUpdate', values)
                     finishRequest(requestUpdate, valuePostulate, valueIndividual)
                     return
                 }
@@ -525,7 +526,7 @@ function Index({ handleAddNewRequest, draftRequest, setOpenSelect, handleUpdateR
             valuePostulate: valuePostulate,
             valueIndividual: valueIndividual,
         }
-        console.log(newRequest)
+        console.log(newRequest, '--------')
         if (draftRequest) return handleUpdateRequest(newRequest)
         return handleAddNewRequest(newRequest)
     }

@@ -465,132 +465,142 @@ const vacationCalcVerbas = (salary, diffDate, haveVacation) => {
 };
 
 const calcHoraExtra = (data, variation, risk, extraHour, limit, valuesForm) => {
+    try {
+        let hextraHour = 0
+        if (variation === "Sim") {
+            let totalHours = 0;
+            extraHour.map((valueItem) => {
 
-    let hextraHour = 0
-    if (variation === "Sim") {
-        let totalHours = 0;
-        extraHour.map((valueItem) => {
+                var fromDateRoutine = parseInt(
+                    new Date(`July 20, 69 ${valueItem.hora_inicio_jornada} GMT+00:00`) / 1000
+                );
+                var toDateRoutine = parseInt(
+                    new Date(`July 20, 69 ${valueItem.hora_fim_jornada} GMT+00:00`) / 1000
+                );
 
+                var timeDiffRoutine =
+                    (Math.abs(fromDateRoutine) - Math.abs(toDateRoutine)) / 3600
+
+
+                console.log(timeDiffRoutine)
+
+                var fromDateInterval = parseInt(
+                    new Date(`July 20, 69 ${valueItem.hora_inicio_intervalo} GMT+00:00`) / 1000
+                );
+                var toDateInterval = parseInt(
+                    new Date(`July 20, 69 ${valueItem.hora_fim_intervalo} GMT+00:00`) / 1000
+                );
+                var timeDiffInterval =
+                    (Math.abs(fromDateInterval) - Math.abs(toDateInterval)) / 3600
+
+                const diff = timeDiffRoutine - timeDiffInterval;
+                totalHours = totalHours + diff;
+            });
+
+            hextraHour = Math.round(totalHours - ParseLimit[limit]);
+
+        } else {
             var fromDateRoutine = parseInt(
-                new Date(`July 20, 69 ${valueItem.hora_inicio_jornada} GMT+00:00`) / 1000
+                new Date(`July 20, 69 ${valuesForm.hora_inicio_jornada} GMT+00:00`) / 1000
             );
-            var toDateRoutine = parseInt(
-                new Date(`July 20, 69 ${valueItem.hora_fim_jornada} GMT+00:00`) / 1000
-            );
+            var toDateRoutine = parseInt(new Date(`July 20, 69 ${valuesForm.hora_fim_jornada} GMT+00:00`) / 1000);
 
             var timeDiffRoutine =
                 (Math.abs(fromDateRoutine) - Math.abs(toDateRoutine)) / 3600
 
-
-            console.log(timeDiffRoutine)
+            console.log(timeDiffRoutine, "timeDiffRoutine")
 
             var fromDateInterval = parseInt(
-                new Date(`July 20, 69 ${valueItem.hora_inicio_intervalo} GMT+00:00`) / 1000
+                new Date(`July 20, 69 ${valuesForm.hora_inicio_intervalo} GMT+00:00`) / 1000
             );
             var toDateInterval = parseInt(
-                new Date(`July 20, 69 ${valueItem.hora_fim_intervalo} GMT+00:00`) / 1000
+                new Date(`July 20, 69 ${valuesForm.hora_fim_intervalo} GMT+00:00`) / 1000
             );
             var timeDiffInterval =
                 (Math.abs(fromDateInterval) - Math.abs(toDateInterval)) / 3600
 
-            const diff = timeDiffRoutine - timeDiffInterval;
-            totalHours = totalHours + diff;
-        });
+            console.log(timeDiffInterval, "timeDiffInterval")
+            const haursWorkedPeerDay = timeDiffRoutine - timeDiffInterval;
+            console.log(haursWorkedPeerDay, "haursWorkedPeerDay")
+            const haursInWeek = haursWorkedPeerDay * valuesForm.days_working_week;
+            console.log(valuesForm, 'valuesForm')
 
-        hextraHour = Math.round(totalHours - ParseLimit[limit]);
+            console.log(haursInWeek, "haursInWeek")
+            hextraHour = haursInWeek - ParseLimit[limit];
 
-    } else {
-        var fromDateRoutine = parseInt(
-            new Date(`July 20, 69 ${valuesForm.hora_inicio_jornada} GMT+00:00`) / 1000
+        }
+
+        if (hextraHour <= 0) return {
+            valueIndividual: 0,
+            valuePostulate: 0
+        }
+
+
+
+
+        console.log(hextraHour, "hextraHour")
+        const { time_worked_months, salary, end_date } = data
+
+        const salaryHour = Math.round(salary / ParseDivisor[limit]);
+
+        const extraHourValue = Math.round(salaryHour + salaryHour * 0.5);
+        console.log(extraHourValue, "extraHourValue")
+
+        const apuracaoDeHorasExtrasMes = Math.round(
+            extraHourValue * hextraHour * 4.286
         );
-        var toDateRoutine = parseInt(new Date(`July 20, 69 ${valuesForm.hora_fim_jornada} GMT+00:00`) / 1000);
 
-        var timeDiffRoutine =
-            (Math.abs(fromDateRoutine) - Math.abs(toDateRoutine)) / 3600
-
-        console.log(timeDiffRoutine, "timeDiffRoutine")
-
-        var fromDateInterval = parseInt(
-            new Date(`July 20, 69 ${valuesForm.hora_inicio_intervalo} GMT+00:00`) / 1000
+        const apuracaoDeHorasExtrasTotal = Math.round(
+            apuracaoDeHorasExtrasMes * time_worked_months
         );
-        var toDateInterval = parseInt(
-            new Date(`July 20, 69 ${valuesForm.hora_fim_intervalo} GMT+00:00`) / 1000
+
+        console.log(apuracaoDeHorasExtrasTotal, "apuracaoDeHorasExtrasTotal")
+
+        const fgts = Math.round(apuracaoDeHorasExtrasTotal * 0.08);
+        console.log(fgts, "fgts")
+        const extraSalary = Math.round((apuracaoDeHorasExtrasMes / 12) * time_worked_months);
+
+        const vocation = Math.round((apuracaoDeHorasExtrasMes / 12) * time_worked_months);
+        const vocationCalc = Math.round(vocation + vocation / 3);
+        console.log(vocationCalc, "vocationCalc")
+        const RSR = Math.round((apuracaoDeHorasExtrasMes / 6) * time_worked_months);
+        console.log(RSR, "RSR")
+
+        const valuePostulate = Math.round(
+            apuracaoDeHorasExtrasTotal + extraSalary + vocationCalc + RSR + fgts
         );
-        var timeDiffInterval =
-            (Math.abs(fromDateInterval) - Math.abs(toDateInterval)) / 3600
+        const principal = apuracaoDeHorasExtrasTotal
+        console.log(valuePostulate, "valuePostulate")
 
-        console.log(timeDiffInterval, "timeDiffInterval")
-        const haursWorkedPeerDay = timeDiffRoutine - timeDiffInterval;
-        console.log(haursWorkedPeerDay, "haursWorkedPeerDay")
-        const haursInWeek = haursWorkedPeerDay * valuesForm.days_working_week;
-        console.log(haursInWeek, "haursInWeek")
-        hextraHour = haursInWeek - ParseLimit[limit];
-
+        const valueIndividual = Math.round(valuePostulate * risk);
+        const reflex = [
+            {
+                label: "Depósitos do FGTS",
+                value: fgts,
+            },
+            {
+                label: "Décimo terceiro salário",
+                value: extraSalary,
+            },
+            {
+                label: "Férias",
+                value: vocationCalc,
+            },
+            {
+                label: "RSR",
+                value: RSR,
+            },
+        ];
+        return {
+            valueIndividual,
+            valuePostulate: valuePostulate,
+            reflex,
+            principal
+        }
+    } catch (e) {
+        console.log(e)
     }
 
-    if (hextraHour <= 0) return {
-        valueIndividual: 0,
-        valuePostulate: 0
-    }
-    console.log(hextraHour, "hextraHour")
-    const { time_worked_months, salary, end_date } = data
-
-    const salaryHour = Math.round(salary / ParseDivisor[limit]);
-
-    const extraHourValue = Math.round(salaryHour + salaryHour * 0.5);
-    console.log(extraHourValue, "extraHourValue")
-
-    const apuracaoDeHorasExtrasMes = Math.round(
-        extraHourValue * hextraHour * 4.286
-    );
-
-    const apuracaoDeHorasExtrasTotal = Math.round(
-        apuracaoDeHorasExtrasMes * time_worked_months
-    );
-
-    console.log(apuracaoDeHorasExtrasTotal, "apuracaoDeHorasExtrasTotal")
-
-    const fgts = Math.round(apuracaoDeHorasExtrasTotal * 0.08);
-    console.log(fgts, "fgts")
-    const extraSalary = Math.round((apuracaoDeHorasExtrasMes / 12) * time_worked_months);
-
-    const vocation = Math.round((apuracaoDeHorasExtrasMes / 12) * time_worked_months);
-    const vocationCalc = Math.round(vocation + vocation / 3);
-    console.log(vocationCalc, "vocationCalc")
-    const RSR = Math.round((apuracaoDeHorasExtrasMes / 6) * time_worked_months);
-    console.log(RSR, "RSR")
-
-    const valuePostulate = Math.round(
-        apuracaoDeHorasExtrasTotal + extraSalary + vocationCalc + RSR + fgts
-    );
-    const principal = apuracaoDeHorasExtrasTotal
-    console.log(valuePostulate, "valuePostulate")
-
-    const valueIndividual = Math.round(valuePostulate * risk);
-    const reflex = [
-        {
-            label: "Depósitos do FGTS",
-            value: fgts,
-        },
-        {
-            label: "Décimo terceiro salário",
-            value: extraSalary,
-        },
-        {
-            label: "Férias",
-            value: vocationCalc,
-        },
-        {
-            label: "RSR",
-            value: RSR,
-        },
-    ];
-    return {
-        valueIndividual,
-        valuePostulate: valuePostulate,
-        reflex,
-        principal
-    }
 
 }
 

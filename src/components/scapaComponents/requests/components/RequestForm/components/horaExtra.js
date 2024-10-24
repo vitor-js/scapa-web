@@ -91,7 +91,7 @@ function Index({ errors, register, data, draftRequest, setValue, watch, extraHou
     } = useForm({ resolver: yupResolver(schema) })
 
     useEffect(() => {
-        console.log(draftRequest)
+        console.log(draftRequest, '----------draft------------')
         if (!draftRequest || !data) return
         if (["Horas Extras",].includes(draftRequest.requestValue)) {
             setValue("extra_hour_variation", draftRequest.extra_hour_variation ? "Sim" : "Não")
@@ -100,7 +100,7 @@ function Index({ errors, register, data, draftRequest, setValue, watch, extraHou
             if (draftRequest.extra_hour_variation !== true) {
                 const dates = draftRequest.extra_hour_object?.data[0]
 
-                setValue("days_working_week", dates.week_limit)
+                setValue("days_working_week", dates.days_working_week)
                 setValue("hora_inicio_jornada", dates.hora_inicio_jornada)
                 setValue("hora_fim_jornada", dates.hora_fim_jornada)
                 setValue("hora_inicio_intervalo", dates.hora_inicio_intervalo)

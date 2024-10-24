@@ -22,7 +22,7 @@ const RISK_TABLE_REVERSE = {
     90: "Muito Alto",
     100: "Total",
 };
-
+const VERBAS = ["Verbas Rescisórias"]
 function Index({ requests = [], setOpenSelect, setDraftRequest, removeRequest, calcAndSave, custonEdit = false, custonEditFunction, createRequest }) {
     const colors = useColors()
 
@@ -189,32 +189,43 @@ function Index({ requests = [], setOpenSelect, setDraftRequest, removeRequest, c
 
 
                     </Grid>
-                    {value.reflex && value.reflex.length !== 0 &&
+                    {value.reflex && value.reflex.length !== 0 ?
                         <>
-                            <Text fontSize={18} fontWeight={600} ml={3} mr={3} >
+
+                            {VERBAS.includes(value.requestValue) ? null : <Text fontSize={18} fontWeight={600} ml={3} mr={3} >
                                 Reflexos
-                            </Text>
+                            </Text>}
+
 
                             <Flex w={"100%"}>
 
                                 <Grid mt={0} templateColumns='repeat(5, 1fr)' gap={6}>
 
-                                    {value.principal !== null && <GridItem w='100%' bg={colors.cardBackground} borderRadius={5} ><Flex my={6} width={'100%'} flexDirection={'column'}>
-                                        <Box>
-                                            <Text fontSize={15} fontWeight={400} ml={3} mr={3} >
-                                                Valor principal
-                                            </Text>
-                                        </Box>
+                                    {value.principal !== null &&
+                                        <>
 
-                                        <Box mt={1}>
-                                            <Text fontSize={15} fontWeight={400} ml={3} mr={3} >
-                                                {toCurrencyScreen(value.principal)}
-                                            </Text>
-                                        </Box>
+                                            {VERBAS.includes(value.requestValue) ? null :
+
+                                                <>
+                                                    <GridItem w='100%' bg={colors.cardBackground} borderRadius={5} ><Flex my={6} width={'100%'} flexDirection={'column'}></Flex>
+                                                        <Box>
+                                                            <Text fontSize={15} fontWeight={400} ml={3} mr={3} >
+                                                                Valor principal
+                                                            </Text>
+                                                        </Box>
+
+                                                        <Box mt={1}>
+                                                            <Text fontSize={15} fontWeight={400} ml={3} mr={3} >
+                                                                {toCurrencyScreen(value.principal)}
+                                                            </Text>
+                                                        </Box>
+                                                    </GridItem>
+                                                </>
+                                            }
+
+                                        </>
 
 
-                                    </Flex>
-                                    </GridItem>
                                     }
                                     {value.reflex && value.reflex.length !== 0 && value.reflex.map((e) => (
                                         <GridItem key={e.label} w='100%' bg={colors.cardBackground} borderRadius={5} >
@@ -240,22 +251,24 @@ function Index({ requests = [], setOpenSelect, setDraftRequest, removeRequest, c
 
                                 </Grid>
                             </Flex>
-                        </>
+                        </> : null
                     }
 
-                </Flex>
+                </Flex >
             ))}
 
 
-            {!custonEdit && <Flex mt={6} justifyContent={"end"} onClick={() => { calcAndSave() }}>
-                <Button color="#fff">
-                    Avançar
-                </Button>
-            </Flex>}
+            {
+                !custonEdit && <Flex mt={6} justifyContent={"end"} onClick={() => { calcAndSave() }}>
+                    <Button color="#fff">
+                        Avançar
+                    </Button>
+                </Flex>
+            }
 
             <Flex marginBottom={450} />
 
-        </Flex>
+        </Flex >
 
     );
 }
