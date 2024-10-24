@@ -40,6 +40,11 @@ function Index() {
         push(v)
     }
 
+    const trasnsformarData = (date) => {
+        const d = new Date(date);
+        let text = d.toLocaleString();
+        return text.substring(10, 0)
+    }
 
     return (
         <LayoutDashboardHome>
@@ -91,11 +96,11 @@ function Index() {
 
                                         <Box>
                                             <Text fontSize='md' fontWeight={'600'}>
-                                                Data de criacao
+                                                Data de criação
                                             </Text>
                                             {console.log(value)}
                                             <Text fontSize='md'>
-                                                {converteNaiveDate(value.createdAt)}
+                                                {trasnsformarData(value.createdAt)}
                                             </Text>
 
                                         </Box>
