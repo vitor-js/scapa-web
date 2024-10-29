@@ -191,6 +191,12 @@ function Index({ requests = [], setRequests, data }) {
                     <Text ml={3} mr={3} >Clique para voltar</Text>
                 </Flex>
 
+                <Flex alignItems={'center'} mb={8}  >
+
+                    <Text color={colors.text} fontSize='2xl' fontWeight={600}  >
+                        Proposta {type}
+                    </Text>
+                </Flex>
 
                 <Flex w={'100%'} >
 

@@ -191,7 +191,7 @@ const calcVerbasRescisorias = (data, reason, risk, have_vacation) => {
     const end_date_convert = new Date(end_date);
 
     const days = end_date_convert.getDay() + 1;
-
+    console.log(days, 'days')
 
     if (reason === "Dispensa imotivada ou rescisão indireta") {
         return calcDispensaImotivadaOuRescisãoIndireta(days, time, salary, risk, have_vacation, end_date_convert);

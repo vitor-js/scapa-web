@@ -125,8 +125,8 @@ function Index() {
             type: params.requestValue,
             risk: RISK_TABLE[params.risk] * 100,
             risk_success: RISK_TABLE[params.risk] * 100,
-            postulated_individual: parseFloat(currencyToBackend(params.valueIndividual)),
-            postulated_individual_value: parseFloat(currencyToBackend(params.valuePostulate)),
+            postulated_individual_value: parseFloat(currencyToBackend(params.valueIndividual)),
+            postulated_individual: parseFloat(currencyToBackend(params.valuePostulate)),
             proposal_id: id,
             ...params
         }
@@ -146,13 +146,13 @@ function Index() {
     }
 
     const handleUpdateRequest = async (params) => {
-        console.log(params)
+        console.log(params, '---------------')
         const newObject = {
             type: params.requestValue,
             risk: RISK_TABLE[params.risk] * 100,
             risk_success: RISK_TABLE[params.risk] * 100,
-            postulated_individual: parseFloat(currencyToBackend(params.valueIndividual)),
-            postulated_individual_value: parseFloat(currencyToBackend(params.valuePostulate)),
+            postulated_individual_value: parseFloat(currencyToBackend(params.valueIndividual)),
+            postulated_individual: parseFloat(currencyToBackend(params.valuePostulate)),
             ...params
         }
 
@@ -165,7 +165,7 @@ function Index() {
             queryClient.invalidateQueries('proposal');
             setOpenSelect(false)
             setDraftRequest(undefined)
-            toast.success("Pedido adicionado com sucesso")
+            toast.success("Pedido atualizado com sucesso")
         } catch (e) {
             console.log(e, 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaasssssssssssssssssssssssssssssspppppppp')
             toast.error("Algo deu errado, tente novamente!")

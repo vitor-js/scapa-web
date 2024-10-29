@@ -128,7 +128,9 @@ function Index({ requests = [], setOpenSelect, setDraftRequest, removeRequest, c
 
 
                         </Flex>
-                        {console.log(value, 'value.principal')}
+
+
+
 
 
 
@@ -158,7 +160,7 @@ function Index({ requests = [], setOpenSelect, setDraftRequest, removeRequest, c
                             <Flex width={'100%'} flexDirection={'column'}>
                                 <Box>
                                     <Text fontSize={15} fontWeight={400} ml={3} mr={3} >
-                                        Risco
+                                        Risco de Exito
                                     </Text>
                                 </Box>
 
@@ -171,7 +173,7 @@ function Index({ requests = [], setOpenSelect, setDraftRequest, removeRequest, c
 
 
                             </Flex>
-                            <Flex my={6} width={'100%'} flexDirection={'column'}>
+                            {/* <Flex my={6} width={'100%'} flexDirection={'column'}>
                                 <Box>
                                     <Text fontSize={15} fontWeight={400} ml={3} mr={3} >
                                         Risco de Exito
@@ -185,10 +187,41 @@ function Index({ requests = [], setOpenSelect, setDraftRequest, removeRequest, c
                                 </Box>
 
 
-                            </Flex>
+                            </Flex> */}
+
+
+
 
 
                         </Grid>
+
+
+                        {value.principal !== null &&
+                            <>
+
+                                {VERBAS.includes(value.requestValue) ? null :
+
+                                    <>
+                                        <Flex my={6} width={'100%'} flexDirection={'column'}>
+                                            <Box>
+                                                <Text fontSize={15} fontWeight={400} ml={3} mr={3} >
+                                                    Valor principal
+                                                </Text>
+                                            </Box>
+
+                                            <Box mt={1}>
+                                                <Text fontSize={15} fontWeight={400} ml={3} mr={3} >
+                                                    {toCurrencyScreen(value.principal)}
+                                                </Text>
+                                            </Box>
+                                        </Flex>
+                                    </>
+                                }
+
+                            </>
+
+
+                        }
                         {value.reflex && value.reflex.length !== 0 ?
                             <>
 
@@ -201,32 +234,7 @@ function Index({ requests = [], setOpenSelect, setDraftRequest, removeRequest, c
 
                                     <Grid mt={0} templateColumns='repeat(5, 1fr)' gap={6}>
 
-                                        {value.principal !== null &&
-                                            <>
 
-                                                {VERBAS.includes(value.requestValue) ? null :
-
-                                                    <>
-                                                        <GridItem w='100%' bg={colors.cardBackground} borderRadius={5} ><Flex my={6} width={'100%'} flexDirection={'column'}></Flex>
-                                                            <Box>
-                                                                <Text fontSize={15} fontWeight={400} ml={3} mr={3} >
-                                                                    Valor principal
-                                                                </Text>
-                                                            </Box>
-
-                                                            <Box mt={1}>
-                                                                <Text fontSize={15} fontWeight={400} ml={3} mr={3} >
-                                                                    {toCurrencyScreen(value.principal)}
-                                                                </Text>
-                                                            </Box>
-                                                        </GridItem>
-                                                    </>
-                                                }
-
-                                            </>
-
-
-                                        }
                                         {value.reflex && value.reflex.length !== 0 && value.reflex.map((e) => (
                                             <GridItem key={e.label} w='100%' bg={colors.cardBackground} borderRadius={5} >
                                                 <Flex my={6} width={'100%'} flexDirection={'column'}>

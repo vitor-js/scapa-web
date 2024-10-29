@@ -82,11 +82,11 @@ function Index() {
         try {
             if (target === "" || checkedItems.length === 0 || value === "") return setError(true)
             if (requestData?.data?.Checklist) {
-                api.put(`checklist/${requestData?.data?.Checklist?.id}`, { type_client: checkedItems[0], target: target, value: currencyToBackend(value) })
+                api.put(`checklist/${requestData?.data?.Checklist?.id}`, { type_client: checkedItems[0], target: target, value: parseFloat(currencyToBackend(value)) })
 
                 toast.success("Atualização feita com sucesso")
             } else {
-                api.post(`checklist`, { process_id: id, type_client: checkedItems[0], target: target, value: currencyToBackend(value) })
+                api.post(`checklist`, { process_id: id, type_client: checkedItems[0], target: target, value: parseFloat(currencyToBackend(value)) })
                 toast.success("Checklist cadastrado com sucesso")
             }
             queryClient.invalidateQueries('procces');
@@ -285,7 +285,7 @@ function Index() {
                                 }
 
                                 <Flex mt={3} alignItems={'center'} justifyContent={'flex-end'}>
-                                    <Button color="#fff" onClick={() => handleSubmit()} >Slavar</Button>
+                                    <Button color="#fff" onClick={() => handleSubmit()} >Salvar</Button>
                                 </Flex>
                             </Box>
 
