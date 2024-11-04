@@ -184,13 +184,21 @@ const insalubridade = (data, grau, risk, salary) => {
 }
 
 
+function addHours(date, hours) {
+    const hoursToAdd = hours * 60 * 60 * 1000;
+    date.setTime(date.getTime() + hoursToAdd);
+    return date;
+}
 
 const calcVerbasRescisorias = (data, reason, risk, have_vacation) => {
     const { time_worked_months, salary, end_date } = data
     const time = parseInt(time_worked_months)
-    const end_date_convert = new Date(end_date);
+    const end_date_convert_without_our = new Date(end_date);
+    const end_date_convert = addHours(end_date_convert_without_our, 3)
 
-    const days = end_date_convert.getDay() + 1;
+
+    const days = end_date_convert.getDate();
+
     console.log(days, 'days')
 
     if (reason === "Dispensa imotivada ou rescisão indireta") {
