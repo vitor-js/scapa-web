@@ -389,7 +389,7 @@ function Index({ handleAddNewRequest, draftRequest, setOpenSelect, handleUpdateR
                         reflex
                     }
 
-                    // finishRequest(requestUpdate, valuePostulate, valueIndividual)
+                    finishRequest(requestUpdate, valuePostulate, valueIndividual)
                     return
                 }
                 if (HORA_EXTRA.includes(valueRequest)) {
