@@ -61,7 +61,7 @@ const Index = ({ onOpen }) => {
                                 shouldMatchExactHref
                             >
                                 <span onClick={onOpen}>
-                                    Informações Básicas
+                                    Dados do processo
                                 </span>
 
                             </NavLink>

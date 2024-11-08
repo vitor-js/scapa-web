@@ -162,7 +162,7 @@ function Index() {
                 <>
                     <WrapperBody>
                         <Flex as='form' mt={5} width="100%" bg={colors.cardBackground} padding={4} borderRadius={5} flexDirection={'column'}>
-                            <Text fontWeight="bold" fontSize="2xl" color={colors.text}>Informações Básicas do Processo</Text>
+                            <Text fontWeight="bold" fontSize="2xl" color={colors.text}>Dados do Processo</Text>
                             <Grid mt={5} gridTemplateColumns={['1fr', '1fr 1fr',]} gap={4}>
                                 <Input
                                     name='title'

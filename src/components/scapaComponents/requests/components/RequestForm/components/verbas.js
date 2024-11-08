@@ -50,22 +50,7 @@ function Index({ errors, register, data, draftRequest, setValue }) {
             </Box>
 
 
-            <Box w={'100%'} mt={5}>
-                <Select label='Existem férias vencidas ?' options={[
-                    {
-                        label: "Sim",
-                        value: "Sim"
-                    },
-                    {
-                        label: "Não",
-                        value: "Não"
-                    }
-                ]}
-                    {...register('have_vacation')}
-                    error={errors?.have_vacation?.message}
-                    name='have_vacation'
-                />
-            </Box>
+
         </>
     );
 }

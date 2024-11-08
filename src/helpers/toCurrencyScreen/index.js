@@ -5,5 +5,5 @@ export default function toBRL(v1) {
     }
     const result = v1.toLocaleString('pt-br', { minimumFractionDigits: 2 });
 
-    return result;
+    return `R$ ${result}`;
 }

@@ -433,38 +433,30 @@ const calcDispensaMotivada = (days, time, salary, risk, have_vacation) => {
 const vacationCalcVerbas = (salary, diffDate, haveVacation) => {
 
     try {
-        if (haveVacation === "Sim") {
-
-            return Math.round(salary + salary / 3);
+        if (diffDate <= 12) {
+            const baseCalc = Math.round((salary / 12) * diffDate);
+            const finalcalc = Math.round(baseCalc + baseCalc / 3);
+            return finalcalc;
         }
 
-        if (haveVacation === "Não") {
-            console.log(diffDate, "diffDatediffDatediffDate")
-            console.log("nao")
-            if (diffDate <= 12) {
+        if (diffDate > 12) {
+            const years = diffDate / 12;
+
+            if (Number.isInteger(years)) {
                 const baseCalc = Math.round((salary / 12) * diffDate);
                 const finalcalc = Math.round(baseCalc + baseCalc / 3);
                 return finalcalc;
+            } else {
+                const getDecimals = years - Math.floor(years);
+
+                const mounths = 12 * getDecimals;
+
+                const baseCalc = Math.round((salary / 12) * mounths);
+                const finalcalc = Math.round(baseCalc + baseCalc / 3);
+
+                return finalcalc;
             }
 
-            if (diffDate > 12) {
-                const years = diffDate / 12;
-
-                if (Number.isInteger(years)) {
-                    const baseCalc = Math.round((salary / 12) * diffDate);
-                    const finalcalc = Math.round(baseCalc + baseCalc / 3);
-                    return finalcalc;
-                } else {
-                    const getDecimals = years - Math.floor(years);
-
-                    const mounths = 12 * getDecimals;
-
-                    const baseCalc = Math.round((salary / 12) * mounths);
-                    const finalcalc = Math.round(baseCalc + baseCalc / 3);
-
-                    return finalcalc;
-                }
-            }
         }
     } catch (e) {
         console.log(e)
@@ -662,7 +654,7 @@ const calcIntervalo = (data, variation, risk, interval, values) => {
     console.log(divisor, "divisor")
 
     const intervalValueCalc = Math.round(salary / divisor);
-    console.log(intervalValueCalc, "intervalValueCalc")
+
     const intervalValue = intervalValueCalc + intervalValueCalc * 0.5;
     console.log(intervalValue, "intervalValue")
 
@@ -676,7 +668,8 @@ const calcIntervalo = (data, variation, risk, interval, values) => {
 
     return {
         valueIndividual,
-        valuePostulate: valuePostulate
+        valuePostulate: valuePostulate,
+        principal: valuePostulate
     }
 
 }
@@ -765,7 +758,7 @@ const feriasIntegrais = (data, risk) => {
 
 }
 
-const feriasProporcionais = (data, riks) => {
+const feriasProporcionais = (data, risk) => {
     const { time_worked_months, salary, end_date } = data
     let vacation = 0;
     if (time_worked_months <= 12) {

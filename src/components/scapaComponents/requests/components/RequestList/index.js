@@ -196,7 +196,7 @@ function Index({ requests = [], setOpenSelect, setDraftRequest, removeRequest, c
                         </Grid>
 
 
-                        {value.principal !== null &&
+                        {value.principal &&
                             <>
 
                                 {VERBAS.includes(value.requestValue) ? null :
@@ -211,6 +211,7 @@ function Index({ requests = [], setOpenSelect, setDraftRequest, removeRequest, c
 
                                             <Box mt={1}>
                                                 <Text fontSize={15} fontWeight={400} ml={3} mr={3} >
+                                                    {console.log(value.principal, '-------===-----------')}
                                                     {toCurrencyScreen(value.principal)}
                                                 </Text>
                                             </Box>

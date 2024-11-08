@@ -14,135 +14,41 @@ import calc from '../../../../../helpers/calcs'
 import { toast } from 'react-hot-toast';
 
 const ACTIONS = [
-    {
-        label: "Horas Extras - (com cálculo)",
-        value: "Horas Extras"
-    }
-    ,
-    {
-        label: "Intervalo Intrajornada - (com cálculo)",
-        value: "Intervalo Intrajornada"
-    },
-    {
-        label: "Verbas Rescisórias - (com cálculo)",
-        value: "Verbas Rescisórias"
-    },
-
-    {
-        label: "Pausas não realizadas - (com cálculo)",
-        value: "Pausas não realizadas"
-    },
-    {
-        label: "Repouso Semanal Remunerado",
-        value: "Repouso Semanal Remunerado"
-    },
-    {
-        label: "Adicional Noturno",
-        value: "Adicional Noturno"
-    },
-    {
-        label: "Adicional de Insalubridade - (com cálculo)",
-        value: "Adicional de Insalubridade"
-    },
-    {
-        label: "Adicional de Periculosidade - (com cálculo)",
-        value: "Adicional de Periculosidade"
-    },
-
-
-    {
-        label: "Diferenças salariais por equiparação salarial - (com cálculo)",
-        value: "Diferenças salariais por equiparação salarial"
-    }, {
-        label: "Diferenças salariais por acúmulo de função - (com cálculo)",
-        value: "Diferenças salariais por acúmulo de função"
-    },
-    {
-        label: "Diferenças salariais convencionais - (com cálculo)",
-        value: "Diferenças salariais convencionais"
-    },
-    {
-        label: "Diferenças reflexas de vantagens salariais - (com cálculo)",
-        value: "Diferenças reflexas de vantagens salariais"
-    },
-    {
-        label: "Diferenças salariais (genérico) - (com cálculo)",
-        value: "Diferenças salariais (genérico)"
-    },
-
-    {
-        label: "Indenização por danos materiais",
-        value: "Indenização por danos materiais"
-    },
-    {
-        label: "Indenização por danos morais",
-        value: "Indenização por danos morais"
-    },
-    {
-        label: "Indenização estabilitária",
-        value: "Indenização estabilitária"
-    },
-    {
-        label: "Décimo terceiro integral - (com cálculo)",
-        value: "Décimo terceiro integral"
-    },
-    {
-        label: "Décimo terceiro proporcional - (com cálculo)",
-        value: "Décimo terceiro proporcional"
-    },
-    {
-        label: "Férias integrais - (com cálculo)",
-        value: "Férias integrais"
-    },
-    {
-        label: "Férias proporcionais - (com cálculo)",
-        value: "Férias proporcionais"
-    },
-    {
-        label: "Depósitos do FGTS - (com cálculo)",
-        value: "Depósitos do FGTS"
-    },
-    {
-        label: "Aviso prévio indenizado",
-        value: "Aviso prévio indenizado"
-    },
-    {
-        label: "Multa de 40% dos depósitos do FGTS",
-        value: "Multa de 40% dos depósitos do FGTS"
-    },
-    {
-        label: "Multa do art. 477 da CLT",
-        value: "Multa do art. 477 da CLT"
-    },
-    {
-        label: "Multa do art. 467 da CLT",
-        value: "Multa do art. 467 da CLT"
-    },
-    {
-        label: "Multa convencional",
-        value: "Multa convencional"
-    },
-    {
-        label: "Auxílio Alimentação",
-        value: "Auxílio Alimentação"
-    },
-    {
-        label: "Vale transporte",
-        value: "Vale transporte"
-    },
-    {
-        label: "Valores totais devidos por reconhecimento do vínculo de emprego",
-        value: "Valores totais devidos por reconhecimento do vínculo de emprego"
-    },
-    {
-        label: "Valores totais decorrentes de reintegração",
-        value: "Valores totais decorrentes de reintegração"
-    },
-    {
-        label: "Outros",
-        value: "Outros"
-    }
+    { label: "Adicional de Insalubridade - (com cálculo)", value: "Adicional de Insalubridade" },
+    { label: "Adicional de Periculosidade - (com cálculo)", value: "Adicional de Periculosidade" },
+    { label: "Adicional Noturno", value: "Adicional Noturno" },
+    { label: "Auxílio Alimentação", value: "Auxílio Alimentação" },
+    { label: "Aviso prévio indenizado", value: "Aviso prévio indenizado" },
+    { label: "Décimo terceiro integral - (com cálculo)", value: "Décimo terceiro integral" },
+    { label: "Décimo terceiro proporcional - (com cálculo)", value: "Décimo terceiro proporcional" },
+    { label: "Depósitos do FGTS - (com cálculo)", value: "Depósitos do FGTS" },
+    { label: "Diferenças reflexas de vantagens salariais - (com cálculo)", value: "Diferenças reflexas de vantagens salariais" },
+    { label: "Diferenças salariais (genérico) - (com cálculo)", value: "Diferenças salariais (genérico)" },
+    { label: "Diferenças salariais convencionais - (com cálculo)", value: "Diferenças salariais convencionais" },
+    { label: "Diferenças salariais por acúmulo de função - (com cálculo)", value: "Diferenças salariais por acúmulo de função" },
+    { label: "Diferenças salariais por equiparação salarial - (com cálculo)", value: "Diferenças salariais por equiparação salarial" },
+    { label: "Férias integrais - (com cálculo)", value: "Férias integrais" },
+    { label: "Férias proporcionais - (com cálculo)", value: "Férias proporcionais" },
+    { label: "Horas Extras - (com cálculo)", value: "Horas Extras" },
+    { label: "Indenização estabilitária", value: "Indenização estabilitária" },
+    { label: "Indenização por danos materiais", value: "Indenização por danos materiais" },
+    { label: "Indenização por danos morais", value: "Indenização por danos morais" },
+    { label: "Intervalo Intrajornada - (com cálculo)", value: "Intervalo Intrajornada" },
+    { label: "Multa convencional", value: "Multa convencional" },
+    { label: "Multa de 40% dos depósitos do FGTS", value: "Multa de 40% dos depósitos do FGTS" },
+    { label: "Multa do art. 467 da CLT", value: "Multa do art. 467 da CLT" },
+    { label: "Multa do art. 477 da CLT", value: "Multa do art. 477 da CLT" },
+    { label: "Outros", value: "Outros" },
+    { label: "Pausas não realizadas - (com cálculo)", value: "Pausas não realizadas" },
+    { label: "Repouso Semanal Remunerado", value: "Repouso Semanal Remunerado" },
+    { label: "Vale transporte", value: "Vale transporte" },
+    { label: "Valores totais decorrentes de reintegração", value: "Valores totais decorrentes de reintegração" },
+    { label: "Valores totais devidos por reconhecimento do vínculo de emprego", value: "Valores totais devidos por reconhecimento do vínculo de emprego" },
+    { label: "Verbas Rescisórias - (com cálculo)", value: "Verbas Rescisórias" }
 ];
+
+
+
 
 const RISK_TABLE = {
     Inexistente: 0.0,
@@ -299,6 +205,20 @@ function Index({ handleAddNewRequest, draftRequest, setOpenSelect, handleUpdateR
             }
             return yup.string().nullable().optional();
         }),
+        termination_type: yup.lazy((value) => {
+            if (value !== undefined && value !== " ") {
+                return yup.string().required('Este campo é origatório');
+            }
+            return yup.string().nullable().optional();
+        }),
+        days_working_week: yup.lazy((value) => {
+            if (value !== undefined && value !== " ") {
+                return yup.string().required('Este campo é origatório');
+            }
+            return yup.string().nullable().optional();
+        }),
+
+
     })
 
     const {
@@ -381,10 +301,9 @@ function Index({ handleAddNewRequest, draftRequest, setOpenSelect, handleUpdateR
                 }
 
                 if (VERBAS.includes(valueRequest)) {
-                    const { valueIndividual, valuePostulate, reflex } = calc.calcVerbasRescisorias(data.data, values.termination_type, RISK_TABLE[risk], values.have_vacation)
+                    const { valueIndividual, valuePostulate, reflex } = calc.calcVerbasRescisorias(data.data, values.termination_type, RISK_TABLE[risk], false)
                     const requestUpdate = {
                         ...newRequest,
-                        have_vacation: values.have_vacation === "Sim" ? true : false,
                         termination_type: values.termination_type,
                         reflex
                     }
@@ -431,13 +350,14 @@ function Index({ handleAddNewRequest, draftRequest, setOpenSelect, handleUpdateR
                         }]
                     } : { data: interval }
 
-                    const { valueIndividual, valuePostulate } = calc.calcIntervalo(data.data, values.interval_variation, RISK_TABLE[risk], interval, values)
+                    const { valueIndividual, valuePostulate, principal } = calc.calcIntervalo(data.data, values.interval_variation, RISK_TABLE[risk], interval, values)
                     const requestUpdate = {
                         ...newRequest,
                         interval_variation: values.interval_variation === "Sim" ? true : false,
                         interval_object: interval_object,
                         week_limit: values.week_limit,
-                        days_whiout_interval: values.days_whiout_interval
+                        days_whiout_interval: values.days_whiout_interval,
+                        principal
 
 
                     }
