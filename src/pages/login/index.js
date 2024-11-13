@@ -61,11 +61,11 @@ function Index() {
                 <Flex width={'100%'} marginY={4} >
                     <Input
                         {...register('email')}
-                        error={errors.email} label='Email' />
+                        error={errors?.email?.message} label='Email' />
                 </Flex>
 
                 <Flex width={'100%'} marginY={4} >
-                    <Input     {...register('password')} error={errors.password} label='Password' type='password' />
+                    <Input     {...register('password')} error={errors?.password?.message} label='Password' type='password' />
                 </Flex>
                 <Flex width={'100%'}>
                     <Button color="#fff" type="submit" width={'100%'} >Entrar {loading && (

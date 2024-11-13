@@ -59,6 +59,14 @@ function Index({ requests = [], setOpenSelect, setDraftRequest, removeRequest, c
                 </Text>
             </Flex>
 
+            {
+                !custonEdit && <Flex mt={6} justifyContent={"end"} onClick={() => { calcAndSave() }}>
+                    <Button opacity={requests.length === 0 ? 0.5 : 1} color="#fff">
+                        Avançar para próxima etapa
+                    </Button>
+                </Flex>
+            }
+
 
             <Flex my={6} width={'100%'} flexDirection={'column-reverse'}>
                 {requests.length !== 0 && requests.map((value, index) => (
@@ -267,13 +275,13 @@ function Index({ requests = [], setOpenSelect, setDraftRequest, removeRequest, c
                 ))}
             </Flex>
 
-            {
+            {/* {
                 !custonEdit && <Flex mt={6} justifyContent={"end"} onClick={() => { calcAndSave() }}>
                     <Button color="#fff">
                         Avançar
                     </Button>
                 </Flex>
-            }
+            } */}
 
             <Flex marginBottom={450} />
 
