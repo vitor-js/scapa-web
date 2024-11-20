@@ -28,11 +28,19 @@ function Index({ requests = [], setRequests, data }) {
         if (!data) return router.push(`/dashboard/processo/propostas/${id}`)
     }, [data])
 
+    function numeroAleatorio() {
+        return Math.floor(Math.random() * 1000000) + 1;
+    }
+
     const handleAddNewRequest = (values) => {
+        const valueWithId = {
+            ...values,
+            id: numeroAleatorio()
+        }
         try {
             setRequests((oldValue) => {
-                const draft = oldValue
-                draft.push(values)
+                const draft = [...oldValue]
+                draft.push(valueWithId)
                 return [...draft]
             })
             setOpenSelect(false)
@@ -62,10 +70,13 @@ function Index({ requests = [], setRequests, data }) {
     const handleUpdateRequest = (params) => {
         try {
             setRequests((oldValue) => {
-                const indexOldValue = oldValue.findIndex(v => v.requestValue === params.requestValue)
+
+                const indexOldValue = params.requestValue ===
+                    "Verbas Rescisórias" ? oldValue.findIndex(v => v.termination_type === params.termination_type && v.requestValue === params.requestValue) : oldValue.findIndex(v => v.requestValue === params.requestValue)
                 const draft = oldValue
                 draft[indexOldValue] = params
                 return [...draft]
+
             })
             setDraftRequest(undefined)
             setOpenSelect(false)

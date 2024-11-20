@@ -76,7 +76,8 @@ function Index({ requests = [], setOpenSelect, setDraftRequest, removeRequest, c
 
                         <Flex my={6} width={'100%'} flexDirection={'row'} alignItems={"center"} justifyContent={'space-between'}>
                             <Text fontSize={18} fontWeight={600} ml={3} mr={3} >
-                                {value.requestValue}
+                                {value.requestValue} - {value.requestValue ===
+                                    "Verbas Rescisórias" && value.termination_type && value.termination_type}
                             </Text>
                             <Box cursor={"pointer"} >
                                 <ButtonGroup gap="2">

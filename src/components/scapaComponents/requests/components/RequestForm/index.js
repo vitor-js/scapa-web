@@ -231,12 +231,15 @@ function Index({ handleAddNewRequest, draftRequest, setOpenSelect, handleUpdateR
     } = useForm({
         resolver: yupResolver(schema),
     })
-
+    function numeroAleatorio() {
+        return Math.floor(Math.random() * 1000000) + 1;
+    }
     const submit = async (values) => {
         console.log(values)
         const pedido = getValues("pedido")
         const custonPeido = getValues("custon_request")
         const newRequest = {
+
             requestValue: pedido === "Outros" ? custonPeido : pedido,
             // valuePostulate: valor_individual_postulado,
             risk: risk,
@@ -446,9 +449,9 @@ function Index({ handleAddNewRequest, draftRequest, setOpenSelect, handleUpdateR
             valuePostulate: valuePostulate,
             valueIndividual: valueIndividual,
         }
-        console.log(newRequest, '--------')
+
         if (draftRequest) return handleUpdateRequest(newRequest)
-        return handleAddNewRequest(newRequest)
+        return handleAddNewRequest({ identificador: numeroAleatorio(), ...newRequest })
     }
 
     useEffect(() => {
