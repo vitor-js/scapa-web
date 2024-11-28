@@ -7,11 +7,15 @@ import { ScapaRequest } from '../../../../../../components'
 
 const RISK_TABLE = {
     0: "Inexistente",
+    16.5: "Muito Baixo",
     10: "Muito Baixo",
     25: "Baixo",
+    33: "Baixo",
     50: "Médio",
     75: "Alto",
+    66.5: "Alto",
     90: "Muito Alto",
+    83: "Muito Alto",
     100: "Total",
 };
 import { useRouter } from 'next/router'

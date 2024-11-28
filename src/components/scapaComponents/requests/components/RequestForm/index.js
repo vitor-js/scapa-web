@@ -52,52 +52,56 @@ const ACTIONS = [
 
 const RISK_TABLE = {
     Inexistente: 0.0,
-    "Muito Baixo": 0.1,
-    Baixo: 0.25,
+    "Muito Baixo": 0.165,
+    Baixo: 0.33,
     Médio: 0.5,
-    Alto: 0.75,
-    "Muito Alto": 0.9,
+    Alto: 0.665,
+    "Muito Alto": 0.83,
     Total: 1.0,
 };
 
 const RISK_TABLE_REVERSE = {
     0: "Inexistente",
+    16.5: "Muito Baixo",
     10: "Muito Baixo",
     25: "Baixo",
+    33: "Baixo",
     50: "Médio",
     75: "Alto",
+    66.5: "Alto",
     90: "Muito Alto",
+    83: "Muito Alto",
     100: "Total",
 };
 
 const OPTIONS_RIK = [
 
     {
-        label: "Inexistente",
+        label: "Inexistente (0%)",
         value: 'Inexistente'
     },
     {
-        label: "Muito Baixo",
+        label: "Muito Baixo (16,5%)",
         value: "Muito Baixo"
     },
     {
-        label: "Baixo",
+        label: "Baixo (33%)",
         value: 'Baixo'
     },
     {
-        label: "Médio",
+        label: "Médio (50%)",
         value: 'Médio'
     },
     {
-        label: "Alto",
+        label: "Alto (66,5%)",
         value: 'Alto'
     },
     {
-        label: "Muito Alto",
+        label: "Muito Alto (83%)",
         value: 'Muito Alto'
     },
     {
-        label: "Total",
+        label: "Total (100%)",
         value: 'Total'
     }
 ]
@@ -568,7 +572,8 @@ function Index({ handleAddNewRequest, draftRequest, setOpenSelect, handleUpdateR
 
                     name='risco'
                     error={errors?.risco?.message}
-                    label='Risco' options={OPTIONS_RIK} />
+                    label='
+Chance de êxito' options={OPTIONS_RIK} />
             </Box>
 
 

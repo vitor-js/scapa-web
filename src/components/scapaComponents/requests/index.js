@@ -113,11 +113,11 @@ function Index({ requests = [], setRequests, data }) {
 
             const RISK_TABLE = {
                 Inexistente: 0.0,
-                "Muito Baixo": 0.1,
-                Baixo: 0.25,
+                "Muito Baixo": 0.165,
+                Baixo: 0.33,
                 Médio: 0.5,
-                Alto: 0.75,
-                "Muito Alto": 0.9,
+                Alto: 0.665,
+                "Muito Alto": 0.83,
                 Total: 1.0,
 
             };
@@ -125,11 +125,15 @@ function Index({ requests = [], setRequests, data }) {
 
             const RISK_TABLE_REVERSE = {
                 0: "Inexistente",
+                16.5: "Muito Baixo",
                 10: "Muito Baixo",
                 25: "Baixo",
+                33: "Baixo",
                 50: "Médio",
                 75: "Alto",
+                66.5: "Alto",
                 90: "Muito Alto",
+                83: "Muito Alto",
                 100: "Total",
             };
 

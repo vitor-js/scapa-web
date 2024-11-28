@@ -239,7 +239,7 @@ const calcDispensaImotivadaOuRescisãoIndireta = (days, time, salary, risk, have
     const vocation_calc = vacationCalcVerbas(salary, time, have_vacation)
 
     const valuePostulate_calc = SalaryForDaysWorkedInTheLastMonth + multa + extraSalary_calc + vocation_calc + fgts + AvisoPrevioIndenizado
-    console.log(SalaryForDaysWorkedInTheLastMonth, multa, extraSalary_calc, vocation_calc, fgts, AvisoPrevioIndenizado)
+
     const reflex = [{
         label: "Salário dos dias trabalhados no último mês",
         value: SalaryForDaysWorkedInTheLastMonth
@@ -411,7 +411,7 @@ const calcDispensaMotivada = (days, time, salary, risk, have_vacation) => {
         valuePostulate_calc
     );
     const valueIndividual = postuateValue * risk;
-    console.log(SalaryForDaysWorkedInTheLastMonth, multa, 'ASDASD')
+
     const reflex = [
         {
             label: "Salário dos dias trabalhados no último mês",

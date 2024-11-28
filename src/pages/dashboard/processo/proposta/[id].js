@@ -33,11 +33,11 @@ import { MdArrowBack } from "react-icons/md";
 
 const RISK_TABLE = {
     Inexistente: 0.0,
-    "Muito Baixo": 0.1,
-    Baixo: 0.25,
+    "Muito Baixo": 0.165,
+    Baixo: 0.33,
     Médio: 0.5,
-    Alto: 0.75,
-    "Muito Alto": 0.9,
+    Alto: 0.665,
+    "Muito Alto": 0.83,
     Total: 1.0,
 };
 
