@@ -447,24 +447,44 @@ function Index({ handleAddNewRequest, draftRequest, setOpenSelect, handleUpdateR
     }
 
     const finishRequest = (value, valuePostulate, valueIndividual) => {
+        console.log(valueIndividual, "valueIndividualvalueIndividualvalueIndividual")
+        let postulated_individual_value = valueIndividual
+        if (typeof valueIndividual === 'string' && valueIndividual.includes("$")) {
+            const split = valueIndividual.split("$")
+            const value = split[1].trim()
+            postulated_individual_value = value
 
+        }
         const newRequest = {
             ...value,
             valuePostulate: valuePostulate,
-            valueIndividual: valueIndividual,
+            valueIndividual: postulated_individual_value,
         }
-
+        console.log(newRequest, "newRequestnewRequestnewRequest")
         if (draftRequest) return handleUpdateRequest(newRequest)
         return handleAddNewRequest({ identificador: numeroAleatorio(), ...newRequest })
     }
 
     useEffect(() => {
-        if (!individualValue || individualValue === "" || risk === "") {
+        if (!individualValue || individualValue === "" || risk === "" ||
+            !risk || !individualValue) {
             return;
         }
         const getRatio = RISK_TABLE[risk];
+        console.log(risk, 'riskriskriskriskrisk')
+        console.log(getRatio, "getRatiooooooooooooooooooooooo")
         setRatio(getRatio * 100)
-        const ApplyRatio = currencyToBackend(individualValue) * getRatio;
+
+        let ApplyRatio = 0
+        if (typeof individualValue === 'string' && individualValue.includes("$")) {
+            const split = individualValue.split("$")
+            const value = split[1].trim()
+            ApplyRatio = currencyToBackend(value) * getRatio;
+        }
+        else {
+            ApplyRatio = currencyToBackend(individualValue) * getRatio;
+        }
+
         setIndividualValueWithRisk(toCurrencyScreen(ApplyRatio));
         setValue("valor_individualizado", toCurrencyScreen(ApplyRatio))
     }, [individualValue, risk]);

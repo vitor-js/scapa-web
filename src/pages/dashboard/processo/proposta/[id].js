@@ -120,12 +120,18 @@ function Index() {
     }
 
     const handleAddNewRequest = async (params) => {
-        console.log(params)
+        let postulated_individual_value = parseFloat(currencyToBackend(params.valueIndividual))
+        if (typeof individualValue === 'string' && params.valueIndividual.includes("$")) {
+            const split = params.valueIndividual.split("$")
+            const value = split[1].trim()
+            postulated_individual_value = parseFloat(currencyToBackend(value))
+            console.log("-------------------------------------------------------------------ttttttttttt--------------------------------------------")
+        }
         const newObject = {
             type: params.requestValue,
             risk: RISK_TABLE[params.risk] * 100,
             risk_success: RISK_TABLE[params.risk] * 100,
-            postulated_individual_value: parseFloat(currencyToBackend(params.valueIndividual)),
+            postulated_individual_value: postulated_individual_value,
             postulated_individual: parseFloat(currencyToBackend(params.valuePostulate)),
             proposal_id: id,
             ...params

@@ -20,15 +20,26 @@ const RISK_TABLE_REVERSE = {
     "1": "Total",
     0: "Inexistente",
     16.5: "Muito Baixo",
+    1650: "Muito Baixo",
     10: "Muito Baixo",
+    100: "Muito Baixo",
     25: "Baixo",
+    250: "Baixo",
     33: "Baixo",
+    333: "Baixo",
     50: "Médio",
+    500: "Médio",
     75: "Alto",
+    750: "Alto",
     66.5: "Alto",
+    665: "Alto",
+    6650: "Alto",
     90: "Muito Alto",
+    900: "Muito Alto",
     83: "Muito Alto",
+    830: "Muito Alto",
     100: "Total",
+    1000: "Total",
 };
 const VERBAS = ["Verbas Rescisórias"]
 function Index({ requests = [], setOpenSelect, setDraftRequest, removeRequest, calcAndSave, custonEdit = false, custonEditFunction, createRequest }) {
@@ -84,8 +95,8 @@ function Index({ requests = [], setOpenSelect, setDraftRequest, removeRequest, c
 
                         <Flex my={6} width={'100%'} flexDirection={'row'} alignItems={"center"} justifyContent={'space-between'}>
                             <Text fontSize={18} fontWeight={600} ml={3} mr={3} >
-                                {value.requestValue} - {value.requestValue ===
-                                    "Verbas Rescisórias" && value.termination_type && value.termination_type}
+                                {value.requestValue}  {value.requestValue ===
+                                    " - Verbas Rescisórias" && value.termination_type && value.termination_type}
                             </Text>
                             <Box cursor={"pointer"} >
                                 <ButtonGroup gap="2">
@@ -183,7 +194,7 @@ function Index({ requests = [], setOpenSelect, setDraftRequest, removeRequest, c
 
                                 <Box mt={1}>
                                     <Text fontSize={15} fontWeight={400} ml={3} mr={3} >
-
+                                        {console.log(value.riskSuccess, 'value.riskSuccessvalue.riskSuccessvalue.riskSuccessvalue.riskSuccessvalue.riskSuccessvalue.riskSuccessvalue.riskSuccessvalue.riskSuccess')}
                                         {RISK_TABLE_REVERSE[value.riskSuccess]}
                                     </Text>
                                 </Box>
