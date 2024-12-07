@@ -153,14 +153,15 @@ function Index({ requests = [], setRequests, data }) {
             }
 
             const format_request = requests.map(v => {
+                console.log(v, "vvvvv")
                 const risk = v.risk
                 if (typeof risk === 'number') {
                     return {
                         ...v,
                         valueIndividual: parseFloat(currencyToBackend(v.valueIndividual)),
                         valuePostulate: parseFloat(currencyToBackend(v.valuePostulate)),
-                        riskSuccess: RISK_TABLE_REVERSE[risk],
-                        risk_success: RISK_TABLE_REVERSE[risk],
+                        riskSuccess: RISK_TABLE_REVERSE[risk * 100],
+                        risk_success: RISK_TABLE_REVERSE[risk * 100],
                     }
                 }
                 else {
@@ -171,14 +172,16 @@ function Index({ requests = [], setRequests, data }) {
                         riskSuccess: RISK_TABLE[risk],
                         risk_success: RISK_TABLE[risk],
                     }
+
+
                 }
 
 
             })
-
+            console.log(format_request, 'format_requestmformat_requestm')
             const body = {
                 postulated_total_value: valotTotalPostulado, total_value_with_riks: valueTotalPostulateIndividual, total_value: valueProposal, interest: 0, process_id: id,
-                requests: format_request, type: query.type
+                requests: format_request, type: query.type, teste: true
             }
             console.log(body, 'bodybody')
             setResult(result)

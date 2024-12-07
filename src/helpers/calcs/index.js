@@ -80,7 +80,7 @@ const valueIndividual = (valuePostulate, risk) => {
 const diffSalaty = (diferenceType, diff_value_salary, data, risk) => {
 
     console.log(diferenceType, diff_value_salary, data, risk, "console das diferencas")
-
+    console.log(risk)
     let sumMonthValue = 0;
     let monthValue = 0;
 
@@ -97,6 +97,7 @@ const diffSalaty = (diferenceType, diff_value_salary, data, risk) => {
             (salary *
                 parseFloat(currencyToNumber(diff_value_salary))) /
             100;
+        console.log(diff_value_salary, time)
         sumMonthValue = monthValue * time;
     }
 
