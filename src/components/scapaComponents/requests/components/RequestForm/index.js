@@ -215,12 +215,7 @@ function Index({ handleAddNewRequest, draftRequest, setOpenSelect, handleUpdateR
             }
             return yup.string().nullable().optional();
         }),
-        days_working_week: yup.lazy((value) => {
-            if (value !== undefined && value !== " ") {
-                return yup.string().required('Este campo é origatório');
-            }
-            return yup.string().nullable().optional();
-        }),
+        days_working_week: yup.string(),
 
 
     })
@@ -235,6 +230,14 @@ function Index({ handleAddNewRequest, draftRequest, setOpenSelect, handleUpdateR
     } = useForm({
         resolver: yupResolver(schema),
     })
+
+
+    useEffect(() => {
+        console.log(errors)
+    }, [errors])
+
+
+
     function numeroAleatorio() {
         return Math.floor(Math.random() * 1000000) + 1;
     }
@@ -329,6 +332,7 @@ function Index({ handleAddNewRequest, draftRequest, setOpenSelect, handleUpdateR
 
                         }]
                     } : { data: extraHour }
+                    console.log(objectHoraExtra, "objectHoraExtraobjectHoraExtra")
                     const { valueIndividual, valuePostulate, reflex, principal } = calc.calcHoraExtra(data.data, values.extra_hour_variation, RISK_TABLE[risk], extraHour, values.week_limit, values)
                     const requestUpdate = {
                         ...newRequest,
@@ -494,7 +498,7 @@ function Index({ handleAddNewRequest, draftRequest, setOpenSelect, handleUpdateR
         if (!draftRequest) return
         console.log(draftRequest, '---')
 
-        setValue("pedido", draftRequest.requestValue)
+        setValue("pedido", isAnother(draftRequest.requestValue))
         setValue("valor_individual_postulado", draftRequest.valuePostulate)
         setValue("ratio", `${draftRequest.riskSuccess}`)
         setValue("valor_individualizado", draftRequest.valueIndividual)
@@ -505,6 +509,16 @@ function Index({ handleAddNewRequest, draftRequest, setOpenSelect, handleUpdateR
         setIndividualValue(toCurrencyScreen(draftRequest.valuePostulate))
         update()
     }, [draftRequest])
+
+    const isAnother = (value) => {
+        const allvalues = ACTIONS.map(e => e.value)
+        if (allvalues.includes(value)) {
+            return value
+        } else {
+            setValue("custon_request", value)
+            return "Outros"
+        }
+    }
 
     const update = () => {
         if (!individualValue || individualValue === "" || risk === "") {

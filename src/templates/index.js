@@ -2,17 +2,39 @@ import React, { useEffect } from "react"
 import styled from "styled-components"
 import { toCurrencyScreen } from '../helpers'
 const RISK_TABLE_REVERSE = {
+    "0": "Inexistente",
+    "0.1": "Muito Baixo",
+    "0.165": "Muito Baixo",
+    "0.25": "Baixo",
+    "0.33": "Baixo",
+    "0.5": "Médio",
+    "0.665": "Alto",
+    "0.75": "Alto",
+    "0.90": "Muito Alto",
+    "0.83": "Muito Alto",
+    "1": "Total",
     0: "Inexistente",
     16.5: "Muito Baixo",
+    1650: "Muito Baixo",
     10: "Muito Baixo",
+    100: "Muito Baixo",
     25: "Baixo",
+    250: "Baixo",
     33: "Baixo",
+    333: "Baixo",
     50: "Médio",
+    500: "Médio",
     75: "Alto",
+    750: "Alto",
     66.5: "Alto",
+    665: "Alto",
+    6650: "Alto",
     90: "Muito Alto",
+    900: "Muito Alto",
     83: "Muito Alto",
+    830: "Muito Alto",
     100: "Total",
+    1000: "Total",
 };
 import Image from 'next/image'
 
@@ -129,7 +151,7 @@ const Tempalte = ({ result }) => {
                                 <td style={{ fontSize: 8, color: '#000', alignItems: 'center', justifyContent: 'center', padding: 5, justifyItems: "center", alignContent: "center", paddingBottom: 8 }}> {index + 1}</td>
                                 <td style={{ fontSize: 8, color: '#000', alignItems: 'center', justifyContent: 'center', padding: 5, justifyItems: "center", alignContent: "center", paddingBottom: 8 }}>{value.requestValue}</td>
                                 <td style={{ fontSize: 8, color: '#000', alignItems: 'center', justifyContent: 'center', padding: 5, justifyItems: "center", alignContent: "center", paddingBottom: 8 }}>R$ {value.valuePostulate}</td>
-
+                                {console.log(value.risk_success, "value.risk_successvalue.risk_successvalue.risk_successvalue.risk_successvalue.risk_successvalue.risk_successvalue.risk_successvalue.risk_successvalue.risk_successvalue.risk_successvalue.risk_successvalue.risk_successvalue.risk_successvalue.risk_successvalue.risk_successvalue.risk_success")}
                                 <td style={{ fontSize: 8, color: '#000', alignItems: 'center', justifyContent: 'center', padding: 5, justifyItems: "center", alignContent: "center", paddingBottom: 8 }}>{RISK_TABLE_REVERSE[value.risk_success]}</td>
                                 <td style={{ fontSize: 8, color: '#000', alignItems: 'center', justifyContent: 'center', padding: 5, justifyItems: "center", alignContent: "center", paddingBottom: 8 }}>R$ {value.valueIndividual}</td>
                             </tr>
