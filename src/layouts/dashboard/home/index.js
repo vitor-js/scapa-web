@@ -159,6 +159,13 @@ function Index({ children }) {
                             </Box>
 
                             <Box my='5'>
+                                <Input label='Réu' name='reu' error={errors?.reu?.message} {...register("reu")} />
+                            </Box>
+                            <Box my='5'>
+                                <Input mask="currency" label='Custo do Réu' name='reu_cost' error={errors?.reu_cost?.message} {...register("reu_cost")} />
+                            </Box>
+
+                            <Box my='5'>
                                 <Input mask={"number"} label='Tempo de duração do procecesso (em meses) - Se não quiser incluir CÁLCULO DE JUROS coloque 0 (ZERO) no Tempo de Duração do Processo' name='proccess_time' error={errors?.proccess_time?.message}  {...register("proccess_time")} />
                             </Box>
 
@@ -197,12 +204,7 @@ function Index({ children }) {
 
 
 
-                            <Box my='5'>
-                                <Input label='Réu' name='reu' error={errors?.reu?.message} {...register("reu")} />
-                            </Box>
-                            <Box my='5'>
-                                <Input mask="currency" label='Custo do Réu' name='reu_cost' error={errors?.reu_cost?.message} {...register("reu_cost")} />
-                            </Box>
+                        
 
 
                         </Box>

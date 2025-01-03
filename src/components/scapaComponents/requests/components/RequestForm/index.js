@@ -39,7 +39,7 @@ const ACTIONS = [
     { label: "Multa do art. 467 da CLT", value: "Multa do art. 467 da CLT" },
     { label: "Multa do art. 477 da CLT", value: "Multa do art. 477 da CLT" },
     { label: "Outros", value: "Outros" },
-    { label: "Pausas não realizadas - (com cálculo)", value: "Pausas não realizadas" },
+    { label: "Pausas não realizadas", value: "Pausas não realizadas" },
     { label: "Repouso Semanal Remunerado", value: "Repouso Semanal Remunerado" },
     { label: "Vale transporte", value: "Vale transporte" },
     { label: "Valores totais decorrentes de reintegração", value: "Valores totais decorrentes de reintegração" },
@@ -216,6 +216,12 @@ function Index({ handleAddNewRequest, draftRequest, setOpenSelect, handleUpdateR
             return yup.string().nullable().optional();
         }),
         days_working_week: yup.string(),
+        have_penalt: yup.lazy((value) => {
+            if (value !== undefined && value !== " ") {
+                return yup.string().required('Este campo é origatório');
+            }
+            return yup.string().nullable().optional();
+        }),
 
 
     })
@@ -291,6 +297,14 @@ function Index({ handleAddNewRequest, draftRequest, setOpenSelect, handleUpdateR
                         return accumulator + value.time
                     }, 0);
 
+                    const { time_worked_months } = data.data
+
+                    const time = parseInt(time_worked_months)
+                    
+                    if(sumMonths > time) {
+                        return toast.error("A quantidade de meses não deve ultrapassar o periodo do contrato de trabalho!")
+                    }
+
                     const sumValues = insalubridadeSalary.reduce(function (accumulator, value) {
                         return accumulator + (value.time * value.value)
                     }, 0);
@@ -309,16 +323,19 @@ function Index({ handleAddNewRequest, draftRequest, setOpenSelect, handleUpdateR
                     finishRequest(requestUpdate, valuePostulate, valueIndividual)
                     return
                 }
-
+const penalt = values.have_penalt === "Sim" ? true : false
                 if (VERBAS.includes(valueRequest)) {
-                    const { valueIndividual, valuePostulate, reflex } = calc.calcVerbasRescisorias(data.data, values.termination_type, RISK_TABLE[risk], false)
+                    console.log(values.have_penalt,  "----------    ")
+                    const { valueIndividual, valuePostulate, reflex } = calc.calcVerbasRescisorias(data.data, values.termination_type, RISK_TABLE[risk], false, penalt
+                    )
                     const requestUpdate = {
                         ...newRequest,
                         termination_type: values.termination_type,
+                        have_penalt: values.have_penalt === "Sim" ? true : false,
                         reflex
                     }
-
-                    finishRequest(requestUpdate, valuePostulate, valueIndividual)
+                                console.log(reflex, '===============0000000099999999')
+                     finishRequest(requestUpdate, valuePostulate, valueIndividual)
                     return
                 }
                 if (HORA_EXTRA.includes(valueRequest)) {
@@ -612,7 +629,7 @@ Chance de êxito' options={OPTIONS_RIK} />
 
 
 
-            {
+            {/* {
                 !VALUES_WITH_CALCS.includes(valueRequest) || salaryValue === undefined ? <>
 
                     <Box w={'100%'} mt={5}>
@@ -625,7 +642,7 @@ Chance de êxito' options={OPTIONS_RIK} />
 
 
                 </> : null
-            }
+            } */}
 
 
             {

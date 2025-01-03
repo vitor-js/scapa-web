@@ -10,7 +10,7 @@ const ACTIONS = [
         value: "percentual"
     },
     {
-        label: "Absoluta",
+        label: "Absoluta (valor)",
         value: "absoluta"
     }
 

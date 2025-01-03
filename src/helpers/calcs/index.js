@@ -191,7 +191,7 @@ function addHours(date, hours) {
     return date;
 }
 
-const calcVerbasRescisorias = (data, reason, risk, have_vacation) => {
+const calcVerbasRescisorias = (data, reason, risk, have_vacation, have_penalt) => {
     const { time_worked_months, salary, end_date } = data
     const time = parseInt(time_worked_months)
     const end_date_convert_without_our = new Date(end_date);
@@ -203,94 +203,95 @@ const calcVerbasRescisorias = (data, reason, risk, have_vacation) => {
     console.log(days, 'days')
 
     if (reason === "Dispensa imotivada ou rescisão indireta") {
-        return calcDispensaImotivadaOuRescisãoIndireta(days, time, salary, risk, have_vacation, end_date_convert);
+        return calcDispensaImotivadaOuRescisãoIndireta(days, time, salary, risk, have_vacation, end_date_convert, have_penalt);
     }
-    if (reason === "Pedido de demissão") { return calcPedidoDeDemissao(days, time, salary, risk, have_vacation, end_date_convert); }
-    if (reason === "Comum acordo") { return calcComumAcordo(days, time, salary, risk, have_vacation, end_date_convert); }
+    if (reason === "Pedido de demissão") { return calcPedidoDeDemissao(days, time, salary, risk, have_vacation, end_date_convert, have_penalt); }
+    if (reason === "Comum acordo") { return calcComumAcordo(days, time, salary, risk, have_vacation, end_date_convert, have_penalt); }
     if (reason === "Dispensa motivada (justa causa)")
-        return calcDispensaMotivada(days, time, salary, risk, have_vacation, end_date_convert);
+        return calcDispensaMotivada(days, time, salary, risk, have_vacation, end_date_convert, have_penalt);
 }
 
 
-const calcDispensaImotivadaOuRescisãoIndireta = (days, time, salary, risk, have_vacation, end_date_convert) => {
-    const SalaryForDaysWorkedInTheLastMonth = (salary / 30) * days;
-    console.log(days, "days")
-    console.log(SalaryForDaysWorkedInTheLastMonth, "SalaryForDaysWorkedInTheLastMonth")
-    const years = Math.round(time / 12);
-
-    const AvisoPrevioIndenizado = Math.round(
-        (salary / 30) * (years * 3) + salary
-    );
-    console.log(AvisoPrevioIndenizado, "AvisoPrevioIndenizado")
-
-    const fgtsBase = Math.round(0.08 * salary * time);
-
-    const fgts = fgtsBase * 0.4;
-    console.log(fgts, "fgts")
-
-    let month = end_date_convert.getMonth() + 1;
-
-
-    const extraSalary_calc = Math.round(
-        (salary / 12) * month
-    );
-
-    const multa = salary
-
-    const vocation_calc = vacationCalcVerbas(salary, time, have_vacation)
-
-    const valuePostulate_calc = SalaryForDaysWorkedInTheLastMonth + multa + extraSalary_calc + vocation_calc + fgts + AvisoPrevioIndenizado
-
-    const reflex = [{
-        label: "Salário dos dias trabalhados no último mês",
-        value: SalaryForDaysWorkedInTheLastMonth
-    },
-
-    {
-        label: "Aviso prévio indenizado",
-        value: AvisoPrevioIndenizado
-    },
-    {
-        label: "40% dos depósitos do FGTS",
-        value: fgts
-    },
-    {
-        label: "Multa do art. 477",
-        value: multa
-    },
-    {
-        label: "13º salário proporcional",
-        value: extraSalary_calc
-    },
-    {
-        label: "Férias proporcionais",
-        value: vocation_calc
+const calcDispensaImotivadaOuRescisãoIndireta = (days, time, salary, risk, have_vacation, end_date_convert, have_penalt) => {
+    try {
+        const SalaryForDaysWorkedInTheLastMonth = (salary / 30) * days;
+        console.log(days, "days")
+        console.log(SalaryForDaysWorkedInTheLastMonth, "SalaryForDaysWorkedInTheLastMonth")
+        const years = Math.round(time / 12);
+    
+        const AvisoPrevioIndenizado = Math.round(
+            (salary / 30) * (years * 3) + salary
+        );
+        console.log(AvisoPrevioIndenizado, "AvisoPrevioIndenizado")
+    
+        const fgtsBase = Math.round(0.08 * salary * time);
+    
+        const fgts = fgtsBase * 0.4;
+        console.log(fgts, "fgts")
+    
+        let month = end_date_convert.getMonth() + 1;
+    
+    
+        const extraSalary_calc = Math.round(
+            (salary / 12) * month
+        );
+        const multa =  have_penalt ? salary : 0;
+        
+        const vocation_calc = vacationCalcVerbas(salary, time, have_vacation)
+    
+        const valuePostulate_calc = SalaryForDaysWorkedInTheLastMonth + multa + extraSalary_calc + vocation_calc + fgts + AvisoPrevioIndenizado
+    
+        let reflex_draft = [{
+            label: "Salário dos dias trabalhados no último mês",
+            value: SalaryForDaysWorkedInTheLastMonth
+        },
+    
+        {
+            label: "Aviso prévio indenizado",
+            value: AvisoPrevioIndenizado
+        },
+        {
+            label: "40% dos depósitos do FGTS",
+            value: fgts
+        },
+        {
+            label: "13º salário proporcional",
+            value: extraSalary_calc
+        },
+        {
+            label: "Férias proporcionais",
+            value: vocation_calc
+        }
+        ]
+    
+        const valueIndividual = Math.round(valuePostulate_calc * risk);
+    
+       const multa_object =  {
+            label: "Multa do art. 477",
+            value: multa
+        }
+        if( have_penalt === true ) {
+            reflex_draft.push( multa_object ) 
+        }
+      
+    
+ 
+        return {
+            valueIndividual,
+            valuePostulate: valuePostulate_calc,
+            reflex: reflex_draft
+        }
+    
+    }catch(e){
+        console.log(e)
     }
-    ]
-
-
-    console.log(reflex)
-
-
-
-
-    const valueIndividual = Math.round(valuePostulate_calc * risk);
-    console.log(valuePostulate_calc, 'valuePostulate_calc')
-    console.log(valueIndividual, 'com risco')
-
-
-    return {
-        valueIndividual,
-        valuePostulate: valuePostulate_calc,
-        reflex
-    }
-
+   
 }
 
-const calcPedidoDeDemissao = (days, time, salary, risk, have_vacation, end_date_convert) => {
+const calcPedidoDeDemissao = (days, time, salary, risk, have_vacation, end_date_convert, have_penalt) => {
 
     const SalaryForDaysWorkedInTheLastMonth = (salary / 30) * days;
-    const multa = salary;
+    const multa =  have_penalt ? salary : 0;
     const last_month = end_date_convert.getMonth() + 1
     console.log(salary, end_date_convert.getMonth() + 1, "--------")
     const extraSalary_calc = Math.round(
@@ -308,15 +309,9 @@ const calcPedidoDeDemissao = (days, time, salary, risk, have_vacation, end_date_
     console.log(postuateValue)
     const valueIndividual = postuateValue * risk;
 
-    const reflex = [{
+    let  reflex_draft = [{
         label: "Salário dos dias trabalhados no último mês",
         value: SalaryForDaysWorkedInTheLastMonth
-    },
-
-    {
-
-        label: "Multa do art. 477",
-        value: multa
     },
     {
         label: "13º salário proporcional",
@@ -329,15 +324,25 @@ const calcPedidoDeDemissao = (days, time, salary, risk, have_vacation, end_date_
     ]
 
 
+    const multa_object =  {
+        label: "Multa do art. 477",
+        value: multa
+    }
+
+    if( have_penalt === true ) {
+        reflex_draft.push( multa_object ) 
+    }
+
+
     return {
         valueIndividual,
         valuePostulate: postuateValue,
-        reflex
+        reflex: reflex_draft
     }
 
 }
 
-const calcComumAcordo = (days, time, salary, risk, have_vacation, end_date_convert) => {
+const calcComumAcordo = (days, time, salary, risk, have_vacation, end_date_convert, have_penalt) => {
     const SalaryForDaysWorkedInTheLastMonth = (salary / 30) * days;
     const years = Math.round(time / 12);
     const AvisoPrevioIndenizadoBase = Math.round(
@@ -346,7 +351,7 @@ const calcComumAcordo = (days, time, salary, risk, have_vacation, end_date_conve
     const AvisoPrevioIndenizado = AvisoPrevioIndenizadoBase * 0.5;
     const fgtsBase = Math.round(0.08 * salary * time);
     const fgts = fgtsBase * 0.2;
-    const multa = salary;
+    const multa =  have_penalt ? salary : 0;
     const extraSalary = Math.round(
         (salary / 12) * end_date_convert.getMonth() + 1
     );
@@ -362,7 +367,7 @@ const calcComumAcordo = (days, time, salary, risk, have_vacation, end_date_conve
     );
     const valueIndividual = postuateValue * risk;
 
-    const reflex = [
+    let reflex_draft = [
         {
             label: "Salário dos dias trabalhados no último mês",
             value: SalaryForDaysWorkedInTheLastMonth,
@@ -375,10 +380,6 @@ const calcComumAcordo = (days, time, salary, risk, have_vacation, end_date_conve
             label: "20% dos depósitos do FGTS",
             value: fgts,
         },
-        {
-            label: "Multa do art. 477",
-            value: multa,
-        },
 
         {
             label: "13º salário proporcional",
@@ -390,21 +391,31 @@ const calcComumAcordo = (days, time, salary, risk, have_vacation, end_date_conve
         },
     ];
 
+    
+    const multa_object =  {
+        label: "Multa do art. 477",
+        value: multa
+    }
+    if( have_penalt === true ) {
+        reflex_draft.push( multa_object ) 
+    }
+  
+
 
     return {
         valueIndividual,
         valuePostulate: postuateValue,
-        reflex
+        reflex: reflex_draft
     }
 
 }
 
-const calcDispensaMotivada = (days, time, salary, risk, have_vacation) => {
+const calcDispensaMotivada = (days, time, salary, risk, have_vacation, have_penalt) => {
 
 
     const SalaryForDaysWorkedInTheLastMonth = (salary / 30) * days;
 
-    const multa = salary;
+    const multa = have_penalt ? salary : 0;
 
     const valuePostulate_calc = SalaryForDaysWorkedInTheLastMonth + multa
 
@@ -413,21 +424,26 @@ const calcDispensaMotivada = (days, time, salary, risk, have_vacation) => {
     );
     const valueIndividual = postuateValue * risk;
 
-    const reflex = [
+    let reflex_draft = [
         {
             label: "Salário dos dias trabalhados no último mês",
             value: SalaryForDaysWorkedInTheLastMonth,
-        },
-
-        {
-            label: "Multa do art. 477",
-            value: multa,
-        },
+        }
     ];
+
+    const multa_object =  {
+        label: "Multa do art. 477",
+        value: multa
+    }
+
+ if( have_penalt === true ) {
+    reflex_draft.push( multa_object ) 
+}
+
     return {
         valueIndividual,
         valuePostulate: postuateValue,
-        reflex
+        reflex: reflex_draft
     }
 }
 
@@ -606,12 +622,13 @@ const calcHoraExtra = (data, variation, risk, extraHour, limit, valuesForm) => {
 }
 
 const calcIntervalo = (data, variation, risk, interval, values) => {
+
     const { time_worked_months, salary, end_date } = data
     let totalWithoutInterval = 0
     let totalHours = 0;
     if (variation === "Sim") {
 
-        extraHour.map((valueItem) => {
+        interval.map((valueItem) => {
 
             var fromDateInterval = parseInt(
                 new Date(`July 20, 69 ${valueItem.hora_inicio_intervalo} GMT+00:00`) / 1000
@@ -627,7 +644,7 @@ const calcIntervalo = (data, variation, risk, interval, values) => {
             totalHours = totalHours + timeDiffRoutine;
         });
         totalWithoutInterval =
-            Math.round(intervalWithVariation.length * totalHours * 4.286 * time_worked_months);
+            Math.round(interval.length * totalHours * 4.286 * time_worked_months);
 
     }
     else {
@@ -724,11 +741,11 @@ const adicionalPericulosidade = (data, risk) => {
 
 const decimoTerceiroIntegral = (data, risk) => {
     const { time_worked_months, salary, end_date } = data
-    const result_with_risk = salary * risk;
+    const result_with_risk = (salary * time_worked_months) * risk;
 
     return {
         valueIndividual: result_with_risk,
-        valuePostulate: salary
+        valuePostulate: salary * time_worked_months
     }
 }
 

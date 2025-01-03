@@ -98,13 +98,13 @@ function Index({ result, hasReturn = true }) {
                 <Flex mt={4} width={'100%'} flexDirection={'column'}>
                     <Box>
                         <Text fontSize={15} fontWeight={400} ml={3} mr={3} >
-                            Tempo estimado (em meses)
+                            Tempo estimado de duração do processo (em meses)
                         </Text>
                     </Box>
 
                     <Box >
                         <Text fontSize={15} fontWeight={400} ml={3} mr={3} >
-                            6 meses
+                            {result && result.proccess_time}
                         </Text>
                     </Box>
                 </Flex>

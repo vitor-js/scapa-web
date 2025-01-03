@@ -48,10 +48,10 @@ function Index({ data, setPrerequests }) {
         if (!select || select === "") return actions.goNextPage()
         try {
             const { data: data } = await api.get(`proposal/${select}`)
-            console.log(data)
+            console.log(data, "data import")
             const formatRequests = data?.data?.Requests.map((v => ({
                 ...v,
-                risk: v.risk_success
+                risk: v.risk_success ? v.risk_success : v.risk
             })))
             setPrerequests([...formatRequests])
             return actions.goNextPage()
