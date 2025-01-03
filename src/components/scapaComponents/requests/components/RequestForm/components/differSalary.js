@@ -48,7 +48,7 @@ function Index({ errors, register, data, draftRequest, setValue }) {
                 <Input mask='currency'
                     {...register('diff_value_salary')}
                     name='diff_value_salary'
-                    label='Valor da diferença' />
+                    label='Diferença (Percentual ou valor)' />
             </Box>
         </>
     );

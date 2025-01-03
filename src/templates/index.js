@@ -41,7 +41,7 @@ import Image from 'next/image'
 const Tempalte = ({ result }) => {
 
     useEffect(() => {
-        console.log(result)
+        result?.requests.map(v => console.log(v.risk_success, "risk_successrisk_successrisk_successrisk_success", v.risk))
     }, [result])
 
 
@@ -67,8 +67,8 @@ const Tempalte = ({ result }) => {
     const finalResult = () => {
         return (
 
-            <div style={{ "marginTop": "10px", color: '#000' }}>
-                <Table style={{ "fontFamily": "arial, sans-serif", "borderCollapse": "collapse", }}>
+            <div style={{ "marginTop": "10px", color: 'red', width: 400, overflow: "hidden" }}>
+                <Table style={{ "fontFamily": "arial, sans-serif", width: 400 }}>
                     <tr>
                         <th style={{ fontSize: 8, color: '#000', alignItems: 'center', justifyContent: 'center', padding: 5, justifyItems: "center", alignContent: "center", paddingBottom: 8 }}>Valor Total Postulado</th>
                         <th style={{ fontSize: 8, color: '#000', alignItems: 'center', justifyContent: 'center', padding: 5, justifyItems: "center", alignContent: "center", paddingBottom: 8 }}>Valor Total individualizado com gestão de risco</th>
@@ -87,7 +87,9 @@ const Tempalte = ({ result }) => {
 
 
     return (
-        <div style={{ paddingLeft: 20, paddingRight: 20, paddingBottom: 20, paddingTop: 20 }}>
+
+        
+        <div style={{ paddingLeft: 20, paddingRight: 20, paddingBottom: 20, paddingTop: 20, width: 400 }}>
             <div style={{ marginTop: 10 }}>
                 <Image
                     src={require('../../assets/logo/logo.png')}
@@ -134,8 +136,8 @@ const Tempalte = ({ result }) => {
                 Pedidos
             </div>
 
-            <div style={{ "marginTop": "10px", color: '#000' }}>
-                <Table  >
+            <div style={{ "marginTop": "10px", color: '#000' ,  width: 400 }}>
+                <Table style={{ width: 400}} >
                     <tr>
                         <th style={{ fontSize: 8, color: '#000', alignItems: 'center', justifyContent: 'center', padding: 5, justifyItems: "center", alignContent: "center", paddingBottom: 8 }}>ID</th>
                         <th style={{ fontSize: 8, color: '#000', alignItems: 'center', justifyContent: 'center', padding: 5, justifyItems: "center", alignContent: "center", paddingBottom: 8 }}>Pedido</th>
@@ -152,7 +154,7 @@ const Tempalte = ({ result }) => {
                                 <td style={{ fontSize: 8, color: '#000', alignItems: 'center', justifyContent: 'center', padding: 5, justifyItems: "center", alignContent: "center", paddingBottom: 8 }}>{value.requestValue}</td>
                                 <td style={{ fontSize: 8, color: '#000', alignItems: 'center', justifyContent: 'center', padding: 5, justifyItems: "center", alignContent: "center", paddingBottom: 8 }}>R$ {value.valuePostulate}</td>
                                 {console.log(value.risk_success, "value.risk_successvalue.risk_successvalue.risk_successvalue.risk_successvalue.risk_successvalue.risk_successvalue.risk_successvalue.risk_successvalue.risk_successvalue.risk_successvalue.risk_successvalue.risk_successvalue.risk_successvalue.risk_successvalue.risk_successvalue.risk_success")}
-                                <td style={{ fontSize: 8, color: '#000', alignItems: 'center', justifyContent: 'center', padding: 5, justifyItems: "center", alignContent: "center", paddingBottom: 8 }}>{RISK_TABLE_REVERSE[value.risk_success]}</td>
+                                <td style={{ fontSize: 8, color: '#000', alignItems: 'center', justifyContent: 'center', padding: 5, justifyItems: "center", alignContent: "center", paddingBottom: 8 }}>{RISK_TABLE_REVERSE[value.risk_success ? value.risk_success : value.risk]}</td>
                                 <td style={{ fontSize: 8, color: '#000', alignItems: 'center', justifyContent: 'center', padding: 5, justifyItems: "center", alignContent: "center", paddingBottom: 8 }}>R$ {value.valueIndividual}</td>
                             </tr>
                         )
@@ -164,8 +166,8 @@ const Tempalte = ({ result }) => {
 
 
 
-            <div style={{ "textAlign": "left", "marginTop": "10px", fontSize: "10px", color: '#000', "fontWeight": "600" }}>
-                <Table  >
+            <div style={{  width: "100%" ,"textAlign": "left", "marginTop": "10px", fontSize: "10px", color: 'red', "fontWeight": "600" }}>
+                <Table style={{ maxWidth: "100%"}} >
                     <tr>
                         <th style={{ fontSize: 8, color: '#000', alignItems: 'center', justifyContent: 'center', padding: 5, justifyItems: "center", alignContent: "center", paddingBottom: 8 }}>Custo do Réu</th>
                     </tr>
@@ -182,9 +184,9 @@ const Tempalte = ({ result }) => {
                 Resultados
             </div>
 
-            <div style={{ "marginTop": "0px", fontSize: "10px", color: '#000' }}>
+          
                 {finalResult()}
-            </div>
+         
         </div>)
 
 }
