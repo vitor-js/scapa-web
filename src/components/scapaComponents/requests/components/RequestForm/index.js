@@ -27,8 +27,7 @@ const ACTIONS = [
     { label: "Diferenças salariais convencionais - (com cálculo)", value: "Diferenças salariais convencionais" },
     { label: "Diferenças salariais por acúmulo de função - (com cálculo)", value: "Diferenças salariais por acúmulo de função" },
     { label: "Diferenças salariais por equiparação salarial - (com cálculo)", value: "Diferenças salariais por equiparação salarial" },
-    { label: "Férias integrais - (com cálculo)", value: "Férias integrais" },
-    { label: "Férias proporcionais - (com cálculo)", value: "Férias proporcionais" },
+    { label: "Férias - (com cálculo)", value: "Férias" },
     { label: "Horas Extras - (com cálculo)", value: "Horas Extras" },
     { label: "Indenização estabilitária", value: "Indenização estabilitária" },
     { label: "Indenização por danos materiais", value: "Indenização por danos materiais" },
@@ -115,8 +114,7 @@ const VALUES_WITH_CALCS = ["Diferenças salariais por equiparação salarial",
     "Verbas Rescisórias",
     "Horas Extras",
     "Intervalo Intrajornada",
-    "Férias integrais",
-    "Férias proporcionais",
+    "Férias",
     "Depósitos do FGTS",
     "Décimo terceiro integral",
     "Décimo terceiro proporcional",
@@ -138,8 +136,7 @@ const VERBAS = ["Verbas Rescisórias"]
 const HORA_EXTRA = ["Horas Extras"]
 const INTERVALO = ["Intervalo Intrajornada"]
 
-const FERIAS = ["Férias proporcionais"]
-const FERIAS_INTEGRAIS = ["Férias integrais"]
+const FERIAS = ["Férias"]
 const FGTS = ["Depósitos do FGTS"]
 
 const DECIMO_TERCEIRO = ["Décimo terceiro integral"]
@@ -217,6 +214,12 @@ function Index({ handleAddNewRequest, draftRequest, setOpenSelect, handleUpdateR
         }),
         days_working_week: yup.string(),
         have_penalt: yup.lazy((value) => {
+            if (value !== undefined && value !== " ") {
+                return yup.string().required('Este campo é origatório');
+            }
+            return yup.string().nullable().optional();
+        }),
+        time_fgts: yup.lazy((value) => {
             if (value !== undefined && value !== " ") {
                 return yup.string().required('Este campo é origatório');
             }
@@ -416,7 +419,7 @@ const penalt = values.have_penalt === "Sim" ? true : false
                 }
 
                 if (FGTS.includes(valueRequest)) {
-                    const { valueIndividual, valuePostulate } = calc.fgts_calc_pure(data.data, RISK_TABLE[risk])
+                    const { valueIndividual, valuePostulate } = calc.fgts_calc_pure(data.data, RISK_TABLE[risk], values.time_fgts)
                     const requestUpdate = {
                         ...newRequest,
 

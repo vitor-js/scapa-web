@@ -42,9 +42,9 @@ const fgts = (monthValue, diffDate) => {
     return Math.round(monthValue * 0.08 * diffDate);
 }
 
-const fgts_calc_pure = (data, risk) => {
+const fgts_calc_pure = (data, risk, time_fgts) => {
     const { time_worked_months, salary, end_date } = data
-    const result = fgts(salary, time_worked_months)
+    const result = fgts(salary, parseInt(time_fgts))
     const result_with_risk = Math.round(result * risk);
 
     return {
@@ -741,26 +741,46 @@ const adicionalPericulosidade = (data, risk) => {
 
 const decimoTerceiroIntegral = (data, risk) => {
     const { time_worked_months, salary, end_date } = data
-    const result_with_risk = (salary * time_worked_months) * risk;
+
+    const time = time_worked_months /12
+    const result_with_risk = (salary * time) * risk;
 
     return {
         valueIndividual: result_with_risk,
-        valuePostulate: salary * time_worked_months
+        valuePostulate: salary * time
     }
 }
 
 const decimoTerceiroProporcional = (data, risk) => {
     const { time_worked_months, salary, end_date } = data
-    const end_date_convert = new Date(end_date);
-    const thirteenth_salary = Math.round((salary / 12) * time_worked_months);
+    let value= 0;
+    if (time_worked_months <= 12) {
+        const baseCalc = Math.round((salary / 12) * time_worked_months);
+        const finalcalc = Math.round(baseCalc + baseCalc / 3);
+        value = finalcalc;
+    }
+    if (time_worked_months > 12) {
+        const years = time_worked_months / 12;
 
-    const result_with_risk = thirteenth_salary * risk;
-
-    return {
-        valueIndividual: result_with_risk,
-        valuePostulate: thirteenth_salary
+        if (Number.isInteger(years)) {
+            const baseCalc = Math.round((salary / 12) * time_worked_months);
+            const finalcalc = Math.round(baseCalc + baseCalc / 3);
+            value = finalcalc;
+        } else {
+            const getDecimals = years - Math.floor(years);
+            const mounths = 12 * getDecimals;
+            const baseCalc = Math.round((salary / 12) * mounths);
+            const finalcalc = Math.round(baseCalc + baseCalc / 3);
+            value = finalcalc;
+        }
     }
 
+    const resultVocation = Math.round(value + value / 3);
+    const result_with_risk = resultVocation * risk;
+    return {
+        valueIndividual: result_with_risk,
+        valuePostulate: resultVocation
+    }
 }
 
 const feriasIntegrais = (data, risk) => {
